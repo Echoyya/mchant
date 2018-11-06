@@ -6,7 +6,7 @@
                 <p><Input v-model="account" placeholder="请输入账号" /></p>
                 <p><Input v-model="password" placeholder="请输入密码" /></p>
                 <p class="forgetPwd"><a href="#">忘记密码?</a></p>
-                <p><Button type="primary" to="manageAccount" class="button">登录</Button></p>
+                <p><Button type="primary" to="completeInformation" class="button">登录</Button></p>
             </div>
         </Card>
     </section>
@@ -22,7 +22,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .container {
     min-height: 100vh;
     position: relative;
