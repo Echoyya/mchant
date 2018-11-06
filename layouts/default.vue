@@ -16,16 +16,11 @@
             </Header>
              <nuxt/>
             <Footer class="mfooter">
-                <!-- <p>
-                    合作银行:中国银行&nbsp;&nbsp;农业银行&nbsp;&nbsp;工商银行&nbsp;&nbsp;建设银行
-                </p>
-                <p>友情链接:四达时代</p>
-                <p>
-                    客服热线:010-53013618&nbsp;&nbsp;|&nbsp;&nbsp;客服邮箱:kefu@startimes.com.cn
-                </p>
-                <p>
-                    北京四达时代软件技术股份有限公司&nbsp;&nbsp;|&nbsp;&nbsp;关于四达&nbsp;&nbsp;|&nbsp;&nbsp;|&nbsp;&nbsp;诚征英才&nbsp;&nbsp;|&nbsp;&nbsp;联系我们&nbsp;&nbsp;|&nbsp;&nbsp;开放平台
-                </p> -->
+                <p>合作银行：中国银行&nbsp;&nbsp;农业银行&nbsp;&nbsp;工商银行&nbsp;&nbsp;建设银行</p>
+                <p>友情链接：四达时代</p>
+                <p>客服热线：010-53013618&nbsp;&nbsp;|&nbsp;&nbsp;客服邮箱:kefu@startimes.com.cn</p>
+                <p>北京四达时代软件技术股份有限公司&nbsp;&nbsp;|&nbsp;&nbsp;关于四达&nbsp;&nbsp;|&nbsp;&nbsp;诚征英才&nbsp;&nbsp;|&nbsp;&nbsp;联系我们&nbsp;&nbsp;|&nbsp;&nbsp;开放平台</p>
+                <p>Copyright © 2018 StarTimes All Rights Reserve</p>
             </Footer>
         </Layout>
     </div>
@@ -34,8 +29,7 @@
 export default {}
 </script>
 <style scoped>
-.mheader,
-.mfooter {
+.mheader {
     background: rgb(0, 102, 153);
     position: relative;
 }
@@ -61,5 +55,14 @@ export default {}
 }
 .mheader .logout {
     color: #ffffff;
+}
+.mfooter {
+    color: #ffffff;
+}
+.mfooter {
+    background: rgb(0, 102, 153);
+}
+.mfooter p {
+    margin: 15px 0;
 }
 </style>
