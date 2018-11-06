@@ -1,102 +1,65 @@
 <template>
     <div class="layout">
         <Layout>
-            <Sider ref="side1" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed">
-                <Menu active-name="1-2" theme="dark" width="auto" :class="menuitemClasses">
-                    <MenuItem name="1-1">
-                    <Icon type="ios-navigate"></Icon>
-                    <span>Option 1</span>
-                    </MenuItem>
-                    <MenuItem name="1-2">
-                    <Icon type="ios-search"></Icon>
-                    <span>Option 2</span>
-                    </MenuItem>
-                    <MenuItem name="1-3">
-                    <Icon type="ios-settings"></Icon>
-                    <span>Option 3</span>
-                    </MenuItem>
-                </Menu>
-            </Sider>
-            <Layout>
-                <Header :style="{padding: 0}" class="layout-header-bar">
-                    <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '0 20px'}" type="md-menu" size="24"></Icon>
-                </Header>
-                <Content :style="{margin: '20px', background: '#fff', minHeight: '260px'}">
-                    Content
-                </Content>
-            </Layout>
+            <Header class="mheader">
+                <h1 class="title">商户管理后台</h1>
+                <div class="user">
+                    <span>你好,张三</span>
+                    <span>
+                        <select name="language" id="language">
+                            <option value="Chinese">简体中文</option>
+                            <option value="English">English</option>
+                        </select>
+                    </span>
+                    <span><a href="#" class="logout">安全退出</a></span>
+                </div>
+            </Header>
+             <nuxt/>
+            <Footer class="mfooter">
+                <!-- <p>
+                    合作银行:中国银行&nbsp;&nbsp;农业银行&nbsp;&nbsp;工商银行&nbsp;&nbsp;建设银行
+                </p>
+                <p>友情链接:四达时代</p>
+                <p>
+                    客服热线:010-53013618&nbsp;&nbsp;|&nbsp;&nbsp;客服邮箱:kefu@startimes.com.cn
+                </p>
+                <p>
+                    北京四达时代软件技术股份有限公司&nbsp;&nbsp;|&nbsp;&nbsp;关于四达&nbsp;&nbsp;|&nbsp;&nbsp;|&nbsp;&nbsp;诚征英才&nbsp;&nbsp;|&nbsp;&nbsp;联系我们&nbsp;&nbsp;|&nbsp;&nbsp;开放平台
+                </p> -->
+            </Footer>
         </Layout>
     </div>
 </template>
 <script>
-export default {
-    data() {
-        return {
-            isCollapsed: false
-        }
-    },
-    computed: {
-        rotateIcon() {
-            return ['menu-icon', this.isCollapsed ? 'rotate-icon' : '']
-        },
-        menuitemClasses() {
-            return ['menu-item', this.isCollapsed ? 'collapsed-menu' : '']
-        }
-    },
-    methods: {
-        collapsedSider() {
-            this.$refs.side1.toggleCollapse()
-        }
-    }
-}
+export default {}
 </script>
 <style scoped>
-.layout {
-    background: #f5f7f9;
+.mheader,
+.mfooter {
+    background: rgb(0, 102, 153);
     position: relative;
-    overflow: hidden;
-    height: 100%;
 }
-.layout-header-bar {
-    background: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+.mheader .title {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 500;
 }
-.layout-logo-left {
-    width: 90%;
-    height: 30px;
-    background: #5b6270;
-    border-radius: 3px;
-    margin: 15px auto;
+.mheader .user {
+    color: #fff;
+    height: 22px;
+    position: absolute;
+    right: 0;
+    top: 20px;
+    line-height: 22px;
 }
-.menu-icon {
-    transition: all 0.3s;
-}
-.rotate-icon {
-    transform: rotate(-90deg);
-}
-.menu-item span {
+.mheader .user span {
     display: inline-block;
-    overflow: hidden;
-    width: 69px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    vertical-align: bottom;
-    transition: width 0.2s ease 0.2s;
+    padding: 0 20px;
 }
-.menu-item i {
-    transform: translateX(0px);
-    transition: font-size 0.2s ease, transform 0.2s ease;
-    vertical-align: middle;
-    font-size: 16px;
+.mheader .user span + span {
+    border-left: 2px solid #ffffff;
 }
-.collapsed-menu span {
-    width: 0px;
-    transition: width 0.2s ease;
-}
-.collapsed-menu i {
-    transform: translateX(5px);
-    transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
-    vertical-align: middle;
-    font-size: 22px;
+.mheader .logout {
+    color: #ffffff;
 }
 </style>
