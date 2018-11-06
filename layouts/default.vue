@@ -6,10 +6,9 @@
                 <div class="user">
                     <span>你好,张三</span>
                     <span>
-                        <select name="language" id="language">
-                            <option value="Chinese">简体中文</option>
-                            <option value="English">English</option>
-                        </select>
+                        <Select v-model="language" size="small" style="width:100px">
+                            <Option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
                     </span>
                     <span><a href="#" class="logout">安全退出</a></span>
                 </div>
@@ -26,7 +25,23 @@
     </div>
 </template>
 <script>
-export default {}
+export default {
+    data() {
+        return {
+            languageList: [
+                {
+                    value: 'Chinese',
+                    label: '简体中文'
+                },
+                {
+                    value: 'English',
+                    label: 'English'
+                }
+            ],
+            language: 'Chinese'
+        }
+    }
+}
 </script>
 <style scoped>
 .mheader {
