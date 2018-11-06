@@ -44,7 +44,7 @@
                     <Col span="9"><Input v-model="phoneNumber" placeholder="请输入注册地址" class="w300" /></Col>
                 </Row>
             </Card>
-                <Button type="primary" class="button">确认提交</Button>
+                <Button type="primary" class="button" @click="submitMsg">确认提交</Button>
         </div>
         <div class="card-box submitOk" v-show="submitOk  == 2">
             <div>
@@ -66,6 +66,14 @@ export default {
             phoneNumber: '',
             verificationCode: '',
             email: ''
+        }
+    },
+    methods: {
+        submitMsg() {
+            this.submitOk = Math.round(Math.random()) + 1
+            if (this.submitOk == 2) {
+                this.isNewUser = false
+            }
         }
     }
 }
