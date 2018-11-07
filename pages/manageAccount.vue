@@ -22,35 +22,15 @@
                     </Card>
                     <Card :bordered="false" :dis-hover="true" class="mCard mb15">
                         <h3>昨日成功交易汇总（按国家）</h3>
-                        <Row class="row mb15 fontbold">
-                            <Col span="8"> 尼日利亚 </Col>
-                            <Col span="8"> 坦桑尼亚 </Col>
-                            <Col span="8"> 肯尼亚 </Col>
+                        <Row>
+                            <Col span="8" v-for="(item, index) in tradeTotelYesterday" :key="index">
+                                <p class="row mb15 fontbold">{{item.country}}</p>
+                                <p class="row">订单总金额：{{item.successAmount}}</p>
+                                <p class="row">货币符号：{{item.currency}}</p>
+                                <p class="row">成功笔数：{{item.successCount}}</p>
+                            </Col>
                         </Row>
-                        <Row class="row">
-                            <Col span="2"> 订单总金额： </Col>
-                            <Col span="6"> 8000.00 </Col>
-                            <Col span="2"> 订单总金额： </Col>
-                            <Col span="6"> 5000.00 </Col>
-                            <Col span="2">订单总金额： </Col>
-                            <Col span="6"> 0.00 </Col>
-                        </Row>
-                        <Row class="row">
-                            <Col span="2"> 货币符号： </Col>
-                            <Col span="6"> ₦ </Col>
-                            <Col span="2">货币符号： </Col>
-                            <Col span="6"> TSh </Col>
-                            <Col span="2">货币符号： </Col>
-                            <Col span="6"> KSh </Col>
-                        </Row>
-                        <Row class="row">
-                            <Col span="2"> 成功笔数： </Col>
-                            <Col span="6"> 10 笔 </Col>
-                            <Col span="2"> 成功笔数： </Col>
-                            <Col span="6"> 10 笔 </Col>
-                            <Col span="2"> 成功笔数： </Col>
-                            <Col span="6"> 0 笔 </Col>
-                        </Row>
+                        
                     </Card>
                     <Card :bordered="false" :dis-hover="true" class="mCard mb15">
                         <h3>应用密钥及交易密码管理</h3>
@@ -75,9 +55,9 @@
                 <TabPane label="交易查询">
                     <Card :bordered="false" :dis-hover="true" class="mCard mb15">
                         <p>业务类型：
-                            <Button :type="currentType == 1 ? 'primary':''" @click="currentType=1" class="btn">交易记录</Button>
-                            <Button :type="currentType == 2 ? 'primary':''" @click="currentType=2" class="btn">退款记录</Button>
-                            <Button :type="currentType == 3 ? 'primary':''" @click="currentType=3" class="btn">交易汇总</Button>
+                            <Button :type="currentType == 1 ? 'primary':'default'" @click="changeCurrType(1)" class="btn">交易记录</Button>
+                            <Button :type="currentType == 2 ? 'primary':'default'" @click="changeCurrType(2)" class="btn">退款记录</Button>
+                            <Button :type="currentType == 3 ? 'primary':'default'" @click="changeCurrType(3)" class="btn">交易汇总</Button>
                         </p>
                         <div v-show="currentType!=3">
                             <p>
@@ -96,17 +76,19 @@
                             </p>
                             <p>
                                 交易时间：
-                                <DatePicker :value="dateValue" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
-                                <Button type="primary" class="search">搜索</Button>
+                                <DatePicker v-model="dateRecord" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
+                                <Button type="primary" class="search" @click="searchOrder(currentType)">搜索</Button>
                                 <Button>下载</Button>
                             </p>
+                            <Table border :columns="columns" :data="tableData" :stripe="true" ></Table>
+                             <Page :total="tableData.length" :current="1" :transfer="true" show-sizer  show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
                         </div>
                         <div v-show="currentType==3">
                             <p>时间选择：
-                                <Button :type="dateSelect == 'week'? 'primary':''" @click="dateSelect='week'" class="btn">近一周</Button>
-                                <Button :type="dateSelect == 'month' ? 'primary':''" @click="dateSelect='month'" class="btn">近一个月</Button>
-                                <Button :type="dateSelect == 'months' ? 'primary':''" @click="dateSelect='months'" class="btn">近三个月</Button>
-                                <DatePicker :value="dateValue" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
+                                <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">近一周</Button>
+                                <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">近一个月</Button>
+                                <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">近三个月</Button>
+                                <DatePicker v-model="dateCollect" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
                             </p>
                             <p>
                                  国家：
@@ -115,9 +97,8 @@
                                 </Select>
                                 <Button type="primary" class="search">搜索</Button>
                             </p>
+                            <Table border :columns="columnsCollect" :data="tableDataCollect" :stripe="true" ></Table>
                         </div>
-                         <Table border :columns="columns" :data="tableData" :stripe="true" ></Table>
-                         <Page :total="tableData.length" :current="1" :transfer="true" show-sizer  show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
                     </Card>
                 </TabPane>
             </Tabs>
@@ -152,12 +133,24 @@ export default {
             ],
             orderStautsList: [
                 {
-                    value: 'succeed',
-                    label: '支付成功'
+                    value: '1',
+                    label: '未付款'
                 },
                 {
-                    value: 'failed',
-                    label: '支付失败'
+                    value: '2',
+                    label: '付款中'
+                },
+                {
+                    value: '3',
+                    label: '已付款'
+                },
+                {
+                    value: '4',
+                    label: '付款失败'
+                },
+                {
+                    value: '5',
+                    label: '退款'
                 }
             ],
             orderTypeList: [
@@ -174,7 +167,10 @@ export default {
             orderStauts: '',
             orderType: 1,
             orderNum: '',
-            dateValue: [],
+            txNo: '', //商户订单号
+            payToken: '', //支付平台订单号
+            dateRecord: [],
+            dateCollect: [],
             columns: [
                 {
                     title: '国家',
@@ -242,6 +238,39 @@ export default {
                     }
                 }
             ],
+            columnsCollect: [
+                {
+                    title: '货币符号',
+                    align: 'center',
+                    key: 'currency'
+                },
+                {
+                    title: '支付成功金额',
+                    align: 'center',
+                    key: 'successAmount'
+                },
+                {
+                    title: '支付成功笔数',
+                    align: 'center',
+                    key: 'successCount'
+                },
+                {
+                    title: '退款金额',
+                    align: 'center',
+                    width: 180,
+                    key: 'refundAmount'
+                },
+                {
+                    title: '退款笔数',
+                    align: 'center',
+                    key: 'refundCount'
+                },
+                {
+                    title: '净交易金额',
+                    align: 'center',
+                    key: 'netAmount'
+                }
+            ],
             tableData: [
                 {
                     country: 'Nigeria',
@@ -284,20 +313,61 @@ export default {
                     tradingStatus: '支付成功'
                 }
             ],
+            tableDataCollect: [],
             pageSizeOpts: [10, 20, 30, 40, 50],
             tradingPwd: '',
             showAppModal: false,
             appRemark: '',
             appName: '',
             currentType: 1,
-            dateSelect: 'week'
+            range: '1',
+            tradeTotelYesterday: [
+                //昨日成交汇总
+                {
+                    country: '尼日利亚',
+                    successAmount: '8000.00',
+                    successCount: '10 笔',
+                    currency: '₦'
+                },
+                {
+                    country: '坦桑尼亚',
+                    successAmount: '5000.00',
+                    successCount: '10 笔',
+                    currency: 'TSh'
+                },
+                {
+                    country: '肯尼亚',
+                    successAmount: '0.00',
+                    successCount: '0 笔',
+                    currency: 'KSh'
+                }
+            ]
         }
     },
     mounted() {
         let token = localStorage.getItem('token')
-        this.$axios.setHeader('token', token)
-
-        // TODO AJAX
+        this.$axios.setHeader('X-Star-Token', token)
+        // 获取商户信息
+        // this.$axios
+        //     .post('/payment/mc/v2/merchant-operator/queryMerchantInfo')
+        //     .then(res => {
+        //         console.log(res.data)
+        //         // TODO
+        //         if (res.data) {
+        //         }
+        //     })
+        // 昨日成功交易汇总
+        this.$axios
+            .post(
+                '/payment/mc/v2/merchant-operator/queryStaticOrderBillResponse'
+            )
+            .then(res => {
+                // TODO
+                if (res.data.length > 0) {
+                    this.tradeTotelYesterday = res.data
+                }
+            })
+        this.searchOrder(this.currentType)
     },
     methods: {
         addApp() {
@@ -309,7 +379,63 @@ export default {
         cancel() {
             this.$Message.info('Clicked cancel')
         },
-        createKey() {}
+        createKey() {},
+        searchOrder(currentType) {
+            if (currentType == 1) {
+                //支付交易记录
+                this.$axios.post('/payment/mc/v2/order-pay-bills').then(res => {
+                    if (res.data) {
+                    }
+                })
+            } else if (currentType == 2) {
+                //退款记录查询
+                this.$axios
+                    .post('/payment/mc/v2/refund/find-refund-bill')
+                    .then(res => {
+                        if (res.data) {
+                        }
+                    })
+            } else if (currentType == 3) {
+                //交易汇总查询
+                this.$axios
+                    .post(
+                        `/payment/mc/v2/static-order-pay-bills?country=${
+                            this.country
+                        }&range=${this.range}&createTimeFrom=${
+                            this.createTimeFrom
+                        }&createTimeTo=${this.createTimeTo}`
+                    )
+                    .then(res => {
+                        console.log(res)
+                        if (res.data.resultCode == 'SUCCESS') {
+                            this.tableDataCollect.push(res.data)
+                        }
+                    })
+            }
+        },
+        changeCurrType(Type) {
+            this.currentType = Type
+            this.searchOrder(this.currentType)
+        },
+        formatDate(date) {
+            let tmpDate = new Date(date)
+            let year = tmpDate.getFullYear()
+            let month = (tmpDate.getMonth() + 1) > 10 ? tmpDate.getMonth() + 1 : '0' + (tmpDate.getMonth() + 1)
+            let day = tmpDate.getDate() > 10 ? tmpDate.getDate() : '0' + tmpDate.getDate()
+            return year + '-' + month + '-' + day
+        }
+    },
+    watch: {
+        orderType(val) {
+            if (val == 1) {
+                this.payToken = this.orderNum
+            } else {
+                this.txNo = this.orderNum
+            }
+        },
+        dateValue(val, oo) {
+            console.log(val, oo)
+        }
     }
 }
 </script>
