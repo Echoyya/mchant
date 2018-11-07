@@ -2,7 +2,7 @@
     <section class="container">
         <Card class="card-box">
             <div>
-                <h3>商户管理后台登录</h3>
+                <h3> </h3>
                 <p><Input v-model="account" placeholder="请输入账号" /></p>
                 <p><Input v-model="password" placeholder="请输入密码" /></p>
                 <p class="forgetPwd"><a href="#">忘记密码?</a></p>
@@ -38,10 +38,8 @@ export default {
     bottom: 0;
     right: 0;
 }
-.card-box h3,
 .card-box p {
-    margin: 0 auto;
-    margin-bottom: 20px;
+    margin: 20px auto;
     width: 300px;
 }
 .card-box .forgetPwd {

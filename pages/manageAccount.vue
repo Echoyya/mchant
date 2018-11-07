@@ -82,11 +82,12 @@
                 <TabPane label="交易查询">
                     <Card :bordered="false" :dis-hover="true" class="mCard mb15" >
                         <p>业务类型：
-                            <span>交易记录</span>
-                            <span>退款记录</span>
-                            <span>交易汇总</span>
+                            <Button :type="currentType == 1 ? 'primary':''" @click="currentType=1" class="btn">交易记录</Button>
+                            <Button :type="currentType == 2 ? 'primary':''" @click="currentType=2" class="btn">退款记录</Button>
+                            <Button :type="currentType == 3 ? 'primary':''" @click="currentType=3" class="btn">交易汇总</Button>
                         </p>
-                        <p>
+                        <div v-show="currentType!=3">
+                            <p>
                             国家：
                             <Select v-model="country" class="mr15 w160" placeholder="选择国家">
                                 <Option v-for="item in countryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -99,13 +100,29 @@
                                 <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                              <Input v-model="orderNum" placeholder="请输入订单号" class="w160" />
-                        </p>
-                        <p>
-                            交易时间：
-                            <DatePicker :value="dateValue" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
-                            <Button type="primary" class="search">搜索</Button>
-                            <Button>下载</Button>
-                        </p>
+                            </p>
+                            <p>
+                                交易时间：
+                                <DatePicker :value="dateValue" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
+                                <Button type="primary" class="search">搜索</Button>
+                                <Button>下载</Button>
+                            </p>
+                        </div>
+                        <div v-show="currentType==3">
+                            <p>时间选择：
+                                <Button :type="dateSelect == 'week'? 'primary':''" @click="dateSelect='week'" class="btn">近一周</Button>
+                                <Button :type="dateSelect == 'month' ? 'primary':''" @click="dateSelect='month'" class="btn">近一个月</Button>
+                                <Button :type="dateSelect == 'months' ? 'primary':''" @click="dateSelect='months'" class="btn">近三个月</Button>
+                                <DatePicker :value="dateValue" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
+                            </p>
+                            <p>
+                                 国家：
+                                <Select v-model="country" class="mr15 w160" placeholder="选择国家">
+                                    <Option v-for="item in countryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                <Button type="primary" class="search">搜索</Button>
+                            </p>
+                        </div>
                          <Table border :columns="columns" :data="tableData" :stripe="true" ></Table>
                          <Page :total="tableData.length" :current="1" :transfer="true" show-sizer  show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
                     </Card>
@@ -278,7 +295,9 @@ export default {
             tradingPwd: '',
             showAppModal: false,
             appRemark: '',
-            appName: ''
+            appName: '',
+            currentType: 1,
+            dateSelect: 'week'
         }
     },
     methods: {
@@ -340,6 +359,9 @@ export default {
     border-left: 3px solid #888484;
     padding-left: 5px;
     margin-bottom: 20px;
+}
+.mCard .btn {
+    margin: 0 20px;
 }
 .row {
     padding-left: 10px;
