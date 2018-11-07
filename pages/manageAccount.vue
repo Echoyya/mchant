@@ -3,26 +3,26 @@
         <div class="tab-box">
             <Tabs :animated="false">
                 <TabPane label="账户管理">
-                     <Card :bordered="false" :dis-hover="true" class="mCard mb15" >
-                         <h3>账户信息</h3>
-                         <Row class="row mb15">
+                    <Card :bordered="false" :dis-hover="true" class="mCard mb15">
+                        <h3>账户信息</h3>
+                        <Row class="row mb15">
                             <Col span="2"> 商户号： </Col>
                             <Col span="5"> M0123456789876543210 </Col>
                             <Col span="2">手机号： </Col>
                             <Col span="4">未绑定 </Col>
                             <Col span="4"> <Button type="primary" size="small">绑定</Button> </Col>
                         </Row>
-                         <Row class="row">
-                             <Col span="2"> 商户名称： </Col>
+                        <Row class="row">
+                            <Col span="2"> 商户名称： </Col>
                             <Col span="5"> 某某股份有限公司 </Col>
                             <Col span="2">邮箱： </Col>
                             <Col span="4">未绑定 </Col>
                             <Col span="4"> <Button type="primary" size="small">绑定</Button> </Col>
                         </Row>
-                     </Card>
-                     <Card :bordered="false" :dis-hover="true" class="mCard mb15" >
-                         <h3>昨日成功交易汇总（按国家）</h3>
-                         <Row class="row mb15 fontbold">
+                    </Card>
+                    <Card :bordered="false" :dis-hover="true" class="mCard mb15">
+                        <h3>昨日成功交易汇总（按国家）</h3>
+                        <Row class="row mb15 fontbold">
                             <Col span="8"> 尼日利亚 </Col>
                             <Col span="8"> 坦桑尼亚 </Col>
                             <Col span="8"> 肯尼亚 </Col>
@@ -51,36 +51,29 @@
                             <Col span="2"> 成功笔数： </Col>
                             <Col span="6"> 0 笔 </Col>
                         </Row>
-                     </Card>
-                     <Card :bordered="false" :dis-hover="true" class="mCard mb15" >
-                         <h3>应用密钥及交易密码管理</h3>
-                         <Button type="primary" class="mb15" @click="addApp"> 添加应用 </Button>
-                          <Modal
-                            title="添加应用"
-                            v-model="showAppModal"
-                            @on-ok="ok"
-                            @on-cancel="cancel"
-                            ok-text="确定"
-                            cancel-text="取消"
-                            width="400">
+                    </Card>
+                    <Card :bordered="false" :dis-hover="true" class="mCard mb15">
+                        <h3>应用密钥及交易密码管理</h3>
+                        <Button type="primary" class="mb15" @click="addApp"> 添加应用 </Button>
+                        <Modal title="添加应用" v-model="showAppModal" @on-ok="ok" @on-cancel="cancel" ok-text="确定" cancel-text="取消" width="400">
                             <p class="mb15">应用名称： <Input v-model="appName" placeholder="请输入应用名称" class="w240" /> </p>
                             <p class="mb15">备注信息： <Input v-model="appRemark" type="textarea" placeholder="请输入备注信息" class="w240" /></p>
                         </Modal>
-                         <p class="mb15 fontbold">应用列表</p>
-                         <Row class="mb15">
+                        <p class="mb15 fontbold">应用列表</p>
+                        <Row class="mb15">
                             <Col span="8">
-                                <p> 应用1： <Button type="primary" @click="createKey"> 生成密钥 </Button></p>
-                                <p> 密钥：</p>
-                                <p> <a href="#">设置交易密码</a></p>
-                                <p> 交易密码: 
-                                    <span v-show="tradingPwd==''">无</span>
-                                    <span v-show="tradingPwd!=''">{{tradingPwd}}</span> </p>
+                            <p> 应用1： <Button type="primary" @click="createKey"> 生成密钥 </Button></p>
+                            <p> 密钥：</p>
+                            <p> <a href="#">设置交易密码</a></p>
+                            <p> 交易密码:
+                                <span v-show="tradingPwd==''">无</span>
+                                <span v-show="tradingPwd!=''">{{tradingPwd}}</span> </p>
                             </Col>
                         </Row>
-                     </Card>
+                    </Card>
                 </TabPane>
                 <TabPane label="交易查询">
-                    <Card :bordered="false" :dis-hover="true" class="mCard mb15" >
+                    <Card :bordered="false" :dis-hover="true" class="mCard mb15">
                         <p>业务类型：
                             <span>交易记录</span>
                             <span>退款记录</span>
@@ -92,13 +85,13 @@
                                 <Option v-for="item in countryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                             订单状态：
-                             <Select v-model="orderStauts" class="mr15 w160"  placeholder="请选择">
+                            <Select v-model="orderStauts" class="mr15 w160" placeholder="请选择">
                                 <Option v-for="item in orderStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                             <Select v-model="orderType" class="mr15 w160" placeholder="请选择">
                                 <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
-                             <Input v-model="orderNum" placeholder="请输入订单号" class="w160" />
+                            <Input v-model="orderNum" placeholder="请输入订单号" class="w160" />
                         </p>
                         <p>
                             交易时间：
@@ -106,8 +99,8 @@
                             <Button type="primary" class="search">搜索</Button>
                             <Button>下载</Button>
                         </p>
-                         <Table border :columns="columns" :data="tableData" :stripe="true" ></Table>
-                         <Page :total="tableData.length" :current="1" :transfer="true" show-sizer  show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
+                        <Table border :columns="columns" :data="tableData" :stripe="true"></Table>
+                        <Page :total="tableData.length" :current="1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
                     </Card>
                 </TabPane>
             </Tabs>
@@ -280,6 +273,12 @@ export default {
             appRemark: '',
             appName: ''
         }
+    },
+    mounted() {
+        let token = localStorage.getItem('token')
+        this.$axios.setHeader('token', token)
+
+        // TODO AJAX
     },
     methods: {
         addApp() {
