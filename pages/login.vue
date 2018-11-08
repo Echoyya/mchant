@@ -41,7 +41,7 @@ export default {
                     .then(res => {
                         if (res.data.code == 0) {
                             setCookie('token', res.data.message)
-                            this.$router.push('/index')
+                            window.location.href = this.$route.query.pre || '/'
                         } else {
                             this.$Modal.error({
                                 title: '登录失败',

@@ -39,7 +39,6 @@ module.exports = {
   */
     plugins: [
         { src: '~plugins/iview', ssr: true },
-        { src: '~plugins/auth', ssr: false },
         { src: '~plugins/axios', ssr: false }
     ],
 
@@ -60,6 +59,9 @@ module.exports = {
     },
     proxy: {
         '/payment/mc/': env.ms_host
+    },
+    router: {
+        middleware: 'auth'
     },
 
     /*

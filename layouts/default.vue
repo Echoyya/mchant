@@ -42,7 +42,12 @@ export default {
         }
     },
     created() {
-        this.$axios.setHeader('X-Star-Token', this.$store.state.token)
+        let token = this.$store.state.token
+        if (token) {
+            this.$axios.setHeader('X-Star-Token', this.$store.state.token)
+        } else {
+            this.$router.push('/login')
+        }
     }
 }
 </script>
