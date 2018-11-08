@@ -13,7 +13,7 @@
                     <span><a href="#" class="logout">安全退出</a></span>
                 </div>
             </Header>
-             <nuxt/>
+            <nuxt />
             <Footer class="mfooter">
                 <p>合作银行：中国银行&nbsp;&nbsp;农业银行&nbsp;&nbsp;工商银行&nbsp;&nbsp;建设银行</p>
                 <p>友情链接：四达时代</p>
@@ -39,6 +39,14 @@ export default {
                 }
             ],
             language: 'Chinese'
+        }
+    },
+    created() {
+        let token = this.$store.state.token
+        if (token) {
+            this.$axios.setHeader('X-Star-Token', this.$store.state.token)
+        } else {
+            this.$router.push('/login')
         }
     }
 }

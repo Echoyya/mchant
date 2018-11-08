@@ -37,7 +37,10 @@ module.exports = {
     /*
   ** Plugins to load before mounting the App
   */
-    plugins: [{ src: '~plugins/iview', ssr: true }],
+    plugins: [
+        { src: '~plugins/iview', ssr: true },
+        { src: '~plugins/axios', ssr: false }
+    ],
 
     /*
   ** Nuxt.js modules
@@ -57,6 +60,9 @@ module.exports = {
     proxy: {
         '/payment/mc/': env.ms_host,
         '/cms/vup/': env.ms_host
+    },
+    router: {
+        middleware: 'auth'
     },
 
     /*
