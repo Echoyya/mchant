@@ -24,13 +24,13 @@
                         <h3>昨日成功交易汇总（按国家）</h3>
                         <Row>
                             <Col span="8" v-for="(item, index) in tradeTotelYesterday" :key="index">
-                                <p class="row mb15 fontbold">{{item.country}}</p>
-                                <p class="row">订单总金额：{{item.successAmount}}</p>
-                                <p class="row">货币符号：{{item.currency}}</p>
-                                <p class="row">成功笔数：{{item.successCount}}</p>
+                            <p class="row mb15 fontbold">{{item.country}}</p>
+                            <p class="row">订单总金额：{{item.successAmount}}</p>
+                            <p class="row">货币符号：{{item.currency}}</p>
+                            <p class="row">成功笔数：{{item.successCount}}</p>
                             </Col>
                         </Row>
-                        
+
                     </Card>
                     <Card :bordered="false" :dis-hover="true" class="mCard mb15">
                         <h3>应用密钥及交易密码管理</h3>
@@ -61,18 +61,18 @@
                         </p>
                         <div v-show="currentType!=3">
                             <p>
-                            国家：
-                            <Select v-model="country" class="mr15 w160" placeholder="选择国家">
-                                <Option v-for="item in countryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                            订单状态：
-                            <Select v-model="orderStauts" class="mr15 w160" placeholder="请选择">
-                                <Option v-for="item in orderStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                            <Select v-model="orderType" class="mr15 w160" placeholder="请选择">
-                                <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                             <Input v-model="orderNum" placeholder="请输入订单号" class="w160" />
+                                国家：
+                                <Select v-model="country" class="mr15 w160" placeholder="选择国家">
+                                    <Option v-for="item in countryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                订单状态：
+                                <Select v-model="orderStauts" class="mr15 w160" placeholder="请选择">
+                                    <Option v-for="item in orderStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                <Select v-model="orderType" class="mr15 w160" placeholder="请选择">
+                                    <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                <Input v-model="orderNum" placeholder="请输入订单号" class="w160" />
                             </p>
                             <p>
                                 交易时间：
@@ -80,8 +80,8 @@
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">搜索</Button>
                                 <Button>下载</Button>
                             </p>
-                            <Table border :columns="columns" :data="tableData" :stripe="true" ></Table>
-                             <Page :total="tableData.length" :current="1" :transfer="true" show-sizer  show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
+                            <Table border :columns="columns" :data="tableData" :stripe="true"></Table>
+                            <Page :total="tableData.length" :current="1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
                         </div>
                         <div v-show="currentType==3">
                             <p>时间选择：
@@ -91,13 +91,13 @@
                                 <DatePicker v-model="dateCollect" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
                             </p>
                             <p>
-                                 国家：
+                                国家：
                                 <Select v-model="country" class="mr15 w160" placeholder="选择国家">
                                     <Option v-for="item in countryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
                                 <Button type="primary" class="search">搜索</Button>
                             </p>
-                            <Table border :columns="columnsCollect" :data="tableDataCollect" :stripe="true" ></Table>
+                            <Table border :columns="columnsCollect" :data="tableDataCollect" :stripe="true"></Table>
                         </div>
                     </Card>
                 </TabPane>
@@ -420,8 +420,14 @@ export default {
         formatDate(date) {
             let tmpDate = new Date(date)
             let year = tmpDate.getFullYear()
-            let month = (tmpDate.getMonth() + 1) > 10 ? tmpDate.getMonth() + 1 : '0' + (tmpDate.getMonth() + 1)
-            let day = tmpDate.getDate() > 10 ? tmpDate.getDate() : '0' + tmpDate.getDate()
+            let month =
+                tmpDate.getMonth() + 1 > 10
+                    ? tmpDate.getMonth() + 1
+                    : '0' + (tmpDate.getMonth() + 1)
+            let day =
+                tmpDate.getDate() > 10
+                    ? tmpDate.getDate()
+                    : '0' + tmpDate.getDate()
             return year + '-' + month + '-' + day
         }
     },
