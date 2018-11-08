@@ -3,6 +3,7 @@
         <Card class="card-box">
             <div>
                 <h3> </h3>
+                <div>{{$L.login.username}}</div>
                 <p><Input v-model="account" placeholder="请输入账号" /></p>
                 <p><Input v-model="password" placeholder="请输入密码" type="password" /></p>
                 <Tooltip max-width="200" placement="bottom-end" content="如果忘记密码，请联系管理员电话：010-53013618 邮箱：kefu@startimes.com.cn">
