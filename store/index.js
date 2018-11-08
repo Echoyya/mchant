@@ -1,6 +1,6 @@
 export const state = () => ({
     token: '',
-    lang: {}
+    lang: 'en'
 })
 export const mutations = {
     SET_LANG: function(state, lang) {
