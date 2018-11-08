@@ -58,7 +58,8 @@ module.exports = {
         retry: { retries: 0 }
     },
     proxy: {
-        '/payment/mc/': env.ms_host
+        '/payment/mc/': env.ms_host,
+        '/cms/vup/': env.ms_host
     },
     router: {
         middleware: 'auth'
