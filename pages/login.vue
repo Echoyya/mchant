@@ -1,17 +1,17 @@
 <template>
     <section class="container">
-        <Card class="card-box">
+        <div class="card-box">
             <div>
-                <h3> </h3>
-                <div>{{$L.login.username}}</div>
-                <p><Input v-model="account" placeholder="请输入账号" /></p>
-                <p><Input v-model="password" placeholder="请输入密码" type="password" /></p>
+                <h3></h3>
+                <!-- <div>{{$L.login.username}}</div> -->
+                <div class="p"><Input v-model="account" placeholder="请输入账号" /></div>
+                <div class="p"><Input v-model="password" placeholder="请输入密码" type="password" /></div>
                 <Tooltip max-width="200" placement="bottom-end" content="如果忘记密码，请联系管理员电话：010-53013618 邮箱：kefu@startimes.com.cn">
-                    <p class="forgetPwd"><a href="#">忘记密码?</a></p>
+                    <div class="forgetPwd p"><a href="#">忘记密码?</a></div>
                 </Tooltip>
-                <p><Button type="primary" @click="toLogin" class="button">登录</Button></p>
+                <div class="p"><Button type="primary" @click="toLogin" class="button">登录</Button></div>
             </div>
-        </Card>
+        </div>
     </section>
 </template>
 <script>
@@ -41,7 +41,7 @@ export default {
                     )
                     .then(res => {
                         if (res.data.code == 0) {
-                            setCookie('token', res.data.message)
+                            setCookie('token', res.data.data)
                             window.location.href = this.$route.query.pre || '/'
                         } else {
                             this.$Modal.error({
@@ -70,8 +70,13 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
-.card-box p {
+.card-box h3 {
+    height: 30px;
+}
+.card-box .p {
     margin: 20px auto;
     width: 300px;
 }

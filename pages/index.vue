@@ -3,7 +3,7 @@
         <div class="tab-box">
             <Tabs :animated="false">
                 <TabPane label="账户管理">
-                    <Card :bordered="false" :dis-hover="true" class="mCard mb15">
+                    <div class="mCard mb15">
                         <h3>账户信息</h3>
                         <Row class="row mb15">
                             <Col span="2"> 商户号： </Col>
@@ -23,8 +23,8 @@
                             <Button type="primary" size="small">绑定</Button>
                             </Col>
                         </Row>
-                    </Card>
-                    <Card :bordered="false" :dis-hover="true" class="mCard mb15">
+                    </div>
+                    <div class="mCard mb15">
                         <h3>昨日成功交易汇总（按国家）</h3>
                         <Row>
                             <Col span="8" v-for="(item, index) in tradeTotelYesterday" :key="index">
@@ -35,8 +35,8 @@
                             </Col>
                         </Row>
 
-                    </Card>
-                    <Card :bordered="false" :dis-hover="true" class="mCard mb15">
+                    </div>
+                    <div class="mCard mb15">
                         <h3>应用密钥及交易密码管理</h3>
                         <Button type="primary" class="mb15" @click="showAddAppModal"> 添加应用 </Button>
                         <Modal title="添加应用" v-model="showAppModal" width="400">
@@ -71,26 +71,24 @@
                                 <Button type="primary" @click="addApp">确定</Button>
                             </div>
                         </Modal>
-                        <p class="mb15 fontbold">应用列表</p>
-                        <Row class="mb15">
-                            <Col span="8">
-                            <p> 应用1：
-                                <Button type="primary" @click="createKey"> 生成密钥 </Button>
-                            </p>
-                            <p> 密钥：</p>
-                            <p>
-                                <a href="#">设置交易密码</a>
-                            </p>
-                            <p> 交易密码:
-                                <span v-show="tradingPwd==''">无</span>
-                                <span v-show="tradingPwd!=''">{{tradingPwd}}</span>
-                            </p>
+                        <h3 class="mb15 fontbold">应用列表</h3>
+                         <Row>
+                            <Col span="8" v-for="(item, index) in MerchantAppInfoDto" :key="index">
+                                <p class="row mb15 fontbold">应用名称:{{item.name}}
+                                    <Button type="primary" @click="createKey" class="ml15" size="small"> 生成密钥 </Button>
+                                </p>
+                                <p class="row mb15">密钥：{{item.Apikey}}</p>
+                                <p class="row mb15">钱包账户:{{item.ewalletAccountNo}}</p>
+                                <p class="row mb15">支付通知Url：{{item.payNotifyUrl}}</p>
+                                <p class="row mb15">退款通知Url：{{item.refundNotifyUrl}}</p>
+                                <p class="row mb15"><a href="#">设置交易密码</a></p>
+                                <p class="row mb15">交易密码:无</p>
                             </Col>
                         </Row>
-                    </Card>
+                    </div>
                 </TabPane>
                 <TabPane label="交易查询">
-                    <Card :bordered="false" :dis-hover="true" class="mCard mb15">
+                    <div :bordered="false" :dis-hover="true" class="mCard mb15">
                         <p class="mb15">业务类型：
                             <Button :type="currentType == 1 ? 'primary':'default'" @click="changeCurrType(1)" class="btn">交易记录</Button>
                             <Button :type="currentType == 2 ? 'primary':'default'" @click="changeCurrType(2)" class="btn">退款记录</Button>
@@ -136,7 +134,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12" offset="1">
-                                    <Input v-model="refundAmount" class="w100" /> 元</Col>
+                                    <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100"></InputNumber> 元</Col>
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <Col span="6" class="tright"> 退款类型：
@@ -167,7 +165,7 @@
                                     <Button type="primary" @click="toRefund">确定</Button>
                                 </div>
                             </Modal>
-                            <Page :total="tableData1.length" :current="1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
+                            <Page :total="tableDataAll1.length" :current="pageIndex1" :page-size="pageSize1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex1 = $event " @on-page-size-change="pageSize1 = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==2">
                             <div class="mb15">
@@ -191,7 +189,7 @@
                                 <Button>下载</Button>
                             </div>
                             <Table border :columns="columns2" :data="tableData2" :stripe="true"></Table>
-                            <Page :total="tableData2.length" :current="1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
+                            <Page :total="tableDataAll2.length" :current="pageIndex2" :page-size="pageSize2" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex2 = $event " @on-page-size-change="pageSize2 = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==3">
                             <div class="mb15">时间选择：
@@ -205,11 +203,11 @@
                                 <Select v-model="country3" class="mr15 w160" placeholder="选择国家">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
                                 </Select>
-                                <Button type="primary" class="search">搜索</Button>
+                                <Button type="primary" class="search" @click="searchOrder(currentType)">搜索</Button>
                             </div>
                             <Table border :columns="columns3" :data="tableData3" :stripe="true"></Table>
                         </div>
-                    </Card>
+                    </div>
                 </TabPane>
             </Tabs>
         </div>
@@ -306,7 +304,7 @@ export default {
             dateRecord: [],
             dateRefund: [],
             dateCollect: [],
-            refundAmount: '',
+            refundAmount: 0,
             refundNote: '',
             refundType: 'EWALLET',
             dealPassword: '',
@@ -351,7 +349,7 @@ export default {
                 {
                     title: '状态',
                     align: 'center',
-                    key: 'state'
+                    key: 'stateShow'
                 },
                 {
                     title: '操作',
@@ -359,23 +357,37 @@ export default {
                     width: 150,
                     align: 'center',
                     render: (h, params) => {
-                        return h('div', [
-                            h(
-                                'a',
-                                {
-                                    style: {
-                                        color: 'rbg(0, 102, 153)'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.refundObj = params.row
-                                            this.showRefundModal = true
+                        if (params.row.state == '3') {
+                            return h('div', [
+                                h(
+                                    'a',
+                                    {
+                                        style: {
+                                            color: 'rbg(0, 102, 153)'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.refundObj = params.row
+                                                this.showRefundModal = true
+                                            }
                                         }
-                                    }
-                                },
-                                '申请退款'
-                            )
-                        ])
+                                    },
+                                    '申请退款'
+                                )
+                            ])
+                        } else {
+                            return h('div', [
+                                h(
+                                    'span',
+                                    {
+                                        style: {
+                                            color: '#999'
+                                        }
+                                    },
+                                    '不可退款'
+                                )
+                            ])
+                        }
                     }
                 }
             ],
@@ -465,9 +477,8 @@ export default {
                     key: 'netAmount'
                 }
             ],
-            tableData1: [],
             tableDataAll1: [],
-            tableData2: [],
+            tableDataAll2: [],
             tableData3: [],
             tradeTotelYesterday: [], //昨日交易
             MerchantAppInfoDto: [], //商户应用列表
@@ -480,7 +491,9 @@ export default {
             refundNotifyUrl: '',
             pageSizeOpts: [10, 20, 30, 40, 50],
             pageIndex1: 1,
-            pageSize1: 10
+            pageIndex2: 1,
+            pageSize1: 10,
+            pageSize2: 10
         }
     },
     mounted() {
@@ -493,8 +506,9 @@ export default {
         this.$axios
             .post('/payment/mc/v2/merchant-operator/queryMerchantAppList')
             .then(res => {
-                if (res.length > 0) {
-                    this.MerchantAppInfoDto = res
+                if (res.data.length > 0) {
+                    this.MerchantAppInfoDto = res.data
+                    console.log(this.MerchantAppInfoDto)
                 }
             })
         // 昨日成功交易汇总
@@ -547,6 +561,10 @@ export default {
             this.ewalletNo = ''
             this.payNotifyUrl = ''
             this.refundNotifyUrl = ''
+            this.showRefundModal = false
+            this.refundAmount = ''
+            this.refundNote = ''
+            this.dealPassword = ''
         },
         createKey() {},
         searchOrder(currentType) {
@@ -575,29 +593,6 @@ export default {
                             res.data.orderPayBills.length > 0
                         ) {
                             this.tableDataAll1 = res.data.orderPayBills
-                            this.tableData1 = res.data.orderPayBills.slice(
-                                (this.pageIndex1 - 1) * this.pageSize1,
-                                this.pageIndex1 * this.pageSize1
-                            )
-                            this.tableData1.forEach(ele => {
-                                switch (ele.state) {
-                                    case '1':
-                                        ele.state = '未付款'
-                                        break
-                                    case '2':
-                                        ele.state = '付款中'
-                                        break
-                                    case '3':
-                                        ele.state = '已付款'
-                                        break
-                                    case '4':
-                                        ele.state = '付款失败'
-                                        break
-                                    case '5':
-                                        ele.state = '退款'
-                                        break
-                                }
-                            })
                         }
                     })
             } else if (currentType == 2) {
@@ -624,29 +619,7 @@ export default {
                             res.data.resultCode == 'SUCCESS' &&
                             res.data.refundBills.length > 0
                         ) {
-                            this.tableData2 = res.data.refundBills
-                            this.tableData2.forEach(ele => {
-                                switch (ele.state) {
-                                    case '1':
-                                        ele.state = '未退款'
-                                        break
-                                    case '2':
-                                        ele.state = '处理中'
-                                        break
-                                    case '4':
-                                        ele.state = '退款失败'
-                                        break
-                                    case '5':
-                                        ele.state = '已退款'
-                                        break
-                                    case '6':
-                                        ele.state = '付款关闭'
-                                        break
-                                    case '11':
-                                        ele.state = '审核失败'
-                                        break
-                                }
-                            })
+                            this.tableDataAll2 = res.data.refundBills
                         }
                     })
             } else if (currentType == 3) {
@@ -692,19 +665,28 @@ export default {
                     content: '当前订单应用交易密码为必填项'
                 })
                 return
+            } else if (this.refundObj.amount < this.refundAmount) {
+                this.$Modal.warning({
+                    content: '退款金额不可大于可退金额'
+                })
             } else {
                 this.$axios
                     .post(
-                        `/payment/mc/v2/refund/{payToken}/applyRefund?amount=${
-                            this.refundAmount
-                        }&refundNote=${this.refundNote}&refundType=${
-                            this.refundType
-                        }&dealPassword=${this.dealPassword}&payToken=${
+                        `/payment/mc/v2/refund/${
                             this.refundObj.payToken
+                        }/applyRefund?amount=${this.refundAmount}&refundNote=${
+                            this.refundNote
+                        }&refundType=${this.refundType}&dealPassword=${
+                            this.dealPassword
                         }`
                     )
                     .then(res => {
-                        console.log(res)
+                        if (res.data.resultCode == 'SUCCESS') {
+                            this.$Modal.success({
+                                content: '申请成功,可在退款记录中查询'
+                            })
+                        }
+                        this.showRefundModal = false
                     })
             }
         },
@@ -750,6 +732,70 @@ export default {
         },
         orderType2() {
             this.orderNum2 = ''
+        },
+        dateCollect(val) {
+            if (val[0] != '' && val[1] != '') {
+                this.range = '0'
+            } else {
+                this.range = '1'
+            }
+        }
+    },
+    computed: {
+        tableData1() {
+            let tmp = this.tableDataAll1.slice(
+                (this.pageIndex1 - 1) * this.pageSize1,
+                this.pageIndex1 * this.pageSize1
+            )
+            tmp.forEach(ele => {
+                switch (ele.state) {
+                    case '1':
+                        ele.stateShow = '未付款'
+                        break
+                    case '2':
+                        ele.stateShow = '付款中'
+                        break
+                    case '3':
+                        ele.stateShow = '已付款'
+                        break
+                    case '4':
+                        ele.stateShow = '付款失败'
+                        break
+                    case '5':
+                        ele.stateShow = '退款'
+                        break
+                }
+            })
+            return tmp
+        },
+        tableData2() {
+            let tmp = this.tableDataAll2.slice(
+                (this.pageIndex2 - 1) * this.pageSize2,
+                this.pageIndex2 * this.pageSize2
+            )
+            tmp.forEach(ele => {
+                switch (ele.state) {
+                    case '1':
+                        ele.state = '未退款'
+                        break
+                    case '2':
+                        ele.state = '处理中'
+                        break
+                    case '4':
+                        ele.state = '退款失败'
+                        break
+                    case '5':
+                        ele.state = '已退款'
+                        break
+                    case '6':
+                        ele.state = '付款关闭'
+                        break
+                    case '11':
+                        ele.state = '审核失败'
+                        break
+                }
+            })
+            return tmp
         }
     }
 }
@@ -764,6 +810,9 @@ export default {
 }
 .mr15 {
     margin-right: 15px;
+}
+.ml15 {
+    margin-left: 15px;
 }
 .mt20 {
     margin-top: 20px;
