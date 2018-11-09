@@ -1,3 +1,6 @@
+import Vue from 'vue'
+import en_map from '~/language/en.json'
+import zh_map from '~/language/zh.json'
 export const state = () => ({
     token: '',
     lang: 'en'
@@ -6,6 +9,11 @@ export const mutations = {
     SET_LANG: function(state, lang) {
         // language en/zh
         state.lang = lang || 'en'
+        if (lang == 'zh') {
+            Vue.prototype.$L = zh_map
+        } else {
+            Vue.prototype.$L = en_map
+        }
     },
     SET_TOKEN: function(state, token) {
         state.token = token
