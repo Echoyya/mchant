@@ -1,5 +1,10 @@
 {
     "login":{
-        "username":"登录"
+        "username":"登录",
+        "account":"请输入账号",
+        "password":"请输入密码",
+        "contact_way":"如果忘记密码，请联系管理员电话：010-53013618 邮箱：kefu@startimes.com.cn",
+        "forgetPwd":"忘记密码",
+        "login":"登录"
     }
 }

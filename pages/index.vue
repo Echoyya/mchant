@@ -4,7 +4,7 @@
             <Tabs :animated="false">
                 <TabPane label="账户管理">
                     <div class="mCard mb15">
-                        <h3 class="mb15">账户信息</h3>
+                        <h2 class="mb15">账户信息</h2>
                         <Row class="row mb15">
                             <Col span="2"> 商户号： </Col>
                             <Col span="5"> {{merchantInfoDto.id}} </Col>
@@ -29,7 +29,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="ewalletNo" placeholder="请输入手机号" class="w160" />
+                                    <Input v-model="phoneNum" placeholder="请输入手机号" class="w160" />
                                     </Col>
                                     <Col span="6">
                                     <div>
@@ -63,11 +63,11 @@
                             <Button type="primary" size="small" v-else @click="showEmailModal=true">绑定</Button>
                             <Modal title="手机绑定" v-model="showEmailModal" width="400">
                                 <Row class="mb15 lh32">
-                                    <Col span="18" offset="6"> 请输入您已经绑定的邮箱账号
+                                    <Col span="18" offset="4"> 请输入您已经绑定的邮箱账号
                                     <span class="required">*</span>
                                     </Col>
-                                    <Col span="18" offset="6">
-                                    <Input v-model="verification" placeholder="请输入验证码" class="w160" />
+                                    <Col span="18" offset="4">
+                                    <Input v-model="email" placeholder="请输入邮箱账号" class="w240" />
                                     </Col>
                                 </Row>
                                 <div slot="footer">
@@ -79,7 +79,7 @@
                         </Row>
                     </div>
                     <div class="mCard mb15">
-                        <h3>昨日成功交易汇总（按国家）</h3>
+                        <h2>昨日成功交易汇总（按国家）</h2>
                         <Row>
                             <Col span="8" v-for="(item, index) in tradeTotelYesterday" :key="index">
                             <p class="row mb15 fontbold">{{item.country}}</p>
@@ -91,7 +91,7 @@
 
                     </div>
                     <div class="mCard mb15">
-                        <h3 class="mb15">应用密钥及交易密码管理</h3>
+                        <h2 class="mb15">应用密钥及交易密码管理</h2>
                         <Button type="primary" class="mb15" @click="showAppModal=true"> 添加应用 </Button>
                         <Modal title="添加应用" v-model="showAppModal" width="400">
                             <Row class="mb15 lh32">
@@ -125,9 +125,9 @@
                                 <Button type="primary" @click="toAddApp">确定</Button>
                             </div>
                         </Modal>
-                        <h3 class="fontbold">应用列表</h3>
+                        <h3 class="fontbold ml15">应用列表</h3>
                         <Row>
-                            <Col span="8" class="bb1 mt15" v-for="(item, index) in merchantAppInfoDto" :key="index">
+                            <Col span="8" class="appBorder mt15" v-for="(item, index) in merchantAppInfoDto" :key="index">
                             <p class="row mb15 fontbold">应用名称：{{item.name}}
                                 <Button type="primary" @click="createApiKey(item.id,index)" class="ml15" size="small"> 生成密钥 </Button>
                             </p>
@@ -135,11 +135,62 @@
                             <p class="row mb15">钱包账户：{{item.ewalletAccountNo}}</p>
                             <p class="row mb15">支付通知Url：{{item.payNotifyUrl}}</p>
                             <p class="row mb15">退款通知Url：{{item.refundNotifyUrl}}</p>
-                            <p class="row mb15">
-                                <a href="#">设置交易密码</a>
-                            </p>
+                            <p class="row mb15 fontColor" v-if="!item.dealPassword" @click="showPasswordModal=true ; appIndex = index ">设置交易密码</p>
+                            <p class="row mb15 fontColor" v-else @click="showRePasswordModal=true ; appIndex = index ">修改交易密码</p>
                             <p class="row mb15">交易密码：无</p>
                             </Col>
+                            <Modal title="设置交易密码" v-model="showPasswordModal" width="400">
+                                <Row class="mb15 lh32">
+                                    <Col span="6">交易密码 ：
+                                    <span class="required">*</span>
+                                    </Col>
+                                    <Col span="12">
+                                    <Input v-model="password" placeholder="请输入交易密码" class="w160" />
+                                    </Col>
+                                </Row>
+                                <Row class="mb15 lh32">
+                                    <Col span="6"> 确认交易密码：
+                                    <span class="required">*</span>
+                                    </Col>
+                                    <Col span="12">
+                                    <Input v-model="repassword" placeholder="请确认交易密码" class="w160" />
+                                    </Col>
+                                </Row>
+                                <div slot="footer">
+                                    <Button @click="cancel('showPasswordModal')">取消</Button>
+                                    <Button type="primary" @click="toUpdataPassword(merchantAppInfoDto[appIndex].dealPassword,password,'')">确定</Button>
+                                </div>
+                            </Modal>
+                            <Modal title="修改交易密码" v-model="showRePasswordModal" width="400">
+                                <Row class="mb15 lh32">
+                                    <Col span="6">原交易密码 ：
+                                    <span class="required">*</span>
+                                    </Col>
+                                    <Col span="12">
+                                    <Input v-model="password" placeholder="请输入交易密码" class="w160" />
+                                    </Col>
+                                </Row>
+                                <Row class="mb15 lh32">
+                                    <Col span="6"> 新交易密码：
+                                    <span class="required">*</span>
+                                    </Col>
+                                    <Col span="12">
+                                    <Input v-model="repassword" placeholder="请确认新交易密码" class="w160" />
+                                    </Col>
+                                </Row>
+                                <Row class="mb15 lh32">
+                                    <Col span="6"> 确认新交易密码：
+                                    <span class="required">*</span>
+                                    </Col>
+                                    <Col span="12">
+                                    <Input v-model="repassword" placeholder="请确认交易密码" class="w160" />
+                                    </Col>
+                                </Row>
+                                <div slot="footer">
+                                    <Button @click="cancel('showRePasswordModal')">取消</Button>
+                                    <Button type="primary" @click="toUpdataPassword(merchantAppInfoDto[appIndex].dealPassword,repassword,password)">确定</Button>
+                                </div>
+                            </Modal>
                         </Row>
                     </div>
                 </TabPane>
@@ -543,6 +594,8 @@ export default {
             showRefundModal: false,
             showPhoneModal: false,
             showEmailModal: false,
+            showPasswordModal: false,
+            showRePasswordModal: false,
             appName: '',
             ewalletNo: '',
             payNotifyUrl: '',
@@ -555,7 +608,11 @@ export default {
             countryPrefix: '',
             verification: '',
             phoneNum: '',
-            email: ''
+            email: '',
+            appIndex: '',
+            password: '',
+            newPassword: '',
+            repassword: ''
         }
     },
     mounted() {
@@ -582,11 +639,6 @@ export default {
         this.$axios.get('/cms/vup/v2/areas?versionCode=5500').then(res => {
             if (res.data.length > 0) {
                 this.countryList = res.data
-                this.countryList.forEach(ele => {
-                    if (ele.id != 8) {
-                        ele.countryPrefix = ele.name + '  +' + ele.phonePrefix
-                    }
-                })
             }
         })
 
@@ -614,14 +666,64 @@ export default {
                 })
         },
         //绑定和更改邮箱
-        toBindEmail() {},
-        toBindPhone() {},
+        toBindEmail() {
+            let reg = /^[0-9A-Za-z][\.-_0-9A-Za-z]*@[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)+$/
+            if (!reg.test(this.email)) {
+                this.$Modal.warning({
+                    title: '验证错误',
+                    content: '请输入正确的邮箱格式'
+                })
+                return
+            } else {
+                this.$axios
+                    .put(
+                        `/payment/mc/v2/merchant-operator/modifyMerchantInfoEmail?email=${
+                            this.email
+                        }`
+                    )
+                    .then(res => {
+                        if (res.data.code == 0) {
+                            this.$Modal.success({
+                                title: '操作成功'
+                            })
+                            this.showEmailModal = false
+                        } else {
+                            console.log(res)
+                        }
+                    })
+            }
+        },
+        toBindPhone() {
+            if (this.phoneNum == '') {
+                this.$Modal.warning({
+                    title: '手机号码为必填项'
+                })
+            } else if (this.verification == '') {
+                this.$Modal.warning({
+                    title: '请输入手机验证码'
+                })
+            } else {
+                let countryPhone =
+                    this.countryPrefix.toUpperCase() + '+' + this.phoneNum
+                this.$axios
+                    .put(
+                        `/payment/mc/v2/merchant-operator/modifyMerchantInfoPhone?phone=${countryPhone}`
+                    )
+                    .then(res => {
+                        if (res.data.code == 0) {
+                            this.$Modal.success({
+                                title: '操作成功'
+                            })
+                            this.showPhoneModal = false
+                        }
+                    })
+            }
+        },
         // 添加商户应用
         toAddApp() {
             if (this.appName == '') {
                 this.$Modal.warning({
-                    title: '添加失败',
-                    content: '应用名称为必填项'
+                    title: '应用名称为必填项'
                 })
             } else {
                 this.$axios
@@ -634,6 +736,35 @@ export default {
                     )
                     .then(res => {
                         this.showAppModal = false
+                    })
+            }
+        },
+        toUpdataPassword(orgPwd, newPwd, oldPwd) {
+            // TODO 修改密码逻辑
+            if (orgPwd && oldPwd == '') {
+                this.$Modal.warning({
+                    title: '请输入原密码'
+                })
+                return
+            }
+            if (newPwd == '') {
+                this.$Modal.warning({
+                    title: '密码为必填项'
+                })
+                return
+            } else if (newPwd != this.repassword) {
+                this.$Modal.warning({
+                    title: '两次密码输入不一致，请重新输入'
+                })
+                return
+            } else {
+                let merchantAppId = this.merchantAppInfoDto[appIndex].id
+                this.$axios
+                    .put(
+                        `/payment/mc/v2/merchant-operator/modifyMerchantAppDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${newPwd}`
+                    )
+                    .then(res => {
+                        console.log(res)
                     })
             }
         },
@@ -676,7 +807,7 @@ export default {
                         this.getMerchantAppInfoDto()
                     } else {
                         this.$Modal.warning({
-                            content: '生成失败，请重试！'
+                            title: '生成失败，请重试！'
                         })
                     }
                 })
@@ -781,8 +912,9 @@ export default {
                 return
             } else if (this.refundObj.amount < this.refundAmount) {
                 this.$Modal.warning({
-                    content: '退款金额不可大于可退金额'
+                    title: '退款金额不可大于可退金额'
                 })
+                return
             } else {
                 this.$axios
                     .post(
@@ -797,7 +929,7 @@ export default {
                     .then(res => {
                         if (res.data.resultCode == 'SUCCESS') {
                             this.$Modal.success({
-                                content: '申请成功,可在退款记录中查询'
+                                title: '申请成功,可在退款记录中查询'
                             })
                         }
                         this.showRefundModal = false
@@ -934,6 +1066,9 @@ export default {
 .mb15 {
     margin-bottom: 15px;
 }
+.pl15 {
+    padding-left: 15px;
+}
 .lh32 {
     line-height: 32px;
 }
@@ -946,9 +1081,6 @@ export default {
 .w240 {
     width: 240px;
 }
-.bb1 {
-    border-bottom: 1px solid #ccc;
-}
 .tleft {
     text-align: left;
 }
@@ -957,6 +1089,9 @@ export default {
 }
 .fontbold {
     font-weight: bold;
+}
+.fontColor {
+    color: #2d8cf0;
 }
 .tab-box {
     width: 80%;
@@ -970,7 +1105,7 @@ export default {
 .mCard .search {
     margin-left: 385px;
 }
-.mCard h3 {
+.mCard h2 {
     border-left: 3px solid #888484;
     padding-left: 5px;
 }
@@ -987,4 +1122,10 @@ export default {
 .required {
     color: #f00;
 }
+.appBorder {
+    border-bottom: 1px solid #ccc;
+}
+/* .appBorder:last-child {
+    border-bottom: none !important;
+} */
 </style>
