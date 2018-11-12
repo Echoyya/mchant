@@ -2,193 +2,194 @@
     <section class="container">
         <div class="tab-box">
             <Tabs :animated="false">
-                <TabPane label="账户管理">
+                <TabPane :label="$L.account.account_management">
                     <div class="mCard mb15">
-                        <h2 class="mb15">账户信息</h2>
+                        <h2 class="mb15">{{$L.account.account_information}}</h2>
                         <Row class="row mb15">
-                            <Col span="2"> 商户号： </Col>
+                            <Col span="2"> {{$L.account.merchant_No}} </Col>
                             <Col span="5"> {{merchantInfoDto.id}} </Col>
-                            <Col span="2">手机号： </Col>
+                            <Col span="2">{{$L.account.phone}} </Col>
                             <Col span="4" v-if="merchantInfoDto.contactPhone">{{merchantInfoDto.contactPhone}}</Col>
-                            <Col span="4" v-else>未绑定</Col>
+                            <Col span="4" v-else>{{$L.account.not_bound}}</Col>
                             <Col span="4">
-                            <Button type="primary" size="small" v-if="merchantInfoDto.contactPhone" @click="showPhoneModal=true">更换</Button>
-                            <Button type="primary" size="small" v-else @click="showPhoneModal=true">绑定</Button>
-                            <Modal title="手机绑定" v-model="showPhoneModal" width="400">
+                            <Button type="primary" size="small" v-if="merchantInfoDto.contactPhone" @click="showPhoneModal=true">{{$L.account.change}}</Button>
+                            <Button type="primary" size="small" v-else @click="showPhoneModal=true">{{$L.account.binding}}</Button>
+                            <Modal :title="$L.account.phone_binding" v-model="showPhoneModal" width="500">
                                 <Row class="mb15 lh32">
-                                    <Col span="6"> 地区：
+                                    <Col span="6"> {{$L.account.region}}
                                     </Col>
                                     <Col span="12">
-                                    <Select v-model="countryPrefix" class="mr15 w160" placeholder="选择国家">
+                                    <Select v-model="countryPrefix" class="mr15 w200" :placeholder="$L.account.choose_country">
                                         <Option v-for="item in countryList" :value="item.country" :key="item.country" v-if="item.id != 8">{{ item.name}} &nbsp;&nbsp;+{{item.phonePrefix}}</Option>
                                     </Select>
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6"> 手机号：
+                                    <Col span="6"> {{$L.account.phone}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="phoneNum" placeholder="请输入手机号" class="w160" />
+                                    <Input v-model="phoneNum" :placeholder="$L.account.enter_phone_number" class="w200" />
                                     </Col>
                                     <Col span="6">
                                     <div>
-                                        <Button type="primary" size="small" @click="sendVerification">发送验证码</Button>
+                                        <Button type="primary" size="small" @click="sendVerification">{{$L.account.send_verification}}</Button>
                                     </div>
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6"> 验证码：
+                                    <Col span="6"> {{$L.account.verification}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="verification" placeholder="请输入验证码" class="w160" />
+                                    <Input v-model="verification" :placeholder="$L.account.enter_verification" class="w200" />
                                     </Col>
                                 </Row>
                                 <div slot="footer">
-                                    <Button @click="cancel('showPhoneModal')">取消</Button>
-                                    <Button type="primary" @click="toBindPhone">确定</Button>
+                                    <Button @click="cancel('showPhoneModal')">{{$L.account.cancel}}</Button>
+                                    <Button type="primary" @click="toBindPhone">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
                             </Col>
                         </Row>
                         <Row class="row">
-                            <Col span="2"> 商户名称： </Col>
+                            <Col span="2">{{$L.account.merchant_name}} </Col>
                             <Col span="5"> {{merchantInfoDto.name}} </Col>
-                            <Col span="2">邮箱： </Col>
+                            <Col span="2">{{$L.account.email}}</Col>
                             <Col span="4" v-if="merchantInfoDto.contactEmail">{{merchantInfoDto.contactEmail}} </Col>
-                            <Col span="4" v-else>未绑定</Col>
+                            <Col span="4" v-else>{{$L.account.not_bound}}</Col>
                             <Col span="4">
-                            <Button type="primary" size="small" v-if="merchantInfoDto.contactEmail" @click="showEmailModal=true">更换</Button>
-                            <Button type="primary" size="small" v-else @click="showEmailModal=true">绑定</Button>
-                            <Modal title="手机绑定" v-model="showEmailModal" width="400">
+                            <Button type="primary" size="small" v-if="merchantInfoDto.contactEmail" @click="showEmailModal=true">{{$L.account.change}}</Button>
+                            <Button type="primary" size="small" v-else @click="showEmailModal=true">{{$L.account.binding}}</Button>
+                            <Modal :title="$L.account.email_address" v-model="showEmailModal" width="400">
                                 <Row class="mb15 lh32">
-                                    <Col span="18" offset="4"> 请输入您已经绑定的邮箱账号
+                                    <Col span="18" offset="4"> {{$L.account.enter_email}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="18" offset="4">
-                                    <Input v-model="email" placeholder="请输入邮箱账号" class="w240" />
+                                    <Input v-model="email" :placeholder="$L.account.enter_email" class="w240" />
                                     </Col>
                                 </Row>
                                 <div slot="footer">
-                                    <Button @click="cancel('showEmailModal')">取消</Button>
-                                    <Button type="primary" @click="toBindEmail">确定</Button>
+                                    <Button @click="cancel('showEmailModal')">{{$L.account.cancel}}</Button>
+                                    <Button type="primary" @click="toBindEmail">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
                             </Col>
                         </Row>
                     </div>
                     <div class="mCard mb15">
-                        <h2>昨日成功交易汇总（按国家）</h2>
+                        <h2>{{$L.account.yesterday_summary}}</h2>
                         <Row>
                             <Col span="8" v-for="(item, index) in tradeTotelYesterday" :key="index">
                             <p class="row mb15 fontbold">{{item.country}}</p>
-                            <p class="row">订单总金额：{{item.successAmount}}</p>
-                            <p class="row">货币符号：{{item.currency}}</p>
-                            <p class="row">成功笔数：{{item.successCount}} 笔</p>
+                            <p class="row">{{$L.account.order_tota}}{{item.successAmount}}</p>
+                            <p class="row">{{$L.account.currency}}{{item.currency}}</p>
+                            <p class="row">{{$L.account.success_frequency}}{{item.successCount}} 笔</p>
                             </Col>
                         </Row>
 
                     </div>
                     <div class="mCard mb15">
-                        <h2 class="mb15">应用密钥及交易密码管理</h2>
-                        <Button type="primary" class="mb15" @click="showAppModal=true"> 添加应用 </Button>
-                        <Modal title="添加应用" v-model="showAppModal" width="400">
+                        <h2 class="mb15">{{$L.account.key_transaction}}</h2>
+                        <Button type="primary" class="mb15" @click="showAppModal=true"> {{$L.account.add_application}} </Button>
+                        <Modal :title="$L.account.add_application" v-model="showAppModal" width="400">
                             <Row class="mb15 lh32">
-                                <Col span="6"> 应用名称：
+                                <Col span="6"> {{$L.account.application_name}}
                                 <span class="required">*</span>
                                 </Col>
                                 <Col span="12">
-                                <Input v-model="appName" placeholder="请输入应用名称" class="w240" />
+                                <Input v-model="appName" :placeholder="$L.account.enter_application_name" class="w240" />
                                 </Col>
                             </Row>
                             <Row class="mb15 lh32">
-                                <Col span="6"> 钱包账号：</Col>
+                                <Col span="6"> {{$L.account.wallet_account}}</Col>
                                 <Col span="12">
-                                <Input v-model="ewalletNo" placeholder="请输入钱包账号" class="w240" />
+                                <Input v-model="ewalletNo" :placeholder="$L.account.enter_wallet_account" class="w240" />
                                 </Col>
                             </Row>
                             <Row class="mb15 lh32">
-                                <Col span="6"> 支付通知Url：</Col>
+                                <Col span="6"> {{$L.account.payment_notice}}</Col>
                                 <Col span="12">
-                                <Input v-model="payNotifyUrl" placeholder="请输入支付通知Url" class="w240" />
+                                <Input v-model="payNotifyUrl" :placeholder="$L.account.enter_payment_notice" class="w240" />
                                 </Col>
                             </Row>
                             <Row class="mb15 lh32">
-                                <Col span="6"> 退款通知Url：</Col>
+                                <Col span="6"> {{$L.account.refund_notice}}</Col>
                                 <Col span="12">
-                                <Input v-model="refundNotifyUrl" placeholder="请输入退款通知Url" class="w240" />
+                                <Input v-model="refundNotifyUrl" :placeholder="$L.account.enter_refund_notice" class="w240" />
                                 </Col>
                             </Row>
                             <div slot="footer">
-                                <Button @click="cancel('showAppModal')">取消</Button>
-                                <Button type="primary" @click="toAddApp">确定</Button>
+                                <Button @click="cancel('showAppModal')">{{$L.account.cancel}}</Button>
+                                <Button type="primary" @click="toAddApp">{{$L.account.okay}}</Button>
                             </div>
                         </Modal>
-                        <h3 class="fontbold ml15">应用列表</h3>
+                        <h3 class="fontbold ml15">{{$L.account.application_list}}</h3>
                         <Row>
                             <Col span="8" class="appBorder mt15" v-for="(item, index) in merchantAppInfoDto" :key="index">
-                            <p class="row mb15 fontbold">应用名称：{{item.name}}
+                            <p class="row mb15 fontbold">{{$L.account.application_name}}{{item.name}}
                                 <Button type="primary" @click="createApiKey(item.id,index)" class="ml15" size="small"> 生成密钥 </Button>
                             </p>
-                            <p class="row mb15">密钥：{{item.apiKey}}</p>
-                            <p class="row mb15">钱包账户：{{item.ewalletAccountNo}}</p>
-                            <p class="row mb15">支付通知Url：{{item.payNotifyUrl}}</p>
-                            <p class="row mb15">退款通知Url：{{item.refundNotifyUrl}}</p>
-                            <p class="row mb15 fontColor" v-if="!item.dealPassword" @click="showPasswordModal=true ; appIndex = index ">设置交易密码</p>
-                            <p class="row mb15 fontColor" v-else @click="showRePasswordModal=true ; appIndex = index ">修改交易密码</p>
-                            <p class="row mb15">交易密码：无</p>
+                            <p class="row mb15">{{$L.account.apiKey}}{{item.apiKey}}</p>
+                            <p class="row mb15">{{$L.account.wallet_account}}{{item.ewalletAccountNo}}</p>
+                            <p class="row mb15">{{$L.account.payment_notice}}{{item.payNotifyUrl}}</p>
+                            <p class="row mb15">{{$L.account.refund_notice}}{{item.refundNotifyUrl}}</p>
+                            <p class="row mb15 fontStyle" v-if="!item.dealPassword" @click="showPasswordModal=true ; appIndex = index ">{{$L.account.set_password}}</p>
+                            <p class="row mb15 fontStyle" v-else @click="showRePasswordModal=true ; appIndex = index ">{{$L.account.change_password}}</p>
+                            <p class="row mb15" v-if="!item.dealPassword">{{$L.account.dealPassword}}{{$L.account.not_have}}</p>
+                            <p class="row mb15" v-else>{{$L.account.dealPassword}} ******</p>
                             </Col>
-                            <Modal title="设置交易密码" v-model="showPasswordModal" width="400">
+                            <Modal :title="$L.account.set_password" v-model="showPasswordModal" width="500">
                                 <Row class="mb15 lh32">
-                                    <Col span="6">交易密码 ：
+                                    <Col span="6">{{$L.account.dealPassword}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="password" placeholder="请输入交易密码" class="w160" />
+                                    <Input v-model="password" :placeholder="$L.account.enter_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6"> 确认交易密码：
+                                    <Col span="6"> {{$L.account.confirm_dealPassword}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="repassword" placeholder="请确认交易密码" class="w160" />
+                                    <Input v-model="repassword" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <div slot="footer">
-                                    <Button @click="cancel('showPasswordModal')">取消</Button>
-                                    <Button type="primary" @click="toUpdataPassword(merchantAppInfoDto[appIndex].dealPassword,password,'')">确定</Button>
+                                    <Button @click="cancel('showPasswordModal')">{{$L.account.cancel}}</Button>
+                                    <Button type="primary" @click="toUpdataPassword(merchantAppInfoDto[appIndex].dealPassword,password,'')">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
-                            <Modal title="修改交易密码" v-model="showRePasswordModal" width="400">
+                            <Modal :title="$L.account.change_password" v-model="showRePasswordModal" width="500">
                                 <Row class="mb15 lh32">
-                                    <Col span="6">原交易密码 ：
+                                    <Col span="7">{{$L.account.original_dealpassword}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="password" placeholder="请输入交易密码" class="w160" />
+                                    <Input v-model="password" :placeholder="$L.account.enter_original_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6"> 新交易密码：
+                                    <Col span="7"> {{$L.account.new_assword}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="repassword" placeholder="请确认新交易密码" class="w160" />
+                                    <Input v-model="repassword" :placeholder="$L.account.enter_new_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6"> 确认新交易密码：
+                                    <Col span="7"> {{$L.account.confirm_new_dealPassword}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="repassword" placeholder="请确认交易密码" class="w160" />
+                                    <Input v-model="repassword" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <div slot="footer">
-                                    <Button @click="cancel('showRePasswordModal')">取消</Button>
-                                    <Button type="primary" @click="toUpdataPassword(merchantAppInfoDto[appIndex].dealPassword,repassword,password)">确定</Button>
+                                    <Button @click="cancel('showRePasswordModal')">{{$L.account.cancel}}</Button>
+                                    <Button type="primary" @click="toUpdataPassword(merchantAppInfoDto[appIndex].dealPassword,repassword,password)">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
                         </Row>
@@ -321,6 +322,7 @@
     </section>
 </template>
 <script>
+import { getCookie } from '~/functions/utils'
 export default {
     data() {
         return {
@@ -616,7 +618,8 @@ export default {
         }
     },
     mounted() {
-        let token = localStorage.getItem('token')
+        // let token = localStorage.getItem('token')
+        let token = getCookie('token')
         this.$axios.setHeader('X-Star-Token', token)
         let getCountryToken =
             'eyJhbGciOiJIUzUxMiJ9.eyJhcHAiOjEsInVpZCI6OTE1MDg3MiwiY2NvZGUiOiJORyIsInJvbGUiOjAsImRldiI6IkEwMDAyIiwiY3JlYXRlZCI6MTU0MTU4MDc3NDU0OCwiZXhwIjoxNTQyMTg1NTc0LCJjaWQiOjJ9.9anQQh-7WveW8IhJsDkdU9kmcpWFmDgvrhaHqErv5SzxsfdlA5GPuHdzH8fiZlkclFOOV7TJ2e4RbhKA7WwvVA'
@@ -741,6 +744,7 @@ export default {
         },
         toUpdataPassword(orgPwd, newPwd, oldPwd) {
             // TODO 修改密码逻辑
+            let reg = /^\d{n}$/
             if (orgPwd && oldPwd == '') {
                 this.$Modal.warning({
                     title: '请输入原密码'
@@ -752,19 +756,36 @@ export default {
                     title: '密码为必填项'
                 })
                 return
+            } else if (reg.test(newPwd)) {
+                this.$Modal.warning({
+                    title: '密码为6位纯数字'
+                })
+                return
             } else if (newPwd != this.repassword) {
                 this.$Modal.warning({
                     title: '两次密码输入不一致，请重新输入'
                 })
                 return
             } else {
-                let merchantAppId = this.merchantAppInfoDto[appIndex].id
+                let merchantAppId = this.merchantAppInfoDto[this.appIndex].id
                 this.$axios
                     .put(
                         `/payment/mc/v2/merchant-operator/modifyMerchantAppDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${newPwd}`
                     )
                     .then(res => {
                         console.log(res)
+                        if (res.data.code == 0) {
+                            this.getMerchantAppInfoDto()
+                            this.showPasswordModal = false
+                            this.showRePasswordModal = false
+                            this.password = ''
+                            this.repassword = ''
+                            this.newPassword = ''
+                        } else if (res.data.code == 500) {
+                            this.$Modal.warning({
+                                title: res.data.message
+                            })
+                        }
                     })
             }
         },
@@ -793,6 +814,17 @@ export default {
                     this.refundAmount = ''
                     this.refundNote = ''
                     this.dealPassword = ''
+                    break
+                case 'showPasswordModal':
+                    this.showPasswordModal = false
+                    this.password = ''
+                    this.repassword = ''
+                    break
+                case 'showRePasswordModal':
+                    this.showRePasswordModal = false
+                    this.password = ''
+                    this.repassword = ''
+                    this.newPassword = ''
                     break
             }
         },
@@ -1078,6 +1110,9 @@ export default {
 .w160 {
     width: 160px;
 }
+.w200 {
+    width: 200px;
+}
 .w240 {
     width: 240px;
 }
@@ -1090,8 +1125,9 @@ export default {
 .fontbold {
     font-weight: bold;
 }
-.fontColor {
+.fontStyle {
     color: #2d8cf0;
+    cursor: pointer;
 }
 .tab-box {
     width: 80%;

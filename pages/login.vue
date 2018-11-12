@@ -3,10 +3,9 @@
         <div class="card-box">
             <div>
                 <h3></h3>
-                <div>{{$L.login.username}}</div>
-                <div class="p"><Input v-model="account" placeholder="请输入账号" /></div>
-                <div class="p"><Input v-model="password" placeholder="请输入密码" type="password" /></div>
-                <Tooltip max-width="200" placement="bottom-end" content="如果忘记密码，请联系管理员电话：010-53013618 邮箱：kefu@startimes.com.cn">
+                <div class="p"><Input v-model="account" :placeholder="$L.login.account" /></div>
+                <div class="p"><Input v-model="password" :placeholder="$L.login.password" type="password" /></div>
+                <Tooltip max-width="200" placement="bottom-end" :content="$L.login.contact_way">
                     <div class="forgetPwd p"><a href="#">{{$L.login.forgetPwd}}?</a></div>
                 </Tooltip>
                 <div class="p"><Button type="primary" @click="toLogin" class="button">{{$L.login.login}}</Button></div>
@@ -28,8 +27,8 @@ export default {
         toLogin() {
             if (this.account == '' || this.password == '') {
                 this.$Modal.error({
-                    title: '登录失败',
-                    content: '用户名/密码不能为空'
+                    title: this.$L.login.failure,
+                    content: this.$L.login.cannot_be_empty
                 })
                 return
             } else {
@@ -45,8 +44,8 @@ export default {
                             window.location.href = this.$route.query.pre || '/'
                         } else {
                             this.$Modal.error({
-                                title: '登录失败',
-                                content: '用户名/密码错误，请重新输入'
+                                title: this.$L.login.failure,
+                                content: this.$L.login.re_enter
                             })
                         }
                     })
