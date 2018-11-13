@@ -1,6 +1,5 @@
 {
     "login":{
-        "username":"登录",
         "account":"请输入账号",
         "password":"请输入密码",
         "contact_way":"如果忘记密码，请联系管理员,电话：010-53013618,邮箱：kefu@startimes.com.cn",
@@ -58,10 +57,80 @@
         "confirm_dealPassword":"确认交易密码：",
         "enter_confirm_dealPassword":"请确认交易密码",
         "original_dealpassword":"原交易密码：",
-        "enter_original_dealPassword":"请输入交易密码",
-
+        "enter_original_dealPassword":"请输入原交易密码",
         "new_assword":"新交易密码：",
         "enter_new_dealPassword":"请输入新交易密码",
-        "confirm_new_dealPassword":"确认新交易密码："
-    } 
+        "confirm_new_dealPassword":"确认新交易密码：",
+
+        "correct_mailbox":"请输入正确的邮箱格式",
+        "success":"操作成功",
+        "password_6_digits":"密码为6位纯数字",
+        "password_not_match":"两次密码输入不一致，请重新输入",
+
+        "build_failed":"生成失败，请重试！"
+
+    },
+    "record": {
+        "transaction_query":"交易查询",
+        "business_type":"业务类型：",
+        "trading_record":"交易记录",
+        "refund_record":"退款记录",
+        "trading_summary":"退款记录",
+        "country":"国家：",
+        "select_country":"选择国家",
+        "order_status":"订单状态：",
+        "please_select":"请选择",
+        "enter_order_number":"请输入订单号",
+        "trading_time":"交易时间：",
+        "start_end_dates":"请选择起止日期",
+        "search":"搜索",
+        "download":"下载",
+        "refund":"申请退款",
+        "order_number":"订单号：",
+        "can_refund_amount":"可退金额：",
+        "refund_amount":"退款金额：",
+        "refund_type":"退款类型：",
+        "order_password":"当前订单应用交易密码：",
+        "refund_remarks":"退款备注：",
+        "enter_refund_remarks":"请输入退款备注",
+        "okay":"确定",
+        "cancel":"取消",
+        
+        "col_country":"国家",
+        "col_trading_time":"交易时间",
+        "col_merchan_number":"商户订单号",
+        "col_platform_number":"支付平台订单号",
+        "col_trading_number":"交易金额",
+        "col_currency":"货币符号",
+        "col_trading_description":"交易描述",
+        "col_state":"状态",
+        "col_operation":"操作",
+        "nonrefundable":"不可退款",
+        "amount_required":"退款金额为必填项",
+        "password_required":"当前订单应用交易密码为必填项",
+        "refundable_amount":"退款金额不可大于可退金额",
+        "success_refund":"申请成功,可在退款记录中查询"
+    },
+    "refund": {
+        "country":"国家：",
+        "select_country":"选择国家",
+        "order_status":"订单状态：",
+        "please_select":"请选择",
+        "enter_order_number":"请输入订单号",
+        "start_end_dates":"请选择起止日期",
+        "search":"搜索",
+        "download":"下载",
+        "refund_time":"申请退款时间：",
+
+        "col_country":"国家",
+        "col_merchan_number":"商户订单号",
+        "col_platform_number":"支付平台订单号",
+        "col_trading_number":"交易金额",
+        "col_refund_amount":"退款金额",
+        "col_currency":"货币符号",
+        "col_refund_time":"申请退款时间",
+        "col_done_time":"完成退款时间",
+        "col_refund_remarks":"退款备注",
+        "col_state":"状态"
+    }
 }

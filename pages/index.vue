@@ -195,57 +195,57 @@
                         </Row>
                     </div>
                 </TabPane>
-                <TabPane label="交易查询">
+                <TabPane :label="$L.record.transaction_query">
                     <div :bordered="false" :dis-hover="true" class="mCard mb15">
-                        <p class="mb15">业务类型：
-                            <Button :type="currentType == 1 ? 'primary':'default'" @click="changeCurrType(1)" class="btn">交易记录</Button>
-                            <Button :type="currentType == 2 ? 'primary':'default'" @click="changeCurrType(2)" class="btn">退款记录</Button>
-                            <Button :type="currentType == 3 ? 'primary':'default'" @click="changeCurrType(3)" class="btn">交易汇总</Button>
+                        <p class="mb15">{{$L.record.business_type}}
+                            <Button :type="currentType == 1 ? 'primary':'default'" @click="changeCurrType(1)" class="btn">{{$L.record.trading_record}}</Button>
+                            <Button :type="currentType == 2 ? 'primary':'default'" @click="changeCurrType(2)" class="btn">{{$L.record.refund_record}}</Button>
+                            <Button :type="currentType == 3 ? 'primary':'default'" @click="changeCurrType(3)" class="btn">{{$L.record.trading_summary}}</Button>
                         </p>
                         <div v-show="currentType==1">
                             <div class="mb15">
-                                <span> 国家：</span>
-                                <Select v-model="country1" class="mr15 w160" placeholder="选择国家">
+                                <span> {{$L.record.country}}</span>
+                                <Select v-model="country1" class="mr15 w160" :placeholder="$L.record.select_country">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
                                 </Select>
-                                <span> 订单状态：</span>
-                                <Select v-model="orderStauts1" class="mr15 w160" placeholder="请选择">
+                                <span> {{$L.record.order_status}}</span>
+                                <Select v-model="orderStauts1" class="mr15 w160" :placeholder="$L.record.please_select">
                                     <Option v-for="item in orderStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Select v-model="orderType1" class="mr15 w160" placeholder="请选择">
+                                <Select v-model="orderType1" class="mr15 w160" :placeholder="$L.record.please_select">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum1" placeholder="请输入订单号" class="w160" />
+                                <Input v-model="orderNum1" :placeholder="$L.record.enter_order_number" class="w160" />
                             </div>
                             <div class="mb15">
-                                <span> 交易时间：</span>
-                                <DatePicker v-model="dateRecord" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
-                                <Button type="primary" class="search" @click="searchOrder(currentType)">搜索</Button>
-                                <Button>下载</Button>
+                                <span> {{$L.record.trading_time}}</span>
+                                <DatePicker v-model="dateRecord" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240"></DatePicker>
+                                <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
+                                <Button>download</Button>
                             </div>
                             <Table border :columns="columns1" :data="tableData1" :stripe="true"></Table>
-                            <Modal title="申请退款" v-model="showRefundModal" width="700">
+                            <Modal :title="$L.record.refund" v-model="showRefundModal" width="700">
                                 <Row class="mb15 lh32">
-                                    <Col span="6" class="tright"> 订单号：</Col>
+                                    <Col span="6" class="tright"> {{$L.record.order_number}}</Col>
                                     <Col span="12" offset="1">{{ refundObj.txNo}}</Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6" class="tright"> 交易时间：</Col>
+                                    <Col span="6" class="tright"> {{$L.record.trading_time}}</Col>
                                     <Col span="12" offset="1">{{ refundObj.createTime}}</Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6" class="tright"> 可退金额：</Col>
-                                    <Col span="12" offset="1">{{ refundObj.amount}}元</Col>
+                                    <Col span="6" class="tright"> {{$L.record.can_refund_amount}}</Col>
+                                    <Col span="12" offset="1">{{ refundObj.amount}}</Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6" class="tright"> 退款金额：
+                                    <Col span="6" class="tright"> {{$L.record.refund_amount}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12" offset="1">
-                                    <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100"></InputNumber> 元</Col>
+                                    <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100"></InputNumber> </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6" class="tright"> 退款类型：
+                                    <Col span="6" class="tright"> {{$L.record.refund_type}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12" offset="1">
@@ -255,7 +255,7 @@
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6" class="tright"> 当前订单应用交易密码：
+                                    <Col span="6" class="tright"> {{$L.record.order_password}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12" offset="1">
@@ -263,38 +263,38 @@
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6" class="tright"> 退款备注：</Col>
+                                    <Col span="6" class="tright"> {{$L.record.refund_remarks}}</Col>
                                     <Col span="12" offset="1">
-                                    <Input v-model="refundNote" type="textarea" :rows="4" placeholder="请输入退款备注" class="w240" />
+                                    <Input v-model="refundNote" type="textarea" :rows="4" :placeholder="$L.record.enter_refund_remarks" class="w240" />
                                     </Col>
                                 </Row>
                                 <div slot="footer">
-                                    <Button @click="cancel('showRefundModal')">取消</Button>
-                                    <Button type="primary" @click="toRefund">确定</Button>
+                                    <Button @click="cancel('showRefundModal')">{{$L.record.cancel}}</Button>
+                                    <Button type="primary" @click="toRefund">{{$L.record.okay}}</Button>
                                 </div>
                             </Modal>
                             <Page :total="tableDataAll1.length" :current="pageIndex1" :page-size="pageSize1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex1 = $event " @on-page-size-change="pageSize1 = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==2">
                             <div class="mb15">
-                                <span> 国家：</span>
-                                <Select v-model="country2" class="mr15 w160" placeholder="选择国家">
+                                <span> {{$L.refund.country}}</span>
+                                <Select v-model="country2" class="mr15 w160" :placeholder="$L.refund.select_country">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
                                 </Select>
-                                订单状态：
-                                <Select v-model="orderStauts2" class="mr15 w160" placeholder="请选择">
+                                {{$L.refund.order_status}}
+                                <Select v-model="orderStauts2" class="mr15 w160" :placeholder="$L.refund.please_select">
                                     <Option v-for="item in refundStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Select v-model="orderType2" class="mr15 w160" placeholder="请选择">
+                                <Select v-model="orderType2" class="mr15 w160" :placeholder="$L.refund.please_select">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum2" placeholder="请输入订单号" class="w160" />
+                                <Input v-model="orderNum2" :placeholder="$L.refund.enter_order_number" class="w160" />
                             </div>
                             <div class="mb15">
-                                申请退款时间：
-                                <DatePicker v-model="dateRefund" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
-                                <Button type="primary" class="search" @click="searchOrder(currentType)">搜索</Button>
-                                <Button>下载</Button>
+                                {{$L.refund.refund_time}}
+                                <DatePicker v-model="dateRefund" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240"></DatePicker>
+                                <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
+                                <Button>{{$L.refund.download}}</Button>
                             </div>
                             <Table border :columns="columns2" :data="tableData2" :stripe="true"></Table>
                             <Page :total="tableDataAll2.length" :current="pageIndex2" :page-size="pageSize2" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex2 = $event " @on-page-size-change="pageSize2 = $event" class="pageStyle" />
@@ -420,48 +420,48 @@ export default {
             refundObj: {},
             columns1: [
                 {
-                    title: '国家',
+                    title: this.$L.record.col_country,
                     align: 'center',
                     key: 'country'
                 },
                 {
-                    title: '交易时间',
+                    title: this.$L.record.col_trading_time,
                     align: 'center',
                     key: 'createTime'
                 },
                 {
-                    title: '商户订单号',
+                    title: this.$L.record.col_merchan_number,
                     align: 'center',
                     key: 'txNo'
                 },
                 {
-                    title: '支付平台订单号',
+                    title: this.$L.record.col_platform_number,
                     align: 'center',
                     width: 180,
                     key: 'payToken'
                 },
                 {
-                    title: '交易金额',
+                    title: this.$L.record.col_trading_number,
                     align: 'center',
                     key: 'amount'
                 },
                 {
-                    title: '货币符号',
+                    title: this.$L.record.col_currency,
                     align: 'center',
                     key: 'currency'
                 },
                 {
-                    title: '交易描述',
+                    title: this.$L.record.col_trading_description,
                     align: 'center',
                     key: 'paySubject'
                 },
                 {
-                    title: '状态',
+                    title: this.$L.record.col_state,
                     align: 'center',
                     key: 'stateShow'
                 },
                 {
-                    title: '操作',
+                    title: this.$L.record.col_operation,
                     key: 'operation',
                     width: 150,
                     align: 'center',
@@ -481,7 +481,7 @@ export default {
                                             }
                                         }
                                     },
-                                    '申请退款'
+                                    this.$L.record.refund
                                 )
                             ])
                         } else {
@@ -493,7 +493,7 @@ export default {
                                             color: '#999'
                                         }
                                     },
-                                    '不可退款'
+                                    this.$L.record.nonrefundable
                                 )
                             ])
                         }
@@ -502,53 +502,53 @@ export default {
             ],
             columns2: [
                 {
-                    title: '国家',
+                    title: this.$L.refund.col_country,
                     align: 'center',
                     key: 'country'
                 },
                 {
-                    title: '商户订单号',
+                    title: this.$L.refund.col_merchan_number,
                     align: 'center',
                     key: 'txNo'
                 },
                 {
-                    title: '支付平台订单号',
+                    title: this.$L.refund.col_platform_number,
                     align: 'center',
                     width: 180,
                     key: 'payToken'
                 },
                 {
-                    title: '交易金额',
+                    title: this.$L.refund.col_trading_number,
                     align: 'center',
                     key: 'payAmount'
                 },
                 {
-                    title: '退款金额',
+                    title: this.$L.refund.col_refund_amount,
                     align: 'center',
                     key: 'refundAmount'
                 },
                 {
-                    title: '货币符号',
+                    title: this.$L.refund.col_currency,
                     align: 'center',
                     key: 'currency'
                 },
                 {
-                    title: '申请退款日期',
+                    title: this.$L.refund.col_refund_time,
                     align: 'center',
                     key: 'applyRefundTime'
                 },
                 {
-                    title: '完成退款日期',
+                    title: this.$L.refund.col_done_time,
                     align: 'center',
                     key: 'refundTime'
                 },
                 {
-                    title: '退款备注',
+                    title: this.$L.refund.col_refund_remarks,
                     align: 'center',
                     key: 'refundNote'
                 },
                 {
-                    title: '状态',
+                    title: this.$L.refund.col_state,
                     align: 'center',
                     key: 'state'
                 }
@@ -673,8 +673,7 @@ export default {
             let reg = /^[0-9A-Za-z][\.-_0-9A-Za-z]*@[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)+$/
             if (!reg.test(this.email)) {
                 this.$Modal.warning({
-                    title: '验证错误',
-                    content: '请输入正确的邮箱格式'
+                    title: this.$L.account.correct_mailbox
                 })
                 return
             } else {
@@ -687,23 +686,26 @@ export default {
                     .then(res => {
                         if (res.data.code == 0) {
                             this.$Modal.success({
-                                title: '操作成功'
+                                title: this.$L.account.success
                             })
                             this.showEmailModal = false
                         } else {
-                            console.log(res)
+                            this.$Modal.success({
+                                title: res.data.meassage
+                            })
                         }
                     })
             }
         },
+        //绑定和更改手机号
         toBindPhone() {
             if (this.phoneNum == '') {
                 this.$Modal.warning({
-                    title: '手机号码为必填项'
+                    title: this.$L.account.enter_phone_number
                 })
             } else if (this.verification == '') {
                 this.$Modal.warning({
-                    title: '请输入手机验证码'
+                    title: this.$L.account.enter_verification
                 })
             } else {
                 let countryPhone =
@@ -715,7 +717,7 @@ export default {
                     .then(res => {
                         if (res.data.code == 0) {
                             this.$Modal.success({
-                                title: '操作成功'
+                                title: this.$L.account.success
                             })
                             this.showPhoneModal = false
                         }
@@ -726,7 +728,7 @@ export default {
         toAddApp() {
             if (this.appName == '') {
                 this.$Modal.warning({
-                    title: '应用名称为必填项'
+                    title: this.$L.account.enter_application_name
                 })
             } else {
                 this.$axios
@@ -747,23 +749,23 @@ export default {
             let reg = /^\d{n}$/
             if (orgPwd && oldPwd == '') {
                 this.$Modal.warning({
-                    title: '请输入原密码'
+                    title: this.$L.account.enter_original_dealPassword
                 })
                 return
             }
             if (newPwd == '') {
                 this.$Modal.warning({
-                    title: '密码为必填项'
+                    title: this.$L.account.enter_new_dealPassword
                 })
                 return
             } else if (reg.test(newPwd)) {
                 this.$Modal.warning({
-                    title: '密码为6位纯数字'
+                    title: this.$L.account.password_6_digits
                 })
                 return
             } else if (newPwd != this.repassword) {
                 this.$Modal.warning({
-                    title: '两次密码输入不一致，请重新输入'
+                    title: this.$L.account.password_not_match
                 })
                 return
             } else {
@@ -839,7 +841,7 @@ export default {
                         this.getMerchantAppInfoDto()
                     } else {
                         this.$Modal.warning({
-                            title: '生成失败，请重试！'
+                            title: this.$L.account.build_failed
                         })
                     }
                 })
@@ -932,19 +934,17 @@ export default {
             // 申请退款接口
             if (this.refundAmount == '') {
                 this.$Modal.warning({
-                    title: '申请失败',
-                    content: '退款金额为必填项'
+                    title: this.$L.record.amount_required
                 })
                 return
             } else if (this.dealPassword == '') {
                 this.$Modal.warning({
-                    title: '申请失败',
-                    content: '当前订单应用交易密码为必填项'
+                    title: this.$L.record.password_required
                 })
                 return
             } else if (this.refundObj.amount < this.refundAmount) {
                 this.$Modal.warning({
-                    title: '退款金额不可大于可退金额'
+                    title: ccc
                 })
                 return
             } else {
@@ -961,7 +961,7 @@ export default {
                     .then(res => {
                         if (res.data.resultCode == 'SUCCESS') {
                             this.$Modal.success({
-                                title: '申请成功,可在退款记录中查询'
+                                title: this.$L.record.success_refund
                             })
                         }
                         this.showRefundModal = false
