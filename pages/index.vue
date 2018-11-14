@@ -221,9 +221,9 @@
                                 <span> {{$L.record.trading_time}}</span>
                                 <DatePicker v-model="dateRecord" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240"></DatePicker>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
-                                <Button>{{$L.record.download}}</Button>
+                                <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
-                            <Table border :columns="columns1" :data="tableData1" :stripe="true"></Table>
+                            <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table"></Table>
                             <Modal :title="$L.record.refund" v-model="showRefundModal" width="700">
                                 <Row class="mb15 lh32">
                                     <Col span="6" class="tright"> {{$L.record.order_number}}</Col>
@@ -295,7 +295,7 @@
                                 {{$L.refund.refund_time}}
                                 <DatePicker v-model="dateRefund" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240"></DatePicker>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
-                                <Button>{{$L.refund.download}}</Button>
+                                <Button @click="downloadTableData(2)">{{$L.refund.download}}</Button>
                             </div>
                             <Table border :columns="columns2" :data="tableData2" :stripe="true"></Table>
                             <Page :total="tableDataAll2.length" :current="pageIndex2" :page-size="pageSize2" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex2 = $event " @on-page-size-change="pageSize2 = $event" class="pageStyle" />
@@ -324,6 +324,7 @@
 </template>
 <script>
 import { getCookie } from '~/functions/utils'
+// import XLSX from 'xlsx'
 export default {
     data() {
         return {
@@ -985,6 +986,21 @@ export default {
                     ? tmpDate.getDate()
                     : '0' + tmpDate.getDate()
             return year + '-' + month + '-' + day
+        },
+        downloadTableData(type) {
+            if (type == 1) {
+                this.$refs.table.exportCsv({
+                    filename: 'record',
+                    columns: this.columns1,
+                    data: this.tableDataAll1
+                })
+            } else if (type == 2) {
+                this.$refs.table.exportCsv({
+                    filename: 'refund',
+                    columns: this.columns2,
+                    data: this.tableDataAll2
+                })
+            }
         }
     },
     watch: {
@@ -1022,11 +1038,7 @@ export default {
     },
     computed: {
         tableData1() {
-            let tmp = this.tableDataAll1.slice(
-                (this.pageIndex1 - 1) * this.pageSize1,
-                this.pageIndex1 * this.pageSize1
-            )
-            tmp.forEach(ele => {
+            this.tableDataAll1.forEach(ele => {
                 switch (ele.state) {
                     case '1':
                         ele.stateShow = this.$L.record.notpay
@@ -1045,14 +1057,14 @@ export default {
                         break
                 }
             })
+            let tmp = this.tableDataAll1.slice(
+                (this.pageIndex1 - 1) * this.pageSize1,
+                this.pageIndex1 * this.pageSize1
+            )
             return tmp
         },
         tableData2() {
-            let tmp = this.tableDataAll2.slice(
-                (this.pageIndex2 - 1) * this.pageSize2,
-                this.pageIndex2 * this.pageSize2
-            )
-            tmp.forEach(ele => {
+            this.tableDataAll2.forEach(ele => {
                 switch (ele.state) {
                     case '1':
                         ele.state = this.$L.refund.notrefund
@@ -1074,6 +1086,10 @@ export default {
                         break
                 }
             })
+            let tmp = this.tableDataAll2.slice(
+                (this.pageIndex2 - 1) * this.pageSize2,
+                this.pageIndex2 * this.pageSize2
+            )
             return tmp
         }
     }
