@@ -625,7 +625,7 @@ export default {
         let token = getCookie('token')
         this.$axios.setHeader('X-Star-Token', token)
         let getCountryToken =
-            'eyJhbGciOiJIUzUxMiJ9.eyJhcHAiOjEsInVpZCI6OTE1MDg3MiwiY2NvZGUiOiJORyIsInJvbGUiOjAsImRldiI6IkEwMDAyIiwiY3JlYXRlZCI6MTU0MTU4MDc3NDU0OCwiZXhwIjoxNTQyMTg1NTc0LCJjaWQiOjJ9.9anQQh-7WveW8IhJsDkdU9kmcpWFmDgvrhaHqErv5SzxsfdlA5GPuHdzH8fiZlkclFOOV7TJ2e4RbhKA7WwvVA'
+            'eyJhbGciOiJIUzUxMiJ9.eyJhcHAiOjEsInVpZCI6OTE1MDgzNiwiY2NvZGUiOiJORyIsInJvbGUiOjAsImRldiI6IkEwMDAxIiwiY3JlYXRlZCI6MTU0MjE4NzAyNjc1MCwiZXhwIjoxNTQyNzkxODI2LCJjaWQiOjJ9.EsGCFqqfNcMBzeK6IJB-RXZf4fboJ9gROLiKpG6AtaDZWQbJv5SaCpjnoa8qwnx0I8rT7FfJDlIUJc8vWSHIgQ'
         this.$axios.setHeader('token', getCountryToken)
 
         this.getMerchantInfoDto()
@@ -689,7 +689,7 @@ export default {
                             this.$Modal.success({
                                 title: this.$L.account.success
                             })
-                            this.showEmailModal = false
+                            this.cancel('showEmailModal')
                             this.getMerchantInfoDto()
                         } else {
                             this.$Modal.success({
@@ -737,7 +737,7 @@ export default {
                             this.$Modal.success({
                                 title: this.$L.account.success
                             })
-                            this.showPhoneModal = false
+                            this.cancel('showPhoneModal')
                             this.getMerchantInfoDto()
                         }
                     })
@@ -759,7 +759,7 @@ export default {
                         }&refundNotifyUrl=${this.refundNotifyUrl}`
                     )
                     .then(res => {
-                        this.showAppModal = false
+                        this.cancel('showAppModal')
                     })
             }
         },
@@ -796,11 +796,8 @@ export default {
                     .then(res => {
                         if (res.data.code == 0) {
                             this.getMerchantAppInfoDto()
-                            this.showPasswordModal = false
-                            this.showRePasswordModal = false
-                            this.password = ''
-                            this.repassword = ''
-                            this.newPassword = ''
+                            this.cancel('showPasswordModal')
+                            this.cancel('showRePasswordModal')
                         } else if (res.data.code == 500) {
                             this.$Modal.warning({
                                 title: res.data.message
@@ -1009,7 +1006,7 @@ export default {
                                 title: this.$L.record.success_refund
                             })
                         }
-                        this.showRefundModal = false
+                        this.cancel('showRefundModal')
                     })
             }
         },
@@ -1222,7 +1219,4 @@ export default {
 .appBorder {
     border-bottom: 1px solid #ccc;
 }
-/* .appBorder:last-child {
-    border-bottom: none !important;
-} */
 </style>
