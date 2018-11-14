@@ -24,8 +24,10 @@
         "send_verification":"发送验证码",
         "enter_verification":"请输入验证码",
         "okay":"确定",
-        "c":"取消",
+        "cancel":"取消",
         "phone_binding":"手机绑定",
+        "later_reapply":"发送成功，60s后再申请",
+        "verification_incorrect":"验证码有误，请重新输入",
 
         "email_address":"邮箱绑定",
         "merchant_name":"商户名称：",

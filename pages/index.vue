@@ -33,7 +33,8 @@
                                     </Col>
                                     <Col span="6">
                                     <div>
-                                        <Button type="primary" size="small" @click="sendVerification">{{$L.account.send_verification}}</Button>
+                                        <Button type="primary" size="small" @click="sendVerification" :disabled="canSend">
+                                            <span v-show="canSend && canSendTime != 0">({{canSendTime}}s) </span> {{$L.account.send_verification}}</Button>
                                     </div>
                                     </Col>
                                 </Row>
@@ -615,7 +616,9 @@ export default {
             appIndex: '',
             password: '',
             newPassword: '',
-            repassword: ''
+            repassword: '',
+            canSend: false,
+            canSendTime: 60
         }
     },
     mounted() {
@@ -687,6 +690,7 @@ export default {
                                 title: this.$L.account.success
                             })
                             this.showEmailModal = false
+                            this.getMerchantInfoDto()
                         } else {
                             this.$Modal.success({
                                 title: res.data.meassage
@@ -706,6 +710,22 @@ export default {
                     title: this.$L.account.enter_verification
                 })
             } else {
+                // 验证手机验证码
+                this.$axios
+                    .get(
+                        `payment/mc/v2/merchantinfomc/check-verify-code?phone=${
+                            this.phoneNum
+                        }&verifyCode=${this.verification}`
+                    )
+                    .then(res => {
+                        console.log(res)
+                        if (res.data.code != 0) {
+                            this.$Modal.warning({
+                                title: this.$L.account.verification_incorrect
+                            })
+                            return
+                        }
+                    })
                 let countryPhone =
                     this.countryPrefix.toUpperCase() + '+' + this.phoneNum
                 this.$axios
@@ -718,6 +738,7 @@ export default {
                                 title: this.$L.account.success
                             })
                             this.showPhoneModal = false
+                            this.getMerchantInfoDto()
                         }
                     })
             }
@@ -742,8 +763,8 @@ export default {
                     })
             }
         },
+        // 修改密码逻辑
         toUpdataPassword(orgPwd, newPwd, oldPwd) {
-            // TODO 修改密码逻辑
             let reg = /^\d{n}$/
             if (orgPwd && oldPwd == '') {
                 this.$Modal.warning({
@@ -773,7 +794,6 @@ export default {
                         `/payment/mc/v2/merchantappMc/modifyDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${newPwd}`
                     )
                     .then(res => {
-                        console.log(res)
                         if (res.data.code == 0) {
                             this.getMerchantAppInfoDto()
                             this.showPasswordModal = false
@@ -789,7 +809,36 @@ export default {
                     })
             }
         },
-        sendVerification() {},
+        // 发生手机验证码
+        sendVerification() {
+            if (this.phoneNum == '') {
+                this.$Modal.warning({
+                    title: this.$L.account.enter_phone_number
+                })
+            }
+            this.$axios
+                .post(
+                    `payment/mc/v2/merchantinfomc/send-verify-code?phone=${
+                        this.phoneNum
+                    }`
+                )
+                .then(res => {
+                    if (res.data.code == 0) {
+                        this.canSend = true
+                        this.$Modal.success({
+                            title: this.$L.account.later_reapply
+                        })
+                        let timer = setInterval(() => {
+                            if (this.canSendTime <= 0) {
+                                clearInterval(timer)
+                                this.canSend = false
+                                return
+                            }
+                            this.canSendTime--
+                        }, 1000)
+                    }
+                })
+        },
         cancel(model) {
             switch (model) {
                 case 'showPhoneModal':
@@ -828,8 +877,8 @@ export default {
                     break
             }
         },
+        // 修改商户应用apiKey
         createApiKey(appId, index) {
-            // 修改商户应用apiKey
             this.$axios
                 .put(`/payment/mc/v2/merchantappMc/modifyApiKey?id=${appId}`)
                 .then(res => {
@@ -926,8 +975,8 @@ export default {
                     })
             }
         },
+        // 申请退款接口
         toRefund() {
-            // 申请退款接口
             if (this.refundAmount == '') {
                 this.$Modal.warning({
                     title: this.$L.record.amount_required
@@ -981,6 +1030,7 @@ export default {
                     : '0' + tmpDate.getDate()
             return year + '-' + month + '-' + day
         },
+        // 下载
         downloadTableData(type) {
             if (type == 1) {
                 this.$refs.table.exportCsv({

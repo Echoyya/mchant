@@ -26,6 +26,8 @@
         "okay":"Okay",
         "cancel":"Cancel",
         "phone_binding":"Mobile Phone Binding",
+        "later_reapply":"Success, Please reapply 60s later",
+        "verification_incorrect":"The verification code is incorrect. Please re input",
 
         "email_address":"Email Address",
         "merchant_name":"Merchant Name：",
