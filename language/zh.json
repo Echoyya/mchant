@@ -13,7 +13,7 @@
         "account_management":"账户管理",
         "account_information":"账户信息", 
         "merchant_No":"商户号：",
-        "phone_number":"手机号：",
+        "phone":"手机号：",
         "not_bound":"未绑定",
         "change":"更改",
         "binding":"绑定",
@@ -109,7 +109,13 @@
         "amount_required":"退款金额为必填项",
         "password_required":"当前订单应用交易密码为必填项",
         "refundable_amount":"退款金额不可大于可退金额",
-        "success_refund":"申请成功,可在退款记录中查询"
+        "success_refund":"申请成功,可在退款记录中查询",
+
+        "notpay":"未付款",
+        "paying":"付款中",
+        "success":"已付款",
+        "fail":"付款失败",
+        "refunded":"退款"
     },
     "refund": {
         "country":"国家：",
@@ -131,6 +137,46 @@
         "col_refund_time":"申请退款时间",
         "col_done_time":"完成退款时间",
         "col_refund_remarks":"退款备注",
-        "col_state":"状态"
+        "col_state":"状态",
+
+        "notrefund":"未退款",
+        "processing":"处理中",
+        "fail":"退款失败",
+        "success":"已退款",
+        "closed":"退款关闭" ,
+        "audit_fail":"审核失败",
+
+        "ewallet":"退款到钱包",
+        "original":"原路退回"
+    },
+    "summary": {
+        "select_time":"时间选择：",
+        "nearly_week":"近一周",
+        "nearly_month":"近一个月",
+        "nearly_three_months":"近三个月",
+        "start_end_dates":"请选择起止日期",
+        "country":"国家：",
+        "select_country":"选择国家",
+        "search":"搜索",
+
+        "col_currency":"货币符号",
+        "col_paid_amount":"支付成功金额",
+        "col_paid_number":"支付成功笔数",
+        "col_refund_amount":"退款金额",
+        "col_refund_number":"退款笔数",
+        "col_net_trading_amount":"净交易金额"
+    },
+    "head_footer": {
+        "title":"商户管理后台",
+        "logout":"安全退出",
+        "cooperative":"合作银行：",
+        "blogroll_startimes":"友情链接：四达时代",
+        "startimes":"北京四达时代软件技术股份有限公司",
+        "about":"关于四达",
+        "inviting_talents":"诚征英才",
+        "contact_us":"联系我们",
+        "open_platform":"开放平台",
+        "customer_hotline":"客服热线：",
+        "service_mailbox":"客服热线："
     }
 }

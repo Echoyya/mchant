@@ -2,43 +2,45 @@
     <div class="layout">
         <Layout>
             <Header class="mheader">
-                <h1 class="title">商户管理后台</h1>
+                <h1 class="title">{{$L.head_footer.title}}</h1>
                 <div class="user">
                     <span>你好,张三</span>
                     <span>
-                        <Select v-model="language" size="small" style="width:100px">
+                        <Select v-model="language" size="small" style="width:100px" @on-change="$store.commit('SET_LANG',$event)">
                             <Option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </span>
-                    <span><a href="#" class="logout">安全退出</a></span>
+                    <span class="logout" @click="logout">{{$L.head_footer.logout}}</span>
                 </div>
             </Header>
             <nuxt />
             <Footer class="mfooter">
-                <p>合作银行：中国银行&nbsp;&nbsp;农业银行&nbsp;&nbsp;工商银行&nbsp;&nbsp;建设银行</p>
-                <p>友情链接：四达时代</p>
-                <p>客服热线：010-53013618&nbsp;&nbsp;|&nbsp;&nbsp;客服邮箱:kefu@startimes.com.cn</p>
-                <p>北京四达时代软件技术股份有限公司&nbsp;&nbsp;|&nbsp;&nbsp;关于四达&nbsp;&nbsp;|&nbsp;&nbsp;诚征英才&nbsp;&nbsp;|&nbsp;&nbsp;联系我们&nbsp;&nbsp;|&nbsp;&nbsp;开放平台</p>
+                <p>{{$L.head_footer.cooperative}}中国银行&nbsp;&nbsp;农业银行&nbsp;&nbsp;工商银行&nbsp;&nbsp;建设银行</p>
+                <p>{{$L.head_footer.blogroll_startimes}}</p>
+                <p>{{$L.head_footer.customer_hotline}}010-53013618&nbsp;&nbsp;|&nbsp;&nbsp;{{$L.head_footer.service_mailbox}}kefu@startimes.com.cn</p>
+                <p>{{$L.head_footer.startimes}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$L.head_footer.about}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$L.head_footer.inviting_talents}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$L.head_footer.contact_us}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$L.head_footer.open_platform}}</p>
                 <p>Copyright © 2018 StarTimes All Rights Reserve</p>
             </Footer>
         </Layout>
     </div>
 </template>
 <script>
+import { delCookie } from '~/functions/utils'
+
 export default {
     data() {
         return {
             languageList: [
                 {
-                    value: 'Chinese',
+                    value: 'zh',
                     label: '简体中文'
                 },
                 {
-                    value: 'English',
+                    value: 'en',
                     label: 'English'
                 }
             ],
-            language: 'Chinese'
+            language: 'zh'
         }
     },
     created() {
@@ -47,6 +49,12 @@ export default {
             this.$axios.setHeader('X-Star-Token', this.$store.state.token)
         } else {
             this.$router.push('/login')
+        }
+    },
+    methods: {
+        logout() {
+            this.$router.push('/login')
+            delCookie('token')
         }
     }
 }
@@ -78,6 +86,7 @@ export default {
 }
 .mheader .logout {
     color: #ffffff;
+    cursor: pointer;
 }
 .mfooter {
     color: #ffffff;

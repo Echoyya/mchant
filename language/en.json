@@ -80,7 +80,7 @@
         "please_select":"please select",
         "enter_order_number":"Please enter the order number",
         "trading_time":"trading time：",
-        "start_end_dates":"Please select start and end dates：",
+        "start_end_dates":"Please select start and end dates",
         "search":"search",
         "download":"download",
         "refund":"Refund",
@@ -107,8 +107,13 @@
         "amount_required":"Refund amount is required",
         "password_required":"The current order password is required",
         "refundable_amount":"The refundable amount shall not be greater than the refundable amount",
-        "success_refund":"Success, Can be found in the refund record"
-        
+        "success_refund":"Success, Can be found in the refund record",
+
+        "notpay":"NOTPAY",
+        "paying":"PAYING",
+        "success":"SUCCESS",
+        "fail":"FAIL",
+        "refunded":"REFUND"
     },
     "refund": {
         "country":"country：",
@@ -116,7 +121,7 @@
         "order_status":"order status：",
         "please_select":"please select",
         "enter_order_number":"Please enter the order number",
-        "start_end_dates":"Please select start and end dates：",
+        "start_end_dates":"Please select start and end dates",
         "search":"search",
         "download":"download",
         "refund_time":"Refund application time",
@@ -130,6 +135,48 @@
         "col_refund_time":"Refund application time",
         "col_done_time":"Refund time",
         "col_refund_remarks":"refund remarks",
-        "col_state":"refund state"
+        "col_state":"refund state",
+
+        "notrefund":"NOTREFUND",
+        "processing":"PROCESSING",
+        "fail":"FAIL",
+        "success":"SUCCESS",
+        "closed":"CLOSED" ,
+        "audit_fail":"AUDIT_FAIL",
+
+        "ewallet":"EWALLET",
+        "original":"ORIGINAL"
+    },
+    "summary": {
+        "select_time":"select time：",
+        "nearly_week":"Nearly a week",
+        "nearly_month":"Nearly a month",
+        "nearly_three_months":"Nearly three months",
+        "start_end_dates":"Please select start and end dates",
+        "country":"country：",
+        "select_country":"Please select country",
+        "search":"search",
+
+        "col_currency":"currency",
+        "col_paid_amount":"paid successful amount",
+        "col_paid_number":"paid successful number",
+        "col_refund_amount":"refund amount",
+        "col_refund_number":"refund number",
+        "col_net_trading_amount":"net trading amount"
+
+    },
+    "head_footer": {
+        "title":"Merchant Management",
+        "logout":"Log Out",
+        "cooperative":"Cooperative：",
+        "blogroll_startimes":"Clogroll：StarTimes",
+        "startimes":"Beijing StarTimes software technology co. LTD",
+        "about":"About StarTimes",
+        "inviting_talents":"Inviting Talents",
+        "contact_us":"Contact Us",
+        "open_platform":"Open Platform",
+        "customer_hotline":"Customer Hotline：",
+        "service_mailbox":"Service Mailbox："
+        
     }
 }

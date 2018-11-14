@@ -300,18 +300,18 @@
                             <Page :total="tableDataAll2.length" :current="pageIndex2" :page-size="pageSize2" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex2 = $event " @on-page-size-change="pageSize2 = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==3">
-                            <div class="mb15">时间选择：
-                                <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">近一周</Button>
-                                <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">近一个月</Button>
-                                <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">近三个月</Button>
-                                <DatePicker v-model="dateCollect" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
+                            <div class="mb15">{{$L.summary.select_time}}
+                                <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">{{$L.summary.nearly_week}}</Button>
+                                <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">{{$L.summary.nearly_month}}</Button>
+                                <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">{{$L.summary.nearly_three_months}}</Button>
+                                <DatePicker v-model="dateCollect" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240"></DatePicker>
                             </div>
                             <div class="mb15">
-                                国家：
-                                <Select v-model="country3" class="mr15 w160" placeholder="选择国家">
+                                {{$L.summary.country}}
+                                <Select v-model="country3" class="mr15 w160" :placeholder="$L.summary.select_country">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
                                 </Select>
-                                <Button type="primary" class="search" @click="searchOrder(currentType)">搜索</Button>
+                                <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.summary.search}}</Button>
                             </div>
                             <Table border :columns="columns3" :data="tableData3" :stripe="true"></Table>
                         </div>
@@ -330,68 +330,68 @@ export default {
             orderStautsList: [
                 {
                     value: '1',
-                    label: '未付款'
+                    label: this.$L.record.notpay
                 },
                 {
                     value: '2',
-                    label: '付款中'
+                    label: this.$L.record.paying
                 },
                 {
                     value: '3',
-                    label: '已付款'
+                    label: this.$L.record.success
                 },
                 {
                     value: '4',
-                    label: '付款失败'
+                    label: this.$L.record.fail
                 },
                 {
                     value: '5',
-                    label: '退款'
+                    label: this.$L.record.refunded
                 }
             ],
             refundStautsList: [
                 {
                     value: '1',
-                    label: '未退款'
+                    label: this.$L.refund.notrefund
                 },
                 {
                     value: '2',
-                    label: '付款中'
+                    label: this.$L.refund.processing
                 },
                 {
                     value: '4',
-                    label: '退款失败'
+                    label: this.$L.refund.fail
                 },
                 {
                     value: '5',
-                    label: '已退款'
+                    label: this.$L.refund.success
                 },
                 {
                     value: '6',
-                    label: '退款关闭'
+                    label: this.$L.refund.closed
                 },
                 {
                     value: '11',
-                    label: '审核失败'
+                    label: this.$L.refund.audit_fail
                 }
             ],
             orderTypeList: [
                 {
-                    label: '支付平台订单号',
+                    label: this.$L.refund.col_platform_number,
                     value: 1
                 },
                 {
-                    label: '商户订单号',
+                    label: this.$L.refund.col_merchan_number,
                     value: 2
                 }
             ],
             refundTypeList: [
                 {
-                    label: '退款到钱包',
+                    label: this.$L.refund.ewallet,
                     value: 'EWALLET'
                 },
                 {
-                    label: '原路退回',
+                    label: this.$L.refund.original,
                     value: 'ORIGINAL'
                 }
             ],
@@ -555,33 +555,33 @@ export default {
             ],
             columns3: [
                 {
-                    title: '货币符号',
+                    title: this.$L.summary.col_currency,
                     align: 'center',
                     key: 'currency'
                 },
                 {
-                    title: '支付成功金额',
+                    title: this.$L.summary.col_paid_amount,
                     align: 'center',
                     key: 'successAmount'
                 },
                 {
-                    title: '支付成功笔数',
+                    title: this.$L.summary.col_paid_number,
                     align: 'center',
                     key: 'successCount'
                 },
                 {
-                    title: '退款金额',
+                    title: this.$L.summary.col_refund_amount,
                     align: 'center',
                     width: 180,
                     key: 'refundAmount'
                 },
                 {
-                    title: '退款笔数',
+                    title: this.$L.summary.col_refund_number,
                     align: 'center',
                     key: 'refundCount'
                 },
                 {
-                    title: '净交易金额',
+                    title: this.$L.summary.col_net_trading_amount,
                     align: 'center',
                     key: 'netAmount'
                 }
@@ -1028,19 +1028,19 @@ export default {
             tmp.forEach(ele => {
                 switch (ele.state) {
                     case '1':
-                        ele.stateShow = '未付款'
+                        ele.stateShow = this.$L.record.notpay
                         break
                     case '2':
-                        ele.stateShow = '付款中'
+                        ele.stateShow = this.$L.record.paying
                         break
                     case '3':
-                        ele.stateShow = '已付款'
+                        ele.stateShow = this.$L.record.success
                         break
                     case '4':
-                        ele.stateShow = '付款失败'
+                        ele.stateShow = this.$L.record.fail
                         break
                     case '5':
-                        ele.stateShow = '退款'
+                        ele.stateShow = this.$L.record.refunded
                         break
                 }
             })
@@ -1054,22 +1054,22 @@ export default {
             tmp.forEach(ele => {
                 switch (ele.state) {
                     case '1':
-                        ele.state = '未退款'
+                        ele.state = this.$L.refund.notrefund
                         break
                     case '2':
-                        ele.state = '处理中'
+                        ele.state = this.$L.refund.processing
                         break
                     case '4':
-                        ele.state = '退款失败'
+                        ele.state = this.$L.refund.fail
                         break
                     case '5':
-                        ele.state = '已退款'
+                        ele.state = this.$L.refund.success
                         break
                     case '6':
-                        ele.state = '付款关闭'
+                        ele.state = this.$L.refund.closed
                         break
                     case '11':
-                        ele.state = '审核失败'
+                        ele.state = this.$L.refund.audit_fail
                         break
                 }
             })
