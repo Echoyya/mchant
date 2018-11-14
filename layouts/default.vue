@@ -6,7 +6,7 @@
                 <div class="user">
                     <span>你好,张三</span>
                     <span>
-                        <Select v-model="language" size="small" style="width:100px" @on-change="$store.commit('SET_LANG',$event)">
+                        <Select v-model="language" size="small" style="width:100px" @on-change="changeLang($event)">
                             <Option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </span>
@@ -25,7 +25,7 @@
     </div>
 </template>
 <script>
-import { delCookie } from '~/functions/utils'
+import { delCookie, setCookie } from '~/functions/utils'
 
 export default {
     data() {
@@ -40,7 +40,7 @@ export default {
                     label: 'English'
                 }
             ],
-            language: 'zh'
+            language: this.$store.state.lang
         }
     },
     created() {
@@ -55,6 +55,11 @@ export default {
         logout() {
             this.$router.push('/login')
             delCookie('token')
+        },
+        changeLang(lang) {
+            console.log(lang)
+            setCookie('lang', lang)
+            window.location.reload()
         }
     }
 }

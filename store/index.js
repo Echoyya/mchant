@@ -9,11 +9,6 @@ export const mutations = {
     SET_LANG: function(state, lang) {
         // language en/zh
         state.lang = lang || 'zh'
-        if (lang == 'zh') {
-            Vue.prototype.$L = zh_map
-        } else {
-            Vue.prototype.$L = en_map
-        }
     },
     SET_TOKEN: function(state, token) {
         state.token = token

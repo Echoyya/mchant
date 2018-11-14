@@ -242,7 +242,8 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12" offset="1">
-                                    <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100"></InputNumber> </Col>
+                                    <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100"></InputNumber>
+                                    </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <Col span="6" class="tright"> {{$L.record.refund_type}}
