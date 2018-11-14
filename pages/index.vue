@@ -221,7 +221,7 @@
                                 <span> {{$L.record.trading_time}}</span>
                                 <DatePicker v-model="dateRecord" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240"></DatePicker>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
-                                <Button>download</Button>
+                                <Button>{{$L.record.download}}</Button>
                             </div>
                             <Table border :columns="columns1" :data="tableData1" :stripe="true"></Table>
                             <Modal :title="$L.record.refund" v-model="showRefundModal" width="700">
