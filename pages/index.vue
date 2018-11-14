@@ -324,7 +324,6 @@
 </template>
 <script>
 import { getCookie } from '~/functions/utils'
-// import XLSX from 'xlsx'
 export default {
     data() {
         return {
@@ -620,7 +619,6 @@ export default {
         }
     },
     mounted() {
-        // let token = localStorage.getItem('token')
         let token = getCookie('token')
         this.$axios.setHeader('X-Star-Token', token)
         let getCountryToken =
@@ -632,9 +630,7 @@ export default {
 
         // 昨日成功交易汇总
         this.$axios
-            .post(
-                '/payment/mc/v2/merchant-operator/queryStaticOrderBillResponse'
-            )
+            .post('/payment/mc/v2/merchantinfomc/queryStaticOrderBillResponse')
             .then(res => {
                 if (res.data.length > 0) {
                     this.tradeTotelYesterday = res.data
@@ -653,7 +649,7 @@ export default {
         // 获取商户
         getMerchantInfoDto() {
             this.$axios
-                .post('/payment/mc/v2/merchant-operator/queryMerchantInfo')
+                .post('/payment/mc/v2/merchantinfomc/query')
                 .then(res => {
                     if (res.data) {
                         this.merchantInfoDto = res.data
@@ -663,7 +659,7 @@ export default {
         // 获取商户应用列表
         getMerchantAppInfoDto() {
             this.$axios
-                .post('/payment/mc/v2/merchant-operator/queryMerchantAppList')
+                .post('/payment/mc/v2/merchantappMc/queryall')
                 .then(res => {
                     if (res.data.length > 0) {
                         this.merchantAppInfoDto = res.data
@@ -681,7 +677,7 @@ export default {
             } else {
                 this.$axios
                     .put(
-                        `/payment/mc/v2/merchant-operator/modifyMerchantInfoEmail?email=${
+                        `/payment/mc/v2/merchantinfomc/modifyEmail?email=${
                             this.email
                         }`
                     )
@@ -714,7 +710,7 @@ export default {
                     this.countryPrefix.toUpperCase() + '+' + this.phoneNum
                 this.$axios
                     .put(
-                        `/payment/mc/v2/merchant-operator/modifyMerchantInfoPhone?phone=${countryPhone}`
+                        `/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`
                     )
                     .then(res => {
                         if (res.data.code == 0) {
@@ -735,7 +731,7 @@ export default {
             } else {
                 this.$axios
                     .put(
-                        `/payment/mc/v2/merchant-operator/addMerchantApp?name=${
+                        `/payment/mc/v2/merchantappMc/add?name=${
                             this.appName
                         }&ewalletNo=${this.ewalletNo}&payNotifyUrl=${
                             this.payNotifyUrl
@@ -774,7 +770,7 @@ export default {
                 let merchantAppId = this.merchantAppInfoDto[this.appIndex].id
                 this.$axios
                     .put(
-                        `/payment/mc/v2/merchant-operator/modifyMerchantAppDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${newPwd}`
+                        `/payment/mc/v2/merchantappMc/modifyDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${newPwd}`
                     )
                     .then(res => {
                         console.log(res)
@@ -835,9 +831,7 @@ export default {
         createApiKey(appId, index) {
             // 修改商户应用apiKey
             this.$axios
-                .put(
-                    `/payment/mc/v2/merchant-operator/modifyMerchantAppApiKey?id=${appId}`
-                )
+                .put(`/payment/mc/v2/merchantappMc/modifyApiKey?id=${appId}`)
                 .then(res => {
                     if (res.data.code == 0) {
                         this.getMerchantAppInfoDto()

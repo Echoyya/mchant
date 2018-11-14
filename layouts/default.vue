@@ -57,7 +57,6 @@ export default {
             delCookie('token')
         },
         changeLang(lang) {
-            console.log(lang)
             setCookie('lang', lang)
             window.location.reload()
         }
