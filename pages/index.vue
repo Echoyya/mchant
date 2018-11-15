@@ -760,6 +760,7 @@ export default {
                     )
                     .then(res => {
                         this.cancel('showAppModal')
+                        this.getMerchantAppInfoDto()
                     })
             }
         },
