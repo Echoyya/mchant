@@ -71,7 +71,8 @@ module.exports = {
     build: {
         /*
     ** You can extend webpack config here
-    */
+        */
+        publicPath: '/mchant/',
         extend(config, ctx) {
             // Run ESLint on save
             if (ctx.isDev && ctx.isClient) {

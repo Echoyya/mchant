@@ -41,7 +41,8 @@ export default {
                     .then(res => {
                         if (res.data.code == 0) {
                             setCookie('token', res.data.data)
-                            window.location.href = this.$route.query.pre || '/'
+                            window.location.href =
+                                this.$route.query.pre || '/mchant/'
                         } else {
                             this.$Modal.error({
                                 title: this.$L.login.failure,

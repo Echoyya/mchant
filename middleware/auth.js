@@ -1,5 +1,5 @@
 let auth_ignore = [
-    /^\/login/
+    /^\/mchant\/login/
     // /^\/hybrid\/account\/logout/,
 ]
 function inIgnore(url) {
@@ -16,7 +16,7 @@ export default function({ route, store, redirect }) {
         if (store.state.token) {
             return true
         } else {
-            return redirect('/login')
+            return redirect('/mchant/login')
         }
     } else {
         return true
