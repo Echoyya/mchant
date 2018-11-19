@@ -77,7 +77,7 @@
         "business_type":"业务类型：",
         "trading_record":"交易记录",
         "refund_record":"退款记录",
-        "trading_summary":"退款记录",
+        "trading_summary":"交易汇总",
         "country":"国家：",
         "select_country":"选择国家",
         "order_status":"订单状态：",
