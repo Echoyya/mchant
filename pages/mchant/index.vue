@@ -219,10 +219,12 @@
                                 <Input v-model="orderNum1" :placeholder="$L.record.enter_order_number" class="w160" />
                             </div>
                             <div class="mb15">
-                                <span> {{$L.record.trading_time}}</span>
-                                <DatePicker v-model="dateRecord" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240"></DatePicker>
-                                <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
-                                <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
+                                <span> {{$L.record.trading_time_start}}</span>
+                                <DatePicker v-model="dateRecord_start" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15"></DatePicker>
+                                <span> {{$L.record.trading_time_end}}</span>
+                                <DatePicker v-model="dateRecord_end" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240"></DatePicker>
+                                <Button type="primary"  class="ml15" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
+                                <Button @click="downloadTableData(1)" >{{$L.record.download}}</Button>
                             </div>
                             <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table"></Table>
                             <Modal :title="$L.record.refund" v-model="showRefundModal" width="700">
@@ -412,7 +414,8 @@ export default {
             txNo2: '',
             payToken1: '', //支付平台订单号
             payToken2: '',
-            dateRecord: [],
+            dateRecord_start: [],
+            dateRecord_end: [],
             dateRefund: [],
             dateCollect: [],
             refundAmount: 0,
@@ -427,9 +430,14 @@ export default {
                     key: 'country'
                 },
                 {
-                    title: this.$L.record.col_trading_time,
+                    title: this.$L.record.col_trading_time_start,
                     align: 'center',
                     key: 'createTime'
+                },
+                {
+                    title: this.$L.record.col_trading_time_end,
+                    align: 'center',
+                    key: 'payEndTime'
                 },
                 {
                     title: this.$L.record.col_merchan_number,
@@ -894,12 +902,20 @@ export default {
                 //支付交易记录
                 let upperCounteyCode = this.country1.toUpperCase()
                 let createTimeFrom =
-                    this.dateRecord[0] != ''
-                        ? this.formatDate(this.dateRecord[0])
+                    this.dateRecord_start[0] != ''
+                        ? this.formatDate(this.dateRecord_start[0])
                         : ''
                 let createTimeTo =
-                    this.dateRecord[1] != ''
-                        ? this.formatDate(this.dateRecord[1])
+                    this.dateRecord_start[1] != ''
+                        ? this.formatDate(this.dateRecord_start[1])
+                        : ''
+                let payEndTimeFrom =
+                    this.dateRecord_end[0] != ''
+                        ? this.formatDate(this.dateRecord_end[0])
+                        : ''
+                let payEndTimeTo =
+                    this.dateRecord_end[1] != ''
+                        ? this.formatDate(this.dateRecord_end[1])
                         : ''
                 this.$axios
                     .post(
@@ -907,7 +923,7 @@ export default {
                             this.orderStauts1
                         }&txNo=${this.txNo1}&payToken=${
                             this.payToken1
-                        }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}`
+                        }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}&payEndTimeFrom=${payEndTimeFrom}&payEndTimeTo=${payEndTimeTo}`
                     )
                     .then(res => {
                         if (
