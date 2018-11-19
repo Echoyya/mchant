@@ -1,5 +1,5 @@
 let auth_ignore = [
-    /^\/login/
+    /^\/mchant\/login/
     // /^\/hybrid\/account\/logout/,
 ]
 function inIgnore(url) {
