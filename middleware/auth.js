@@ -16,7 +16,7 @@ export default function({ route, store, redirect }) {
         if (store.state.token) {
             return true
         } else {
-            return redirect('/login')
+            return redirect('/mchant/login')
         }
     } else {
         return true
