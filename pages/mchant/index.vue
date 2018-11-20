@@ -223,8 +223,8 @@
                                 <DatePicker v-model="dateRecord_start" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15"></DatePicker>
                                 <span> {{$L.record.trading_time_end}}</span>
                                 <DatePicker v-model="dateRecord_end" format="yyyy年MM月dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240"></DatePicker>
-                                <Button type="primary"  class="ml15" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
-                                <Button @click="downloadTableData(1)" >{{$L.record.download}}</Button>
+                                <Button type="primary" class="ml15" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
+                                <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
                             <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table"></Table>
                             <Modal :title="$L.record.refund" v-model="showRefundModal" width="700">
@@ -626,7 +626,8 @@ export default {
             newPassword: '',
             repassword: '',
             canSend: false,
-            canSendTime: 60
+            canSendTime: 60,
+            currencySymbol: ''
         }
     },
     mounted() {
@@ -727,7 +728,6 @@ export default {
                         }&verifyCode=${this.verification}`
                     )
                     .then(res => {
-                        console.log(res)
                         if (res.data.code != 0) {
                             this.$Modal.warning({
                                 title: this.$L.account.verification_incorrect
@@ -985,6 +985,9 @@ export default {
                     )
                     .then(res => {
                         if (res.data.resultCode == 'SUCCESS') {
+                            res.data.currency = res.data.currency
+                                ? res.data.currency
+                                : this.currencySymbol
                             this.tableData3.push(res.data)
                         }
                     })
@@ -1093,6 +1096,13 @@ export default {
             } else {
                 this.range = '1'
             }
+        },
+        country3(val) {
+            this.countryList.forEach(ele => {
+                if (ele.country == val) {
+                    this.currencySymbol = ele.currencySymbol
+                }
+            })
         }
     },
     computed: {
