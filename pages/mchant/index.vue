@@ -651,6 +651,7 @@ export default {
         this.$axios.get('/cms/vup/v2/areas?versionCode=5500').then(res => {
             if (res.data.length > 0) {
                 this.countryList = res.data
+                this.country3 = this.countryList[0].country
             }
         })
 
@@ -963,11 +964,11 @@ export default {
             } else if (currentType == 3) {
                 //交易汇总查询
                 this.tableData3 = []
-                let upperCounteyCode = 'TZ' // test 数据
-                // let upperCounteyCode =
-                //     this.country3 == ''
-                //         ? this.countryList[0].country.toUpperCase()
-                //         : this.country3.toUpperCase()
+                // let upperCounteyCode = 'TZ' // test 数据
+                let upperCounteyCode =
+                    this.country3 == ''
+                        ? this.countryList[0].country.toUpperCase()
+                        : this.country3.toUpperCase()
                 let createTimeFrom =
                     this.dateCollect[0] != ''
                         ? this.formatDate(this.dateCollect[0])
