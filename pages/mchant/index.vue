@@ -634,7 +634,7 @@ export default {
         let token = getCookie('token')
         this.$axios.setHeader('X-Star-Token', token)
         let getCountryToken =
-            'eyJhbGciOiJIUzUxMiJ9.eyJhcHAiOjEsInVpZCI6OTE1MDgzNiwiY2NvZGUiOiJORyIsInJvbGUiOjAsImRldiI6IkEwMDAxIiwiY3JlYXRlZCI6MTU0MjE4NzAyNjc1MCwiZXhwIjoxNTQyNzkxODI2LCJjaWQiOjJ9.EsGCFqqfNcMBzeK6IJB-RXZf4fboJ9gROLiKpG6AtaDZWQbJv5SaCpjnoa8qwnx0I8rT7FfJDlIUJc8vWSHIgQ'
+            'eyJhbGciOiJIUzUxMiJ9.eyJhcHAiOjIsInVpZCI6OTE1MjQyNSwiY2NvZGUiOiJORyIsInJvbGUiOjEsImNyZWF0ZWQiOjE1NDMyMjEzNTk5MTYsImV4cCI6MjA0MjQyMTM1OSwiY2lkIjoyfQ.lfLIxjI86KGl06KTU55KY0gSeRpkABdllX-P-5KQtSL2iytd2PvWazRu7yURb0XWcn3-xKyBTlcz--pDjtPBzg'
         this.$axios.setHeader('token', getCountryToken)
 
         this.getMerchantInfoDto()
