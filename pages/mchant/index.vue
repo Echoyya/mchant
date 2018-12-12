@@ -9,7 +9,7 @@
                             <Col span="2"> {{$L.account.merchant_No}} </Col>
                             <Col span="5"> {{merchantInfoDto.id}} </Col>
                             <Col span="2">{{$L.account.phone}} </Col>
-                            <Col span="4" v-if="merchantInfoDto.contactPhone">{{merchantInfoDto.contactPhone}}</Col>
+                            <Col span="4" v-if="merchantInfoDto.contactPhone">{{merchantInfoDto.contactPhone.split(' ')[1]}}</Col>
                             <Col span="4" v-else>{{$L.account.not_bound}}</Col>
                             <Col span="4">
                             <Button type="primary" size="small" v-if="merchantInfoDto.contactPhone" @click="showPhoneModal=true">{{$L.account.change}}</Button>
@@ -147,7 +147,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="password" :placeholder="$L.account.enter_dealPassword" class="w200" />
+                                    <Input v-model="password" type="password" :placeholder="$L.account.enter_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -155,12 +155,12 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="repassword" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
+                                    <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <div slot="footer">
                                     <Button @click="cancel('showPasswordModal')">{{$L.account.cancel}}</Button>
-                                    <Button type="primary" @click="toUpdataPassword(merchantAppInfoDto[appIndex].dealPassword,password,'')">{{$L.account.okay}}</Button>
+                                    <Button type="primary" @click="toUpdataPassword('set',password,repassword,'')">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
                             <Modal :title="$L.account.change_password" v-model="showRePasswordModal" width="500">
@@ -169,7 +169,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="password" :placeholder="$L.account.enter_original_dealPassword" class="w200" />
+                                    <Input v-model="password" type="password" :placeholder="$L.account.enter_original_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -177,7 +177,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="repassword" :placeholder="$L.account.enter_new_dealPassword" class="w200" />
+                                    <Input v-model="newPassword" type="password" :placeholder="$L.account.enter_new_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -185,12 +185,12 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="repassword" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
+                                    <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
                                     </Col>
                                 </Row>
                                 <div slot="footer">
                                     <Button @click="cancel('showRePasswordModal')">{{$L.account.cancel}}</Button>
-                                    <Button type="primary" @click="toUpdataPassword(merchantAppInfoDto[appIndex].dealPassword,repassword,password)">{{$L.account.okay}}</Button>
+                                    <Button type="primary" @click="toUpdataPassword('change',password,repassword,newPassword,password)">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
                         </Row>
@@ -652,7 +652,7 @@ export default {
         this.$axios.get('/cms/vup/v2/areas?versionCode=5500').then(res => {
             if (res.data.length > 0) {
                 this.countryList = res.data
-                this.country3 = this.countryList[0].country
+                this.country3 = this.countryList[1].country
             }
         })
 
@@ -711,9 +711,14 @@ export default {
         },
         //绑定和更改手机号
         toBindPhone() {
+            let reg = /^\d{6,}$/
             if (this.phoneNum == '') {
                 this.$Modal.warning({
                     title: this.$L.account.enter_phone_number
+                })
+            } else if (!reg.test(this.phoneNum)) {
+                this.$Modal.warning({
+                    title: this.$L.account.phone_least_six_digits
                 })
             } else if (this.verification == '') {
                 this.$Modal.warning({
@@ -728,26 +733,31 @@ export default {
                         }&verifyCode=${this.verification}`
                     )
                     .then(res => {
-                        if (res.data.code != 0) {
-                            this.$Modal.warning({
-                                title: this.$L.account.verification_incorrect
-                            })
-                            return
-                        }
-                    })
-                let countryPhone =
-                    this.countryPrefix.toUpperCase() + '+' + this.phoneNum
-                this.$axios
-                    .put(
-                        `/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`
-                    )
-                    .then(res => {
                         if (res.data.code == 0) {
-                            this.$Modal.success({
-                                title: this.$L.account.success
+                            let countryPhone =
+                                this.countryPrefix.toUpperCase() +
+                                '+' +
+                                this.phoneNum
+                            this.$axios
+                                .put(
+                                    `/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`
+                                )
+                                .then(res => {
+                                    if (res.data.code == 0) {
+                                        this.$Modal.success({
+                                            title: this.$L.account.success
+                                        })
+                                        this.cancel('showPhoneModal')
+                                        this.getMerchantInfoDto()
+                                    }
+                                })
+                        } else {
+                            this.$Modal.warning({
+                                title: this.$L.account.verification_incorrect,
+                                onOk: () => {
+                                    this.verification = ''
+                                }
                             })
-                            this.cancel('showPhoneModal')
-                            this.getMerchantInfoDto()
                         }
                     })
             }
@@ -774,47 +784,84 @@ export default {
             }
         },
         // 修改密码逻辑
-        toUpdataPassword(orgPwd, newPwd, oldPwd) {
-            let reg = /^\d{n}$/
-            if (orgPwd && oldPwd == '') {
-                this.$Modal.warning({
-                    title: this.$L.account.enter_original_dealPassword
-                })
-                return
-            }
-            if (newPwd == '') {
-                this.$Modal.warning({
-                    title: this.$L.account.enter_new_dealPassword
-                })
-                return
-            } else if (reg.test(newPwd)) {
-                this.$Modal.warning({
-                    title: this.$L.account.password_6_digits
-                })
-                return
-            } else if (newPwd != this.repassword) {
-                this.$Modal.warning({
-                    title: this.$L.account.password_not_match
-                })
-                return
-            } else {
-                let merchantAppId = this.merchantAppInfoDto[this.appIndex].id
-                this.$axios
-                    .put(
-                        `/payment/mc/v2/merchantappMc/modifyDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${newPwd}`
-                    )
-                    .then(res => {
-                        if (res.data.code == 0) {
-                            this.getMerchantAppInfoDto()
-                            this.cancel('showPasswordModal')
-                            this.cancel('showRePasswordModal')
-                        } else if (res.data.code == 500) {
-                            this.$Modal.warning({
-                                title: res.data.message
-                            })
-                        }
+        toUpdataPassword(type, pwd, rePwd, newPwd, oldPwd) {
+            let reg = /^\d{6}$/
+            if (type == 'set') {
+                if (pwd == '') {
+                    this.$Modal.warning({
+                        title: this.$L.account.enter_dealPassword
                     })
+                    return
+                } else if (!reg.test(pwd)) {
+                    this.$Modal.warning({
+                        title: this.$L.account.password_6_digits
+                    })
+                    return
+                } else if (rePwd == '') {
+                    this.$Modal.warning({
+                        title: this.$L.account.enter_confirm_dealPassword
+                    })
+                    return
+                } else if (!reg.test(rePwd)) {
+                    this.$Modal.warning({
+                        title: this.$L.account.password_6_digits
+                    })
+                    return
+                } else if (pwd != rePwd) {
+                    this.$Modal.warning({
+                        title: this.$L.account.password_not_match
+                    })
+                    return
+                }
+            } else if (type == 'change') {
+                if (pwd == '') {
+                    this.$Modal.warning({
+                        title: this.$L.account.enter_original_dealPassword
+                    })
+                    return
+                } else if (!reg.test(pwd)) {
+                    this.$Modal.warning({
+                        title: this.$L.account.password_6_digits
+                    })
+                    return
+                } else if (newPwd == '') {
+                    this.$Modal.warning({
+                        title: this.$L.account.enter_new_dealPassword
+                    })
+                    return
+                } else if (!reg.test(newPwd)) {
+                    this.$Modal.warning({
+                        title: this.$L.account.password_6_digits
+                    })
+                    return
+                } else if (rePwd == '') {
+                    this.$Modal.warning({
+                        title: this.$L.account.enter_confirm_dealPassword
+                    })
+                    return
+                } else if (newPwd != rePwd) {
+                    this.$Modal.warning({
+                        title: this.$L.account.password_not_match
+                    })
+                    return
+                }
             }
+            let merchantAppId = this.merchantAppInfoDto[this.appIndex].id
+            this.$axios
+                .put(
+                    `/payment/mc/v2/merchantappMc/modifyDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${rePwd}`
+                )
+                .then(res => {
+                    if (res.data.code == 0) {
+                        this.getMerchantAppInfoDto()
+                        this.cancel('showPasswordModal')
+                        this.cancel('showRePasswordModal')
+                    } else if (res.data.code == 500) {
+                        this.$Modal.warning({
+                            title: res.data.message
+                        })
+                    }
+                })
         },
         // 发生手机验证码
         sendVerification() {
@@ -927,10 +974,7 @@ export default {
                         }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}&payEndTimeFrom=${payEndTimeFrom}&payEndTimeTo=${payEndTimeTo}`
                     )
                     .then(res => {
-                        if (
-                            res.data.resultCode == 'SUCCESS' &&
-                            res.data.orderPayBills.length > 0
-                        ) {
+                        if (res.data.resultCode == 'SUCCESS') {
                             this.tableDataAll1 = res.data.orderPayBills
                         }
                     })
@@ -954,10 +998,7 @@ export default {
                         }&applyRefundTimeFrom=${applyRefundTimeFrom}&applyRefundTimeTo=${applyRefundTimeTo}`
                     )
                     .then(res => {
-                        if (
-                            res.data.resultCode == 'SUCCESS' &&
-                            res.data.refundBills.length > 0
-                        ) {
+                        if (res.data.resultCode == 'SUCCESS') {
                             this.tableDataAll2 = res.data.refundBills
                         }
                     })
@@ -967,7 +1008,7 @@ export default {
                 // let upperCounteyCode = 'TZ' // test 数据
                 let upperCounteyCode =
                     this.country3 == ''
-                        ? this.countryList[0].country.toUpperCase()
+                        ? this.countryList[1].country.toUpperCase()
                         : this.country3.toUpperCase()
                 let createTimeFrom =
                     this.dateCollect[0] != ''
@@ -1007,7 +1048,7 @@ export default {
                 return
             } else if (this.refundObj.amount < this.refundAmount) {
                 this.$Modal.warning({
-                    title: ccc
+                    title: this.$L.record.refundable_amount
                 })
                 return
             } else {
@@ -1051,17 +1092,29 @@ export default {
         // 下载
         downloadTableData(type) {
             if (type == 1) {
-                this.$refs.table.exportCsv({
-                    filename: 'record',
-                    columns: this.columns1,
-                    data: this.tableDataAll1
-                })
+                if (this.tableDataAll1.length > 0) {
+                    this.$refs.table.exportCsv({
+                        filename: 'record',
+                        columns: this.columns1,
+                        data: this.tableDataAll1
+                    })
+                } else {
+                    this.$Modal.warning({
+                        title: this.$L.record.no_entries_for_download
+                    })
+                }
             } else if (type == 2) {
-                this.$refs.table.exportCsv({
-                    filename: 'refund',
-                    columns: this.columns2,
-                    data: this.tableDataAll2
-                })
+                if (this.tableDataAll2.length > 0) {
+                    this.$refs.table.exportCsv({
+                        filename: 'refund',
+                        columns: this.columns2,
+                        data: this.tableDataAll2
+                    })
+                } else {
+                    this.$Modal.warning({
+                        title: this.$L.record.no_entries_for_download
+                    })
+                }
             }
         }
     },

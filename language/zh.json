@@ -20,6 +20,7 @@
         "region":"地区：",
         "choose_country":"选择国家",
         "enter_phone_number":"请输入手机号",
+        "phone_least_six_digits":"手机号至少为6位数字",
         "verification":"验证码：",
         "send_verification":"发送验证码",
         "enter_verification":"请输入验证码",
@@ -98,6 +99,8 @@
         "enter_refund_remarks":"请输入退款备注",
         "okay":"确定",
         "cancel":"取消",
+        "no_entries_for_download":"暂无条目不可下载",
+
         
         "col_country":"国家",
         "col_trading_time_start":"订单创建时间",

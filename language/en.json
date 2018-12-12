@@ -20,6 +20,8 @@
         "region":"Region：",
         "choose_country":"Choose the country",
         "enter_phone_number":"Please enter your phone number",
+        "phone_least_six_digits":"The phone number should be at least 6 digits",
+
         "verification":"verification：",
         "send_verification":"Send Verification",
         "enter_verification":"Please enter the verification code",
@@ -96,6 +98,8 @@
         "enter_refund_remarks":"Please enter refund remarks",
         "okay":"Okay",
         "cancel":"Cancel",
+        "no_entries_for_download":"No entries are available for download",
+
 
         "col_country":"country",
         "col_trading_time_start":"trading start time",
