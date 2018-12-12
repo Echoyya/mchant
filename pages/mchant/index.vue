@@ -786,6 +786,18 @@ export default {
         // 更换手机号 下一步 验证原来的手机号
         toNextStep(curr) {
             if (curr == 2) {
+                let reg = /^\d{6,}$/
+                if (this.phoneNum == '') {
+                    this.$Modal.warning({
+                        title: this.$L.account.enter_phone_number
+                    })
+                    return
+                } else if (!reg.test(this.phoneNum)) {
+                    this.$Modal.warning({
+                        title: this.$L.account.phone_least_six_digits
+                    })
+                    return
+                }
                 let prefix =
                     this.countryPrefix == ''
                         ? this.countryList[1].country.toUpperCase()
