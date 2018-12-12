@@ -20,7 +20,7 @@
                                     </Col>
                                     <Col span="12">
                                     <Select v-model="countryPrefix" class="mr15 w200" :placeholder="$L.account.choose_country">
-                                        <Option v-for="item in countryList" :value="item.country" :key="item.country" v-if="item.id != 8">{{ item.name}} &nbsp;&nbsp;+{{item.phonePrefix}}</Option>
+                                        <Option v-for="item in countryList" :value="item.country" :key="item.country" v-if="item.id != 8 && item.id != 1">{{ item.name}} &nbsp;&nbsp;+{{item.phonePrefix}}</Option>
                                     </Select>
                                     </Col>
                                 </Row>
@@ -207,7 +207,7 @@
                             <div class="mb15">
                                 <span> {{$L.record.country}}</span>
                                 <Select v-model="country1" class="mr15 w160" :placeholder="$L.record.select_country">
-                                    <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
+                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 1">{{ item.name }}</Option>
                                 </Select>
                                 <span> {{$L.record.order_status}}</span>
                                 <Select v-model="orderStauts1" class="mr15 w160" :placeholder="$L.record.please_select">
@@ -283,7 +283,7 @@
                             <div class="mb15">
                                 <span> {{$L.refund.country}}</span>
                                 <Select v-model="country2" class="mr15 w160" :placeholder="$L.refund.select_country">
-                                    <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
+                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 1">{{ item.name }}</Option>
                                 </Select>
                                 {{$L.refund.order_status}}
                                 <Select v-model="orderStauts2" class="mr15 w160" :placeholder="$L.refund.please_select">
@@ -313,7 +313,7 @@
                             <div class="mb15">
                                 {{$L.summary.country}}
                                 <Select v-model="country3" class="mr15 w160" :placeholder="$L.summary.select_country">
-                                    <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
+                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 1">{{ item.name }}</Option>
                                 </Select>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.summary.search}}</Button>
                             </div>
