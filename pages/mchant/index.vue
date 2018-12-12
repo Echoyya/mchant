@@ -14,8 +14,16 @@
                             <Col span="4">
                             <Button type="primary" size="small" v-if="merchantInfoDto.contactPhone" @click="showPhoneModal=true">{{$L.account.change}}</Button>
                             <Button type="primary" size="small" v-else @click="showPhoneModal=true">{{$L.account.binding}}</Button>
-                            <Modal :title="$L.account.phone_binding" v-model="showPhoneModal" width="500">
+                            <Modal :title="$L.account.phone_binding" v-model="showPhoneModal" width="500" :closable="false">
                                 <Row class="mb15 lh32">
+                                    <Col span="24">
+                                    <p class="phoneText" v-if="current==1">{{$L.account.enter_phone_want_to_bind}}</p>
+                                    <p class="phoneText" v-if="current==2">{{$L.account.enter_phone_you_bound}}</p>
+                                    <p class="phoneText" v-if="current==3">{{$L.account.enter_old_verification}}</p>
+                                    <p class="phoneText" v-if="current==4">{{$L.account.enter_new_phone_want_change}}</p>
+                                    </Col>
+                                </Row>
+                                <Row class="mb15 lh32" v-if="current!=3">
                                     <Col span="6"> {{$L.account.region}}
                                     </Col>
                                     <Col span="12">
@@ -24,31 +32,34 @@
                                     </Select>
                                     </Col>
                                 </Row>
-                                <Row class="mb15 lh32">
+                                <Row class="mb15 lh32" v-if="current!=3">
                                     <Col span="6"> {{$L.account.phone}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
                                     <Input v-model="phoneNum" :placeholder="$L.account.enter_phone_number" class="w200" />
                                     </Col>
-                                    <Col span="6">
-                                    <div>
-                                        <Button type="primary" size="small" @click="sendVerification" :disabled="canSend">
-                                            <span v-show="canSend && canSendTime != 0">({{canSendTime}}s) </span> {{$L.account.send_verification}}</Button>
-                                    </div>
-                                    </Col>
                                 </Row>
-                                <Row class="mb15 lh32">
+                                <Row class="mb15 lh32" v-if="current!=2">
                                     <Col span="6"> {{$L.account.verification}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
                                     <Input v-model="verification" :placeholder="$L.account.enter_verification" class="w200" />
                                     </Col>
+                                    <Col span="6">
+                                    <div>
+                                        <Button type="primary" size="small" @click="sendVerification" :disabled="canSend">
+                                            <span v-show="canSend && canSendTime != 0">({{canSendTime}}s) </span> {{$L.account.send_verification}}
+                                        </Button>
+                                    </div>
+                                    </Col>
                                 </Row>
                                 <div slot="footer">
                                     <Button @click="cancel('showPhoneModal')">{{$L.account.cancel}}</Button>
-                                    <Button type="primary" @click="toBindPhone">{{$L.account.okay}}</Button>
+                                    <Button type="primary" @click="toNextStep(2)" v-if="current==2">{{$L.account.next_step}}</Button>
+                                    <Button type="primary" @click="toNextStep(3)" v-else-if="current==3">{{$L.account.next_step}}</Button>
+                                    <Button type="primary" @click="toBindPhone" v-else>{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
                             </Col>
@@ -62,7 +73,7 @@
                             <Col span="4">
                             <Button type="primary" size="small" v-if="merchantInfoDto.contactEmail" @click="showEmailModal=true">{{$L.account.change}}</Button>
                             <Button type="primary" size="small" v-else @click="showEmailModal=true">{{$L.account.binding}}</Button>
-                            <Modal :title="$L.account.email_address" v-model="showEmailModal" width="400">
+                            <Modal :title="$L.account.email_address" v-model="showEmailModal" width="400" :closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="18" offset="4"> {{$L.account.enter_email}}
                                     <span class="required">*</span>
@@ -94,7 +105,7 @@
                     <div class="mCard mb15">
                         <h2 class="mb15">{{$L.account.key_transaction}}</h2>
                         <Button type="primary" class="mb15" @click="showAppModal=true"> {{$L.account.add_application}} </Button>
-                        <Modal :title="$L.account.add_application" v-model="showAppModal" width="400">
+                        <Modal :title="$L.account.add_application" v-model="showAppModal" width="400" :closable="false">
                             <Row class="mb15 lh32">
                                 <Col span="6"> {{$L.account.application_name}}
                                 <span class="required">*</span>
@@ -141,7 +152,7 @@
                             <p class="row mb15" v-if="!item.dealPassword">{{$L.account.dealPassword}}{{$L.account.not_have}}</p>
                             <p class="row mb15" v-else>{{$L.account.dealPassword}} ******</p>
                             </Col>
-                            <Modal :title="$L.account.set_password" v-model="showPasswordModal" width="500">
+                            <Modal :title="$L.account.set_password" v-model="showPasswordModal" width="500" :closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="6">{{$L.account.dealPassword}}
                                     <span class="required">*</span>
@@ -163,7 +174,7 @@
                                     <Button type="primary" @click="toUpdataPassword('set',password,repassword,'')">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
-                            <Modal :title="$L.account.change_password" v-model="showRePasswordModal" width="500">
+                            <Modal :title="$L.account.change_password" v-model="showRePasswordModal" width="500" :closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="7">{{$L.account.original_dealpassword}}
                                     <span class="required">*</span>
@@ -227,7 +238,7 @@
                                 <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
                             <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table"></Table>
-                            <Modal :title="$L.record.refund" v-model="showRefundModal" width="700">
+                            <Modal :title="$L.record.refund" v-model="showRefundModal" width="700" :closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="6" class="tright"> {{$L.record.order_number}}</Col>
                                     <Col span="12" offset="1">{{ refundObj.txNo}}</Col>
@@ -627,7 +638,8 @@ export default {
             repassword: '',
             canSend: false,
             canSendTime: 60,
-            currencySymbol: ''
+            currencySymbol: '',
+            current: 1
         }
     },
     mounted() {
@@ -666,6 +678,9 @@ export default {
                 .then(res => {
                     if (res.data) {
                         this.merchantInfoDto = res.data
+                        if (this.merchantInfoDto.contactPhone != '') {
+                            this.current = 2
+                        }
                     }
                 })
         },
@@ -725,41 +740,81 @@ export default {
                     title: this.$L.account.enter_verification
                 })
             } else {
-                // 验证手机验证码
+                this.checkoutVerification(() => {
+                    this.$Modal.success({
+                        title: this.$L.account.success
+                    })
+                    this.cancel('showPhoneModal')
+                    this.getMerchantInfoDto()
+                })
+            }
+        },
+        // 验证手机验证码
+        checkoutVerification(callback) {
+            this.$axios
+                .get(
+                    `payment/mc/v2/merchantinfomc/check-verify-code?phone=${
+                        this.phoneNum
+                    }&verifyCode=${this.verification}`
+                )
+                .then(res => {
+                    if (res.data.code == 0) {
+                        let prefix =
+                            this.countryPrefix == ''
+                                ? this.countryList[1].country.toUpperCase()
+                                : this.countryPrefix.toUpperCase()
+                        let countryPhone = prefix + ' ' + this.phoneNum
+                        this.$axios
+                            .put(
+                                `/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`
+                            )
+                            .then(res => {
+                                if (res.data.code == 0) {
+                                    callback && callback()
+                                }
+                            })
+                    } else {
+                        this.$Modal.warning({
+                            title: this.$L.account.verification_incorrect,
+                            onOk: () => {
+                                this.verification = ''
+                            }
+                        })
+                    }
+                })
+        },
+        // 更换手机号 下一步 验证原来的手机号
+        toNextStep(curr) {
+            if (curr == 2) {
+                let prefix =
+                    this.countryPrefix == ''
+                        ? this.countryList[1].country.toUpperCase()
+                        : this.countryPrefix.toUpperCase()
+                let orgPhone = prefix + ' ' + this.phoneNum
                 this.$axios
                     .get(
-                        `payment/mc/v2/merchantinfomc/check-verify-code?phone=${
-                            this.phoneNum
-                        }&verifyCode=${this.verification}`
+                        `/payment/mc/v2/merchantinfomc/checkOldPhone?phone=${orgPhone}`
                     )
                     .then(res => {
                         if (res.data.code == 0) {
-                            let countryPhone =
-                                this.countryPrefix.toUpperCase() +
-                                '+' +
-                                this.phoneNum
-                            this.$axios
-                                .put(
-                                    `/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`
-                                )
-                                .then(res => {
-                                    if (res.data.code == 0) {
-                                        this.$Modal.success({
-                                            title: this.$L.account.success
-                                        })
-                                        this.cancel('showPhoneModal')
-                                        this.getMerchantInfoDto()
-                                    }
-                                })
-                        } else {
+                            this.sendVerification()
+                            this.current = 3
+                        } else if (res.data.code == 500) {
                             this.$Modal.warning({
-                                title: this.$L.account.verification_incorrect,
-                                onOk: () => {
-                                    this.verification = ''
-                                }
+                                title: this.$L.account.binding_number_not_match
                             })
                         }
                     })
+            }
+            if (curr == 3) {
+                this.checkoutVerification(() => {
+                    this.phoneNum = ''
+                    this.current = 4
+                    this.verification = ''
+                    this.canSend = false
+                    this.canSendTime = 60
+                    this.countryPrefix = ''
+                })
             }
         },
         // 添加商户应用
@@ -1299,5 +1354,10 @@ export default {
 }
 .appBorder {
     border-bottom: 1px solid #ccc;
+}
+.phoneText {
+    text-align: center;
+    font-weight: 600;
+    font-size: 15px;
 }
 </style>

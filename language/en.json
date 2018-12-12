@@ -30,6 +30,13 @@
         "phone_binding":"Mobile Phone Binding",
         "later_reapply":"Success, Please reapply 60s later",
         "verification_incorrect":"The verification code is incorrect. Please re input",
+        "enter_phone_you_bound":"Please enter the phone number you have bound",
+        "enter_phone_want_to_bind":"Please enter the phone number you want to bind",
+        "enter_new_phone_want_change":"Please enter the new phone number you want to change",
+        "next_step":"Next Step",
+        "binding_number_not_match":"The binding number does not match",
+        "enter_old_verification":"Please enter the original mobile phone number verification code",
+
 
         "email_address":"Email Address",
         "merchant_name":"Merchant Name：",

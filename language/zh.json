@@ -29,6 +29,13 @@
         "phone_binding":"手机绑定",
         "later_reapply":"发送成功，60s后再申请",
         "verification_incorrect":"验证码有误，请重新输入",
+        "enter_phone_you_bound":"请输入您已经绑定的手机号",
+        "enter_phone_want_to_bind":"请输入您要绑定的手机号",
+        "enter_new_phone_want_change":"请输入您要更换的新手机号",
+        "next_step":"下一步",
+        "binding_number_not_match":"绑定号码不匹配",
+        "enter_old_verification":"请输入原手机号验证码",
+
 
         "email_address":"邮箱绑定",
         "merchant_name":"商户名称：",
