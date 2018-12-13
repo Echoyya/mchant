@@ -339,6 +339,10 @@
 <script>
 import { getCookie } from '~/functions/utils'
 export default {
+    async asyncData() {
+        let serverTime = new Date()
+        return { serverTime: serverTime }
+    },
     data() {
         return {
             countryList: [],
@@ -646,7 +650,7 @@ export default {
             repassword: '',
             canSend: false,
             canSendTime: 60,
-            currencySymbol: '',
+            currencySymbol: '-',
             current: 1
         }
     },
@@ -676,9 +680,18 @@ export default {
             }
         })
 
+        this.initSearchTime()
         this.searchOrder(this.currentType)
     },
     methods: {
+        // 初始化搜索时间为近一周
+        initSearchTime() {
+            let lastWeek = this.serverTime.getTime() - 7 * 24 * 3600 * 1000
+            this.dateRecord_start[0] = this.formatDate(lastWeek)
+            this.dateRecord_start[1] = this.formatDate(this.serverTime)
+            this.dateRefund[0] = this.formatDate(lastWeek)
+            this.dateRefund[1] = this.formatDate(this.serverTime)
+        },
         // 获取商户
         getMerchantInfoDto() {
             this.$axios
@@ -1224,14 +1237,14 @@ export default {
             } else {
                 this.range = '1'
             }
-        },
-        country3(val) {
-            this.countryList.forEach(ele => {
-                if (ele.country == val) {
-                    this.currencySymbol = ele.currencySymbol
-                }
-            })
         }
+        // country3(val) {
+        //     this.countryList.forEach(ele => {
+        //         if (ele.country == val) {
+        //             this.currencySymbol = ele.currencySymbol
+        //         }
+        //     })
+        // }
     },
     computed: {
         tableData1() {
