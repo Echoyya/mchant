@@ -125,6 +125,7 @@
         "refundable_amount":"退款金额不可大于可退金额",
         "success_refund":"申请成功,可在退款记录中查询",
 
+        "all":"全部",
         "notpay":"未付款",
         "paying":"付款中",
         "success":"已付款",
@@ -153,6 +154,7 @@
         "col_refund_remarks":"退款备注",
         "col_state":"状态",
 
+        "all":"全部",
         "notrefund":"未退款",
         "processing":"处理中",
         "fail":"退款失败",

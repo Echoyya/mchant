@@ -124,6 +124,7 @@
         "refundable_amount":"The refundable amount shall not be greater than the refundable amount",
         "success_refund":"Success, Can be found in the refund record",
 
+        "all":"all",
         "notpay":"NOTPAY",
         "paying":"PAYING",
         "success":"SUCCESS",
@@ -152,6 +153,7 @@
         "col_refund_remarks":"refund remarks",
         "col_state":"refund state",
 
+        "all":"all",
         "notrefund":"NOTREFUND",
         "processing":"PROCESSING",
         "fail":"FAIL",
