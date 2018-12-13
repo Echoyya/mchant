@@ -244,7 +244,7 @@
                                     <Col span="12" offset="1">{{ refundObj.txNo}}</Col>
                                 </Row>
                                 <Row class="mb15 lh32">
-                                    <Col span="6" class="tright"> {{$L.record.trading_time}}</Col>
+                                    <Col span="6" class="tright"> {{$L.record.trading_time_start}}</Col>
                                     <Col span="12" offset="1">{{ refundObj.createTime}}</Col>
                                 </Row>
                                 <Row class="mb15 lh32">
