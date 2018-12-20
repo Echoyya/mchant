@@ -14,16 +14,15 @@
                             <Col span="4">
                             <Button type="primary" size="small" v-if="merchantInfoDto.contactPhone" @click="showPhoneModal=true">{{$L.account.change}}</Button>
                             <Button type="primary" size="small" v-else @click="showPhoneModal=true">{{$L.account.binding}}</Button>
-                            <Modal :title="$L.account.phone_binding" v-model="showPhoneModal" width="500" :closable="false">
+                            <Modal :title="$L.account.phone_binding" v-model="showPhoneModal" width="500" :closable="false" :mask-closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="24">
                                     <p class="phoneText" v-if="current==1">{{$L.account.enter_phone_want_to_bind}}</p>
                                     <p class="phoneText" v-if="current==2">{{$L.account.enter_phone_you_bound}}</p>
-                                    <p class="phoneText" v-if="current==3">{{$L.account.enter_old_verification}}</p>
                                     <p class="phoneText" v-if="current==4">{{$L.account.enter_new_phone_want_change}}</p>
                                     </Col>
                                 </Row>
-                                <Row class="mb15 lh32" v-if="current!=3">
+                                <Row class="mb15 lh32">
                                     <Col span="6"> {{$L.account.region}}
                                     <span class="required">*</span>
                                     </Col>
@@ -31,27 +30,29 @@
                                     <Select v-model="countryPrefix" class="mr15 w200" :placeholder="$L.account.choose_country">
                                         <Option v-for="item in countryList" :value="item.country" :key="item.country" v-if="item.id != 8 && item.id != 0">{{ item.name}} &nbsp;&nbsp;+{{item.phonePrefix}}</Option>
                                     </Select>
-
                                     </Col>
                                 </Row>
-                                <Row class="mb15 lh32" v-if="current!=3">
+                                <Row class="mb15 lh32">
                                     <Col span="6"> {{$L.account.phone}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="phoneNum" :placeholder="$L.account.enter_phone_number" class="w200" />
+                                    <Input v-model="phoneNum" :placeholder="$L.account.enter_phone_number" class="w200"></Input>
                                     </Col>
                                 </Row>
-                                <Row class="mb15 lh32" v-if="current!=2">
+                                <Row class="mb15 lh32">
                                     <Col span="6"> {{$L.account.verification}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="verification" :placeholder="$L.account.enter_verification" class="w200" />
+                                    <Input v-model="verification" :placeholder="$L.account.enter_verification" class="w200"></Input>
                                     </Col>
                                     <Col span="6">
                                     <div>
-                                        <Button type="primary" size="small" @click="sendVerification" :disabled="canSend">
+                                        <Button type="primary" size="small" v-if="current==2" @click="sendVerificationOrg" :disabled="canSend">
+                                            <span v-show="canSend && canSendTime != 0">({{canSendTime}}s) </span> {{$L.account.send_verification}}
+                                        </Button>
+                                        <Button type="primary" size="small" v-if="current!=2" @click="sendVerification" :disabled="canSend">
                                             <span v-show="canSend && canSendTime != 0">({{canSendTime}}s) </span> {{$L.account.send_verification}}
                                         </Button>
                                     </div>
@@ -59,8 +60,7 @@
                                 </Row>
                                 <div slot="footer">
                                     <Button @click="cancel('showPhoneModal')">{{$L.account.cancel}}</Button>
-                                    <Button type="primary" @click="toNextStep(2)" v-if="current==2">{{$L.account.next_step}}</Button>
-                                    <Button type="primary" @click="toNextStep(3)" v-else-if="current==3">{{$L.account.next_step}}</Button>
+                                    <Button type="primary" @click="toNextStep" v-if="current==2">{{$L.account.next_step}}</Button>
                                     <Button type="primary" @click="toBindPhone" v-else>{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
@@ -75,13 +75,13 @@
                             <Col span="4">
                             <Button type="primary" size="small" v-if="merchantInfoDto.contactEmail" @click="showEmailModal=true">{{$L.account.change}}</Button>
                             <Button type="primary" size="small" v-else @click="showEmailModal=true">{{$L.account.binding}}</Button>
-                            <Modal :title="$L.account.email_address" v-model="showEmailModal" width="400" :closable="false">
+                            <Modal :title="$L.account.email_address" v-model="showEmailModal" width="400" :closable="false" :mask-closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="18" offset="4"> {{$L.account.enter_email}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="18" offset="4">
-                                    <Input v-model="email" :placeholder="$L.account.enter_email" class="w240" />
+                                    <Input v-model="email" :placeholder="$L.account.enter_email" class="w240"></Input>
                                     </Col>
                                 </Row>
                                 <div slot="footer">
@@ -107,31 +107,31 @@
                     <div class="mCard mb15">
                         <h2 class="mb15">{{$L.account.key_transaction}}</h2>
                         <Button type="primary" class="mb15" @click="showAppModal=true"> {{$L.account.add_application}} </Button>
-                        <Modal :title="$L.account.add_application" v-model="showAppModal" width="400" :closable="false">
+                        <Modal :title="$L.account.add_application" v-model="showAppModal" width="400" :closable="false" :mask-closable="false">
                             <Row class="mb15 lh32">
                                 <Col span="6"> {{$L.account.application_name}}
                                 <span class="required">*</span>
                                 </Col>
                                 <Col span="12">
-                                <Input v-model="appName" :placeholder="$L.account.enter_application_name" class="w240" />
+                                <Input v-model="appName" :placeholder="$L.account.enter_application_name" class="w240"></Input>
                                 </Col>
                             </Row>
                             <Row class="mb15 lh32">
                                 <Col span="6"> {{$L.account.wallet_account}}</Col>
                                 <Col span="12">
-                                <Input v-model="ewalletNo" :placeholder="$L.account.enter_wallet_account" class="w240" />
+                                <Input v-model="ewalletNo" :placeholder="$L.account.enter_wallet_account" class="w240"></Input>
                                 </Col>
                             </Row>
                             <Row class="mb15 lh32">
                                 <Col span="6"> {{$L.account.payment_notice}}</Col>
                                 <Col span="12">
-                                <Input v-model="payNotifyUrl" :placeholder="$L.account.enter_payment_notice" class="w240" />
+                                <Input v-model="payNotifyUrl" :placeholder="$L.account.enter_payment_notice" class="w240"></Input>
                                 </Col>
                             </Row>
                             <Row class="mb15 lh32">
                                 <Col span="6"> {{$L.account.refund_notice}}</Col>
                                 <Col span="12">
-                                <Input v-model="refundNotifyUrl" :placeholder="$L.account.enter_refund_notice" class="w240" />
+                                <Input v-model="refundNotifyUrl" :placeholder="$L.account.enter_refund_notice" class="w240"></Input>
                                 </Col>
                             </Row>
                             <div slot="footer">
@@ -154,13 +154,13 @@
                             <p class="row mb15" v-if="!item.dealPassword">{{$L.account.dealPassword}}{{$L.account.not_have}}</p>
                             <p class="row mb15" v-else>{{$L.account.dealPassword}} ******</p>
                             </Col>
-                            <Modal :title="$L.account.set_password" v-model="showPasswordModal" width="500" :closable="false">
+                            <Modal :title="$L.account.set_password" v-model="showPasswordModal" width="500" :closable="false" :mask-closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="6">{{$L.account.dealPassword}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="password" type="password" :placeholder="$L.account.enter_dealPassword" class="w200" />
+                                    <Input v-model="password" type="password" :placeholder="$L.account.enter_dealPassword" class="w200"></Input>
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -168,7 +168,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
+                                    <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200"></Input>
                                     </Col>
                                 </Row>
                                 <div slot="footer">
@@ -176,13 +176,13 @@
                                     <Button type="primary" @click="toUpdataPassword('set',password,repassword,'')">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
-                            <Modal :title="$L.account.change_password" v-model="showRePasswordModal" width="500" :closable="false">
+                            <Modal :title="$L.account.change_password" v-model="showRePasswordModal" width="500" :closable="false" :mask-closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="7">{{$L.account.original_dealpassword}}
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="password" type="password" :placeholder="$L.account.enter_original_dealPassword" class="w200" />
+                                    <Input v-model="password" type="password" :placeholder="$L.account.enter_original_dealPassword" class="w200"></Input>
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -190,7 +190,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="newPassword" type="password" :placeholder="$L.account.enter_new_dealPassword" class="w200" />
+                                    <Input v-model="newPassword" type="password" :placeholder="$L.account.enter_new_dealPassword" class="w200"></Input>
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -198,7 +198,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
-                                    <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
+                                    <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200"></Input>
                                     </Col>
                                 </Row>
                                 <div slot="footer">
@@ -229,18 +229,18 @@
                                 <Select v-model="orderType1" class="mr15 w160" :placeholder="$L.record.please_select">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum1" :placeholder="$L.record.enter_order_number" class="w160" />
+                                <Input v-model="orderNum1" :placeholder="$L.record.enter_order_number" class="w160"></Input>
                             </div>
                             <div class="mb15">
                                 <span> {{$L.record.trading_time_start}}</span>
-                                <DatePicker v-model="dateRecord_start" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15"></DatePicker>
+                                <DatePicker v-model="dateRecord_start" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" />
                                 <span> {{$L.record.trading_time_end}}</span>
-                                <DatePicker v-model="dateRecord_end" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240"></DatePicker>
+                                <DatePicker v-model="dateRecord_end" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" />
                                 <Button type="primary" class="ml15" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
                                 <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
-                            <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table"></Table>
-                            <Modal :title="$L.record.refund" v-model="showRefundModal" width="700" :closable="false">
+                            <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table" />
+                            <Modal :title="$L.record.refund" v-model="showRefundModal" width="700" :closable="false" :mask-closable="false">
                                 <Row class="mb15 lh32">
                                     <Col span="6" class="tright"> {{$L.record.order_number}}</Col>
                                     <Col span="12" offset="1">{{ refundObj.txNo}}</Col>
@@ -258,7 +258,7 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12" offset="1">
-                                    <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100"></InputNumber>
+                                    <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100" />
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -276,13 +276,13 @@
                                     <span class="required">*</span>
                                     </Col>
                                     <Col span="12" offset="1">
-                                    <Input v-model="dealPassword" class="w240" />
+                                    <Input v-model="dealPassword" class="w240"></Input>
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <Col span="6" class="tright"> {{$L.record.refund_remarks}}</Col>
                                     <Col span="12" offset="1">
-                                    <Input v-model="refundNote" type="textarea" :rows="4" :placeholder="$L.record.enter_refund_remarks" class="w240" />
+                                    <Input v-model="refundNote" type="textarea" :rows="4" :placeholder="$L.record.enter_refund_remarks" class="w240"></Input>
                                     </Col>
                                 </Row>
                                 <div slot="footer">
@@ -305,15 +305,15 @@
                                 <Select v-model="orderType2" class="mr15 w160" :placeholder="$L.refund.please_select">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum2" :placeholder="$L.refund.enter_order_number" class="w160" />
+                                <Input v-model="orderNum2" :placeholder="$L.refund.enter_order_number" class="w160"></Input>
                             </div>
                             <div class="mb15">
                                 {{$L.refund.refund_time}}
-                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240"></DatePicker>
+                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" />>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
                                 <Button @click="downloadTableData(2)">{{$L.refund.download}}</Button>
                             </div>
-                            <Table border :columns="columns2" :data="tableData2" :stripe="true"></Table>
+                            <Table border :columns="columns2" :data="tableData2" :stripe="true" />
                             <Page :total="tableDataAll2.length" :current="pageIndex2" :page-size="pageSize2" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex2 = $event " @on-page-size-change="pageSize2 = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==3">
@@ -321,7 +321,7 @@
                                 <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">{{$L.summary.nearly_week}}</Button>
                                 <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">{{$L.summary.nearly_month}}</Button>
                                 <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">{{$L.summary.nearly_three_months}}</Button>
-                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240"></DatePicker>
+                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" />
                             </div>
                             <div class="mb15">
                                 {{$L.summary.country}}
@@ -330,7 +330,7 @@
                                 </Select>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.summary.search}}</Button>
                             </div>
-                            <Table border :columns="columns3" :data="tableData3" :stripe="true"></Table>
+                            <Table border :columns="columns3" :data="tableData3" :stripe="true" />
                         </div>
                     </div>
                 </TabPane>
@@ -667,13 +667,11 @@ export default {
         this.getMerchantAppInfoDto()
 
         // 昨日成功交易汇总
-        this.$axios
-            .post('/payment/mc/v2/merchantinfomc/queryStaticOrderBillResponse')
-            .then(res => {
-                if (res.data.length > 0) {
-                    this.tradeTotelYesterday = res.data
-                }
-            })
+        this.$axios.post('/payment/mc/v2/merchantinfomc/queryStaticOrderBillResponse').then(res => {
+            if (res.data.length > 0) {
+                this.tradeTotelYesterday = res.data
+            }
+        })
         // 获取国家
         this.countryList = countrys
         this.country3 = this.countryList[1].country
@@ -691,26 +689,22 @@ export default {
         },
         // 获取商户
         getMerchantInfoDto() {
-            this.$axios
-                .post('/payment/mc/v2/merchantinfomc/query')
-                .then(res => {
-                    if (res.data) {
-                        this.merchantInfoDto = res.data
-                        if (this.merchantInfoDto.contactPhone) {
-                            this.current = 2
-                        }
+            this.$axios.post('/payment/mc/v2/merchantinfomc/query').then(res => {
+                if (res.data) {
+                    this.merchantInfoDto = res.data
+                    if (this.merchantInfoDto.contactPhone) {
+                        this.current = 2
                     }
-                })
+                }
+            })
         },
         // 获取商户应用列表
         getMerchantAppInfoDto() {
-            this.$axios
-                .post('/payment/mc/v2/merchantappMc/queryall')
-                .then(res => {
-                    if (res.data.length > 0) {
-                        this.merchantAppInfoDto = res.data
-                    }
-                })
+            this.$axios.post('/payment/mc/v2/merchantappMc/queryall').then(res => {
+                if (res.data.length > 0) {
+                    this.merchantAppInfoDto = res.data
+                }
+            })
         },
         //绑定和更改邮箱
         toBindEmail() {
@@ -721,142 +715,173 @@ export default {
                 })
                 return
             } else {
-                this.$axios
-                    .put(
-                        `/payment/mc/v2/merchantinfomc/modifyEmail?email=${
-                            this.email
-                        }`
-                    )
-                    .then(res => {
-                        if (res.data.code == 0) {
-                            this.$Modal.success({
-                                title: this.$L.account.success
-                            })
-                            this.cancel('showEmailModal')
-                            this.getMerchantInfoDto()
-                        } else {
-                            this.$Modal.success({
-                                title: res.data.meassage
-                            })
-                        }
-                    })
+                this.$axios.put(`/payment/mc/v2/merchantinfomc/modifyEmail?email=${this.email}`).then(res => {
+                    if (res.data.code == 0) {
+                        this.$Modal.success({
+                            title: this.$L.account.success
+                        })
+                        this.cancel('showEmailModal')
+                        this.getMerchantInfoDto()
+                    } else {
+                        this.$Modal.success({
+                            title: res.data.meassage
+                        })
+                    }
+                })
             }
         },
         //绑定和更改手机号
         toBindPhone() {
-            let reg = /^\d{6,}$/
-            if (this.countryPrefix == '') {
-                this.$Modal.warning({
-                    title: this.$L.account.choose_country
+            if (!this.beforeSendVerification()) return
+            this.checkoutVerification(() => {
+                this.$Modal.success({
+                    title: this.$L.account.success
                 })
-            } else if (this.phoneNum == '') {
-                this.$Modal.warning({
-                    title: this.$L.account.enter_phone_number
-                })
-            } else if (!reg.test(this.phoneNum)) {
-                this.$Modal.warning({
-                    title: this.$L.account.phone_least_six_digits
-                })
-            } else if (this.verification == '') {
-                this.$Modal.warning({
-                    title: this.$L.account.enter_verification
-                })
-            } else {
-                this.checkoutVerification(() => {
-                    this.$Modal.success({
-                        title: this.$L.account.success
-                    })
-                    this.cancel('showPhoneModal')
-                    this.getMerchantInfoDto()
-                })
-            }
+                this.cancel('showPhoneModal')
+                this.getMerchantInfoDto()
+            })
         },
         // 验证手机验证码
         checkoutVerification(callback) {
-            this.$axios
-                .get(
-                    `payment/mc/v2/merchantinfomc/check-verify-code?phone=${
-                        this.phoneNum
-                    }&verifyCode=${this.verification}`
-                )
-                .then(res => {
-                    if (res.data.code == 0) {
-                        // let prefix =
-                        //     this.countryPrefix == ''
-                        //         ? this.countryList[0].country.toUpperCase()
-                        //         : this.countryPrefix.toUpperCase()
-                        // let countryPhone = prefix + ' ' + this.phoneNum
-                        let countryPhone =
-                            this.countryPrefix + ' ' + this.phoneNum
-                        this.$axios
-                            .put(
-                                `/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`
-                            )
-                            .then(res => {
-                                if (res.data.code == 0) {
-                                    callback && callback()
-                                }
-                            })
-                    } else {
-                        this.$Modal.warning({
-                            title: this.$L.account.verification_incorrect,
-                            onOk: () => {
-                                this.verification = ''
-                            }
-                        })
-                    }
-                })
+            this.$axios.get(`payment/mc/v2/merchantinfomc/check-verify-code?phone=${this.phoneNum}&verifyCode=${this.verification}`).then(res => {
+                if (res.data.code == 0) {
+                    let countryPhone = this.countryPrefix + ' ' + this.phoneNum
+                    this.$axios.put(`/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`).then(res => {
+                        if (res.data.code == 0) {
+                            callback && callback()
+                            this.canSend = false
+                            this.canSendTime = 60
+                        }
+                    })
+                } else {
+                    this.$Modal.warning({
+                        title: this.$L.account.verification_incorrect,
+                        onOk: () => {
+                            this.verification = ''
+                        }
+                    })
+                }
+            })
         },
         // 更换手机号 下一步 验证原来的手机号
         toNextStep(curr) {
-            if (curr == 2) {
-                let reg = /^\d{6,}$/
-                if (this.countryPrefix == '') {
-                    this.$Modal.warning({
-                        title: this.$L.account.choose_country
-                    })
-                    return
-                } else if (this.phoneNum == '') {
-                    this.$Modal.warning({
-                        title: this.$L.account.enter_phone_number
-                    })
-                    return
-                } else if (!reg.test(this.phoneNum)) {
-                    this.$Modal.warning({
-                        title: this.$L.account.phone_least_six_digits
-                    })
-                    return
-                }
-                // let prefix =
-                //     this.countryPrefix == ''
-                //         ? this.countryList[0].country.toUpperCase()
-                //         : this.countryPrefix.toUpperCase()
-                // let orgPhone = prefix + ' ' + this.phoneNum
-                let orgPhone = this.countryPrefix + ' ' + this.phoneNum
-                this.$axios
-                    .get(
-                        `/payment/mc/v2/merchantinfomc/checkOldPhone?phone=${orgPhone}`
-                    )
-                    .then(res => {
-                        if (res.data.code == 0) {
-                            this.sendVerification()
-                            this.current = 3
-                        } else if (res.data.code == 500) {
-                            this.$Modal.warning({
-                                title: this.$L.account.binding_number_not_match
-                            })
-                        }
-                    })
+            if (!this.beforeSendVerification()) return
+            if (this.verification == '') {
+                this.$Modal.warning({
+                    title: this.$L.account.enter_verification
+                })
+                return
             }
-            if (curr == 3) {
-                this.checkoutVerification(() => {
+            this.$axios.get(`payment/mc/v2/merchantinfomc/check-verify-code?phone=${this.phoneNum}&verifyCode=${this.verification}`).then(res => {
+                if (res.data.code == 0) {
                     this.phoneNum = ''
                     this.current = 4
                     this.verification = ''
                     this.canSend = false
                     this.canSendTime = 60
                     this.countryPrefix = ''
+                } else {
+                    this.$Modal.warning({
+                        title: this.$L.account.verification_incorrect,
+                        onOk: () => {
+                            this.verification = ''
+                        }
+                    })
+                }
+            })
+        },
+        // 验证手机号及国家地区
+        beforeSendVerification() {
+            let reg = /^\d{6,}$/
+            if (this.countryPrefix == '') {
+                this.$Modal.warning({
+                    title: this.$L.account.choose_country
                 })
+                return
+            } else if (this.phoneNum == '') {
+                this.$Modal.warning({
+                    title: this.$L.account.enter_phone_number
+                })
+                return
+            } else if (!reg.test(this.phoneNum)) {
+                this.$Modal.warning({
+                    title: this.$L.account.phone_least_six_digits
+                })
+                return
+            } else {
+                return true
+            }
+        },
+        // 发送原手机验证码 前验证原手机号绑定
+        sendVerificationOrg() {
+            if (!this.beforeSendVerification()) return
+            let orgPhone = this.countryPrefix + ' ' + this.phoneNum
+            this.$axios.get(`/payment/mc/v2/merchantinfomc/checkOldPhone?phone=${orgPhone}`).then(res => {
+                if (res.data.code == 0) {
+                    this.sendVerification()
+                } else if (res.data.code == 500) {
+                    this.$Modal.warning({
+                        title: this.$L.account.binding_number_not_match
+                    })
+                }
+            })
+        },
+        // 发送手机验证码
+        sendVerification() {
+            if (!this.beforeSendVerification()) return
+            this.$axios.post(`payment/mc/v2/merchantinfomc/send-verify-code?phone=${this.phoneNum}`).then(res => {
+                if (res.data.code == 0) {
+                    this.canSend = true
+                    this.$Modal.success({
+                        title: this.$L.account.later_reapply
+                    })
+                    let timer = setInterval(() => {
+                        if (this.canSendTime <= 0) {
+                            clearInterval(timer)
+                            this.canSend = false
+                            return
+                        }
+                        this.canSendTime--
+                    }, 1000)
+                }
+            })
+        },
+        cancel(model) {
+            switch (model) {
+                case 'showPhoneModal':
+                    this.showPhoneModal = false
+                    this.countryPrefix = ''
+                    this.verification = ''
+                    this.phoneNum = ''
+                    break
+                case 'showEmailModal':
+                    this.showEmailModal = false
+                    this.email = ''
+                    break
+                case 'showAppModal':
+                    this.showAppModal = false
+                    this.appName = ''
+                    this.ewalletNo = ''
+                    this.payNotifyUrl = ''
+                    this.refundNotifyUrl = ''
+                    break
+                case 'showRefundModal':
+                    this.showRefundModal = false
+                    this.refundAmount = ''
+                    this.refundNote = ''
+                    this.dealPassword = ''
+                    break
+                case 'showPasswordModal':
+                    this.showPasswordModal = false
+                    this.password = ''
+                    this.repassword = ''
+                    break
+                case 'showRePasswordModal':
+                    this.showRePasswordModal = false
+                    this.password = ''
+                    this.repassword = ''
+                    this.newPassword = ''
+                    break
             }
         },
         // 添加商户应用
@@ -868,9 +893,7 @@ export default {
             } else {
                 this.$axios
                     .put(
-                        `/payment/mc/v2/merchantappMc/add?name=${
-                            this.appName
-                        }&ewalletNo=${this.ewalletNo}&payNotifyUrl=${
+                        `/payment/mc/v2/merchantappMc/add?name=${this.appName}&ewalletNo=${this.ewalletNo}&payNotifyUrl=${
                             this.payNotifyUrl
                         }&refundNotifyUrl=${this.refundNotifyUrl}`
                     )
@@ -945,9 +968,7 @@ export default {
             }
             let merchantAppId = this.merchantAppInfoDto[this.appIndex].id
             this.$axios
-                .put(
-                    `/payment/mc/v2/merchantappMc/modifyDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${rePwd}`
-                )
+                .put(`/payment/mc/v2/merchantappMc/modifyDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${rePwd}`)
                 .then(res => {
                     if (res.data.code == 0) {
                         this.getMerchantAppInfoDto()
@@ -960,114 +981,29 @@ export default {
                     }
                 })
         },
-        // 发生手机验证码
-        sendVerification() {
-            if (this.phoneNum == '') {
-                this.$Modal.warning({
-                    title: this.$L.account.enter_phone_number
-                })
-            }
-            this.$axios
-                .post(
-                    `payment/mc/v2/merchantinfomc/send-verify-code?phone=${
-                        this.phoneNum
-                    }`
-                )
-                .then(res => {
-                    if (res.data.code == 0) {
-                        this.canSend = true
-                        this.$Modal.success({
-                            title: this.$L.account.later_reapply
-                        })
-                        let timer = setInterval(() => {
-                            if (this.canSendTime <= 0) {
-                                clearInterval(timer)
-                                this.canSend = false
-                                return
-                            }
-                            this.canSendTime--
-                        }, 1000)
-                    }
-                })
-        },
-        cancel(model) {
-            switch (model) {
-                case 'showPhoneModal':
-                    this.showPhoneModal = false
-                    this.countryPrefix = ''
-                    this.verification = ''
-                    this.phoneNum = ''
-                    break
-                case 'showEmailModal':
-                    this.showEmailModal = false
-                    this.email = ''
-                    break
-                case 'showAppModal':
-                    this.showAppModal = false
-                    this.appName = ''
-                    this.ewalletNo = ''
-                    this.payNotifyUrl = ''
-                    this.refundNotifyUrl = ''
-                    break
-                case 'showRefundModal':
-                    this.showRefundModal = false
-                    this.refundAmount = ''
-                    this.refundNote = ''
-                    this.dealPassword = ''
-                    break
-                case 'showPasswordModal':
-                    this.showPasswordModal = false
-                    this.password = ''
-                    this.repassword = ''
-                    break
-                case 'showRePasswordModal':
-                    this.showRePasswordModal = false
-                    this.password = ''
-                    this.repassword = ''
-                    this.newPassword = ''
-                    break
-            }
-        },
         // 修改商户应用apiKey
         createApiKey(appId, index) {
-            this.$axios
-                .put(`/payment/mc/v2/merchantappMc/modifyApiKey?id=${appId}`)
-                .then(res => {
-                    if (res.data.code == 0) {
-                        this.getMerchantAppInfoDto()
-                    } else {
-                        this.$Modal.warning({
-                            title: this.$L.account.build_failed
-                        })
-                    }
-                })
+            this.$axios.put(`/payment/mc/v2/merchantappMc/modifyApiKey?id=${appId}`).then(res => {
+                if (res.data.code == 0) {
+                    this.getMerchantAppInfoDto()
+                } else {
+                    this.$Modal.warning({
+                        title: this.$L.account.build_failed
+                    })
+                }
+            })
         },
         searchOrder(currentType) {
             if (currentType == 1) {
                 //支付交易记录
-                let upperCounteyCode =
-                    this.country1 == '-' ? '' : this.country1.toUpperCase()
-                let createTimeFrom =
-                    this.dateRecord_start[0] != ''
-                        ? this.formatDate(this.dateRecord_start[0])
-                        : ''
-                let createTimeTo =
-                    this.dateRecord_start[1] != ''
-                        ? this.formatDate(this.dateRecord_start[1])
-                        : ''
-                let payEndTimeFrom =
-                    this.dateRecord_end[0] != ''
-                        ? this.formatDate(this.dateRecord_end[0])
-                        : ''
-                let payEndTimeTo =
-                    this.dateRecord_end[1] != ''
-                        ? this.formatDate(this.dateRecord_end[1])
-                        : ''
+                let upperCounteyCode = this.country1 == '-' ? '' : this.country1.toUpperCase()
+                let createTimeFrom = this.dateRecord_start[0] != '' ? this.formatDate(this.dateRecord_start[0]) : ''
+                let createTimeTo = this.dateRecord_start[1] != '' ? this.formatDate(this.dateRecord_start[1]) : ''
+                let payEndTimeFrom = this.dateRecord_end[0] != '' ? this.formatDate(this.dateRecord_end[0]) : ''
+                let payEndTimeTo = this.dateRecord_end[1] != '' ? this.formatDate(this.dateRecord_end[1]) : ''
                 this.$axios
                     .post(
-                        `payment/mc/v2/order-pay-bills?country=${upperCounteyCode}&state=${
-                            this.orderStauts1
-                        }&txNo=${this.txNo1}&payToken=${
+                        `payment/mc/v2/order-pay-bills?country=${upperCounteyCode}&state=${this.orderStauts1}&txNo=${this.txNo1}&payToken=${
                             this.payToken1
                         }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}&payEndTimeFrom=${payEndTimeFrom}&payEndTimeTo=${payEndTimeTo}`
                     )
@@ -1075,29 +1011,18 @@ export default {
                         if (res.data.resultCode == 'SUCCESS') {
                             this.tableDataAll1 = res.data.orderPayBills
                             this.tableDataAll1.forEach(ele => {
-                                ele.currency = this.formatCurrencySymbol(
-                                    ele.country
-                                )
+                                ele.currency = this.formatCurrencySymbol(ele.country)
                             })
                         }
                     })
             } else if (currentType == 2) {
                 //退款记录查询
-                let upperCounteyCode =
-                    this.country2 == '-' ? '' : this.country2.toUpperCase()
-                let applyRefundTimeFrom =
-                    this.dateRefund[0] != ''
-                        ? this.formatDate(this.dateRefund[0])
-                        : ''
-                let applyRefundTimeTo =
-                    this.dateRefund[1] != ''
-                        ? this.formatDate(this.dateRefund[1])
-                        : ''
+                let upperCounteyCode = this.country2 == '-' ? '' : this.country2.toUpperCase()
+                let applyRefundTimeFrom = this.dateRefund[0] != '' ? this.formatDate(this.dateRefund[0]) : ''
+                let applyRefundTimeTo = this.dateRefund[1] != '' ? this.formatDate(this.dateRefund[1]) : ''
                 this.$axios
                     .post(
-                        `/payment/mc/v2/refund/find-refund-bill?country=${upperCounteyCode}&state=${
-                            this.orderStauts2
-                        }&txNo=${this.txNo2}&payToken=${
+                        `/payment/mc/v2/refund/find-refund-bill?country=${upperCounteyCode}&state=${this.orderStauts2}&txNo=${this.txNo2}&payToken=${
                             this.payToken2
                         }&applyRefundTimeFrom=${applyRefundTimeFrom}&applyRefundTimeTo=${applyRefundTimeTo}`
                     )
@@ -1105,9 +1030,7 @@ export default {
                         if (res.data.resultCode == 'SUCCESS') {
                             this.tableDataAll2 = res.data.refundBills
                             this.tableDataAll2.forEach(ele => {
-                                ele.currency = this.formatCurrencySymbol(
-                                    ele.country
-                                )
+                                ele.currency = this.formatCurrencySymbol(ele.country)
                             })
                         }
                     })
@@ -1115,18 +1038,9 @@ export default {
                 //交易汇总查询
                 this.tableData3 = []
                 // let upperCounteyCode = 'TZ' // test 数据
-                let upperCounteyCode =
-                    this.country3 == ''
-                        ? this.countryList[1].country.toUpperCase()
-                        : this.country3.toUpperCase()
-                let createTimeFrom =
-                    this.dateCollect[0] != ''
-                        ? this.formatDate(this.dateCollect[0])
-                        : ''
-                let createTimeTo =
-                    this.dateCollect[1] != ''
-                        ? this.formatDate(this.dateCollect[1])
-                        : ''
+                let upperCounteyCode = this.country3 == '' ? this.countryList[1].country.toUpperCase() : this.country3.toUpperCase()
+                let createTimeFrom = this.dateCollect[0] != '' ? this.formatDate(this.dateCollect[0]) : ''
+                let createTimeTo = this.dateCollect[1] != '' ? this.formatDate(this.dateCollect[1]) : ''
                 this.$axios
                     .post(
                         `/payment/mc/v2/static-order-pay-bills?country=${upperCounteyCode}&range=${
@@ -1137,9 +1051,7 @@ export default {
                         if (res.data.resultCode == 'SUCCESS') {
                             this.tableData3.push(res.data)
                             this.tableData3.forEach(ele => {
-                                ele.currency = this.formatCurrencySymbol(
-                                    ele.country
-                                )
+                                ele.currency = this.formatCurrencySymbol(ele.country)
                             })
                         }
                     })
@@ -1165,13 +1077,9 @@ export default {
             } else {
                 this.$axios
                     .post(
-                        `/payment/mc/v2/refund/${
-                            this.refundObj.payToken
-                        }/applyRefund?amount=${this.refundAmount}&refundNote=${
+                        `/payment/mc/v2/refund/${this.refundObj.payToken}/applyRefund?amount=${this.refundAmount}&refundNote=${
                             this.refundNote
-                        }&refundType=${this.refundType}&dealPassword=${
-                            this.dealPassword
-                        }`
+                        }&refundType=${this.refundType}&dealPassword=${this.dealPassword}`
                     )
                     .then(res => {
                         if (res.data.resultCode == 'SUCCESS') {
@@ -1190,14 +1098,8 @@ export default {
         formatDate(date) {
             let tmpDate = new Date(date)
             let year = tmpDate.getFullYear()
-            let month =
-                tmpDate.getMonth() + 1 > 10
-                    ? tmpDate.getMonth() + 1
-                    : '0' + (tmpDate.getMonth() + 1)
-            let day =
-                tmpDate.getDate() > 10
-                    ? tmpDate.getDate()
-                    : '0' + tmpDate.getDate()
+            let month = tmpDate.getMonth() + 1 > 10 ? tmpDate.getMonth() + 1 : '0' + (tmpDate.getMonth() + 1)
+            let day = tmpDate.getDate() > 10 ? tmpDate.getDate() : '0' + tmpDate.getDate()
             return year + '-' + month + '-' + day
         },
         // 下载
@@ -1302,10 +1204,7 @@ export default {
                         break
                 }
             })
-            let tmp = this.tableDataAll1.slice(
-                (this.pageIndex1 - 1) * this.pageSize1,
-                this.pageIndex1 * this.pageSize1
-            )
+            let tmp = this.tableDataAll1.slice((this.pageIndex1 - 1) * this.pageSize1, this.pageIndex1 * this.pageSize1)
             return tmp
         },
         tableData2() {
@@ -1331,10 +1230,7 @@ export default {
                         break
                 }
             })
-            let tmp = this.tableDataAll2.slice(
-                (this.pageIndex2 - 1) * this.pageSize2,
-                this.pageIndex2 * this.pageSize2
-            )
+            let tmp = this.tableDataAll2.slice((this.pageIndex2 - 1) * this.pageSize2, this.pageIndex2 * this.pageSize2)
             return tmp
         }
     },
