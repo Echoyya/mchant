@@ -7,7 +7,7 @@ module.exports = {
     parserOptions: {
         parser: 'babel-eslint'
     },
-    extends: ['plugin:vue/strongly-recommended', 'plugin:prettier/recommended'],
+    extends: ['plugin:vue/essential', 'plugin:prettier/recommended'],
     // required to lint *.vue files
     plugins: ['vue', 'prettier'],
     // add your custom rules here
@@ -16,12 +16,12 @@ module.exports = {
         'vue/max-attributes-per-line': [
             2,
             {
-                singleline: 10
+                singleline: 20
             }
         ],
         'vue/mustache-interpolation-spacing': 'off',
-        'prettier/prettier': 0,
         'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }],
+        'prettier/prettier': 0,
         'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
     }

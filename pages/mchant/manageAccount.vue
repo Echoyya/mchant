@@ -6,74 +6,83 @@
                     <Card :bordered="false" :dis-hover="true" class="mCard mb15">
                         <h3>账户信息</h3>
                         <Row class="row mb15">
-                            <Col span="2"> 商户号： </Col>
-                            <Col span="5"> M0123456789876543210 </Col>
-                            <Col span="2">手机号： </Col>
-                            <Col span="4">未绑定 </Col>
-                            <Col span="4">
-                            <Button type="primary" size="small">绑定</Button>
-                            </Col>
+                            <i-col span="2">商户号：</i-col>
+                            <i-col span="5">M0123456789876543210</i-col>
+                            <i-col span="2">手机号：</i-col>
+                            <i-col span="4">未绑定</i-col>
+                            <i-col span="4">
+                                <Button type="primary" size="small">绑定</Button>
+                            </i-col>
                         </Row>
                         <Row class="row">
-                            <Col span="2"> 商户名称： </Col>
-                            <Col span="5"> 某某股份有限公司 </Col>
-                            <Col span="2">邮箱： </Col>
-                            <Col span="4">未绑定 </Col>
-                            <Col span="4">
-                            <Button type="primary" size="small">绑定</Button>
-                            </Col>
+                            <i-col span="2">商户名称：</i-col>
+                            <i-col span="5">某某股份有限公司</i-col>
+                            <i-col span="2">邮箱：</i-col>
+                            <i-col span="4">未绑定</i-col>
+                            <i-col span="4">
+                                <Button type="primary" size="small">绑定</Button>
+                            </i-col>
                         </Row>
                     </Card>
                     <Card :bordered="false" :dis-hover="true" class="mCard mb15">
                         <h3>昨日成功交易汇总（按国家）</h3>
                         <Row>
-                            <Col span="8" v-for="(item, index) in tradeTotelYesterday" :key="index">
-                            <p class="row mb15 fontbold">{{item.country}}</p>
-                            <p class="row">订单总金额：{{item.successAmount}}</p>
-                            <p class="row">货币符号：{{item.currency}}</p>
-                            <p class="row">成功笔数：{{item.successCount}} 笔</p>
-                            </Col>
+                            <i-col span="8" v-for="(item, index) in tradeTotelYesterday" :key="index">
+                                <p class="row mb15 fontbold">{{item.country}}</p>
+                                <p class="row">订单总金额：{{item.successAmount}}</p>
+                                <p class="row">货币符号：{{item.currency}}</p>
+                                <p class="row">成功笔数：{{item.successCount}} 笔</p>
+                            </i-col>
                         </Row>
-
                     </Card>
                     <Card :bordered="false" :dis-hover="true" class="mCard mb15">
                         <h3>应用密钥及交易密码管理</h3>
-                        <Button type="primary" class="mb15" @click="addApp"> 添加应用 </Button>
+                        <Button type="primary" class="mb15" @click="addApp">添加应用</Button>
                         <Modal title="添加应用" v-model="showAppModal" @on-ok="ok" @on-cancel="cancel" ok-text="确定" cancel-text="取消" width="400">
                             <Row class="mb15 lh32">
-                                 <Col span="6">
-                                    应用名称：<span class="required">*</span>
-                                </Col>
-                                <Col span="12"><Input v-model="appName" placeholder="请输入应用名称" class="w240" /></Col>
+                                <i-col span="6">
+                                    应用名称：
+                                    <span class="required">*</span>
+                                </i-col>
+                                <i-col span="12">
+                                    <Input v-model="appName" placeholder="请输入应用名称" class="w240"/>
+                                </i-col>
                             </Row>
                             <Row class="mb15 lh32">
-                                <Col span="6"> 钱包账号：</Col>
-                                <Col span="12"><Input v-model="appName" placeholder="请输入钱包账号" class="w240" /></Col>
+                                <i-col span="6">钱包账号：</i-col>
+                                <i-col span="12">
+                                    <Input v-model="appName" placeholder="请输入钱包账号" class="w240"/>
+                                </i-col>
                             </Row>
                             <Row class="mb15 lh32">
-                                <Col span="6"> 支付通知Url：</Col>
-                                <Col span="12"><Input v-model="appName" placeholder="请输入支付通知Url" class="w240" /></Col>
+                                <i-col span="6">支付通知Url：</i-col>
+                                <i-col span="12">
+                                    <Input v-model="appName" placeholder="请输入支付通知Url" class="w240"/>
+                                </i-col>
                             </Row>
                             <Row class="mb15 lh32">
-                                <Col span="6"> 退款通知Url：</Col>
-                                 <Col span="12"><Input v-model="appName" placeholder="请输入退款通知Url" class="w240" /></Col>
+                                <i-col span="6">退款通知Url：</i-col>
+                                <i-col span="12">
+                                    <Input v-model="appName" placeholder="请输入退款通知Url" class="w240"/>
+                                </i-col>
                             </Row>
                         </Modal>
                         <p class="mb15 fontbold">应用列表</p>
                         <Row class="mb15">
-                            <Col span="8">
-                            <p> 应用1：
-                                <Button type="primary" @click="createKey"> 生成密钥 </Button>
-                            </p>
-                            <p> 密钥：</p>
-                            <p>
-                                <a href="#">设置交易密码</a>
-                            </p>
-                            <p> 交易密码:
-                                <span v-show="tradingPwd==''">无</span>
-                                <span v-show="tradingPwd!=''">{{tradingPwd}}</span>
-                            </p>
-                            </Col>
+                            <i-col span="8">
+                                <p>应用1：
+                                    <Button type="primary" @click="createKey">生成密钥</Button>
+                                </p>
+                                <p>密钥：</p>
+                                <p>
+                                    <a href="#">设置交易密码</a>
+                                </p>
+                                <p>
+                                    交易密码:
+                                    <span v-show="tradingPwd==''">无</span>
+                                    <span v-show="tradingPwd!=''">{{tradingPwd}}</span>
+                                </p>
+                            </i-col>
                         </Row>
                     </Card>
                 </TabPane>
@@ -86,61 +95,95 @@
                         </p>
                         <div v-show="currentType==1">
                             <div>
-                                <span> 国家：</span>
+                                <span>国家：</span>
                                 <Select v-model="country1" class="mr15 w160" placeholder="选择国家">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
                                 </Select>
-                                 <span> 订单状态：</span>
+                                <span>订单状态：</span>
                                 <Select v-model="orderStauts1" class="mr15 w160" placeholder="请选择">
                                     <Option v-for="item in orderStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
                                 <Select v-model="orderType1" class="mr15 w160" placeholder="请选择">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum1" placeholder="请输入订单号" class="w160" />
+                                <Input v-model="orderNum1" placeholder="请输入订单号" class="w160"/>
                             </div>
                             <div>
-                                <span> 交易时间：</span>
-                                <DatePicker v-model="dateRecord" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
+                                <span>交易时间：</span>
+                                <DatePicker
+                                    v-model="dateRecord"
+                                    format="yyyy年MM月dd"
+                                    type="daterange"
+                                    placement="bottom-start"
+                                    placeholder="请选择起始日期"
+                                    class="w240"
+                                ></DatePicker>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">搜索</Button>
                                 <Button>下载</Button>
                             </div>
                             <Table border :columns="columns1" :data="tableData1" :stripe="true"></Table>
-                            <Page :total="tableData1.length" :current="1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
+                            <Page
+                                :total="tableData1.length"
+                                :current="1"
+                                :transfer="true"
+                                show-sizer
+                                show-elevator
+                                :page-size-opts="pageSizeOpts"
+                                class="pageStyle"
+                            />
                         </div>
                         <div v-show="currentType==2">
                             <div>
-                                <span> 国家：</span>
+                                <span>国家：</span>
                                 <Select v-model="country2" class="mr15 w160" placeholder="选择国家">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
-                                </Select>
-                                订单状态：
+                                </Select>订单状态：
                                 <Select v-model="orderStauts2" class="mr15 w160" placeholder="请选择">
                                     <Option v-for="item in refundStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
                                 <Select v-model="orderType2" class="mr15 w160" placeholder="请选择">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum2" placeholder="请输入订单号" class="w160" />
+                                <Input v-model="orderNum2" placeholder="请输入订单号" class="w160"/>
                             </div>
-                            <div>
-                                申请退款时间：
-                                <DatePicker v-model="dateRefund" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
+                            <div>申请退款时间：
+                                <DatePicker
+                                    v-model="dateRefund"
+                                    format="yyyy年MM月dd"
+                                    type="daterange"
+                                    placement="bottom-start"
+                                    placeholder="请选择起始日期"
+                                    class="w240"
+                                ></DatePicker>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">搜索</Button>
                                 <Button>下载</Button>
                             </div>
                             <Table border :columns="columns2" :data="tableData2" :stripe="true"></Table>
-                            <Page :total="tableData2.length" :current="1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" class="pageStyle" />
+                            <Page
+                                :total="tableData2.length"
+                                :current="1"
+                                :transfer="true"
+                                show-sizer
+                                show-elevator
+                                :page-size-opts="pageSizeOpts"
+                                class="pageStyle"
+                            />
                         </div>
                         <div v-show="currentType==3">
                             <div>时间选择：
                                 <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">近一周</Button>
                                 <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">近一个月</Button>
                                 <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">近三个月</Button>
-                                <DatePicker v-model="dateCollect" format="yyyy年MM月dd" type="daterange" placement="bottom-start" placeholder="请选择起始日期" class="w240"></DatePicker>
+                                <DatePicker
+                                    v-model="dateiCollect"
+                                    format="yyyy年MM月dd"
+                                    type="daterange"
+                                    placement="bottom-start"
+                                    placeholder="请选择起始日期"
+                                    class="w240"
+                                ></DatePicker>
                             </div>
-                            <div>
-                                国家：
+                            <div>国家：
                                 <Select v-model="country3" class="mr15 w160" placeholder="选择国家">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value">{{ item.name }}</Option>
                                 </Select>
@@ -232,7 +275,7 @@ export default {
             payToken2: '',
             dateRecord: [],
             dateRefund: [],
-            dateCollect: [],
+            dateiCollect: [],
             columns1: [
                 {
                     title: '国家',
@@ -414,15 +457,11 @@ export default {
         //     })
 
         // 昨日成功交易汇总
-        this.$axios
-            .post(
-                '/payment/mc/v2/merchant-operator/queryStaticOrderBillResponse'
-            )
-            .then(res => {
-                if (res.data.length > 0) {
-                    this.tradeTotelYesterday = res.data
-                }
-            })
+        this.$axios.post('/payment/mc/v2/merchant-operator/queryStaticOrderBillResponse').then(res => {
+            if (res.data.length > 0) {
+                this.tradeTotelYesterday = res.data
+            }
+        })
         // 获取国家
         this.$axios.get('/cms/vup/v2/areas?versionCode=5500').then(res => {
             if (res.data.length > 0) {
@@ -447,19 +486,11 @@ export default {
             if (currentType == 1) {
                 //支付交易记录
                 let upperCounteyCode = this.country1.toUpperCase()
-                let createTimeFrom =
-                    this.dateRecord[0] != ''
-                        ? this.formatDate(this.dateRecord[0])
-                        : ''
-                let createTimeTo =
-                    this.dateRecord[1] != ''
-                        ? this.formatDate(this.dateRecord[1])
-                        : ''
+                let createTimeFrom = this.dateRecord[0] != '' ? this.formatDate(this.dateRecord[0]) : ''
+                let createTimeTo = this.dateRecord[1] != '' ? this.formatDate(this.dateRecord[1]) : ''
                 this.$axios
                     .post(
-                        `payment/mc/v2/order-pay-bills?country=${upperCounteyCode}&state=${
-                            this.orderStauts1
-                        }&txNo=${this.txNo1}&payToken=${
+                        `payment/mc/v2/order-pay-bills?country=${upperCounteyCode}&state=${this.orderStauts1}&txNo=${this.txNo1}&payToken=${
                             this.payToken1
                         }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}`
                     )
@@ -471,19 +502,11 @@ export default {
             } else if (currentType == 2) {
                 //退款记录查询
                 let upperCounteyCode = this.country2.toUpperCase()
-                let applyRefundTimeFrom =
-                    this.dateRefund[0] != ''
-                        ? this.formatDate(this.dateRefund[0])
-                        : ''
-                let applyRefundTimeTo =
-                    this.dateRefund[1] != ''
-                        ? this.formatDate(this.dateRefund[1])
-                        : ''
+                let applyRefundTimeFrom = this.dateRefund[0] != '' ? this.formatDate(this.dateRefund[0]) : ''
+                let applyRefundTimeTo = this.dateRefund[1] != '' ? this.formatDate(this.dateRefund[1]) : ''
                 this.$axios
                     .post(
-                        `/payment/mc/v2/refund/find-refund-bill?country=${upperCounteyCode}&state=${
-                            this.orderStauts2
-                        }&txNo=${this.txNo2}&payToken=${
+                        `/payment/mc/v2/refund/find-refund-bill?country=${upperCounteyCode}&state=${this.orderStauts2}&txNo=${this.txNo2}&payToken=${
                             this.payToken2
                         }&applyRefundTimeFrom=${applyRefundTimeFrom}&applyRefundTimeTo=${applyRefundTimeTo}`
                     )
@@ -493,19 +516,11 @@ export default {
                     })
             } else if (currentType == 3) {
                 //交易汇总查询
-                let createTimeFrom =
-                    this.dateCollect[0] != ''
-                        ? this.formatDate(this.dateCollect[0])
-                        : ''
-                let createTimeTo =
-                    this.dateCollect[1] != ''
-                        ? this.formatDate(this.dateCollect[1])
-                        : ''
+                let createTimeFrom = this.dateiCollect[0] != '' ? this.formatDate(this.dateiCollect[0]) : ''
+                let createTimeTo = this.dateiCollect[1] != '' ? this.formatDate(this.dateiCollect[1]) : ''
                 this.$axios
                     .post(
-                        `/payment/mc/v2/static-order-pay-bills?country=${
-                            this.country3
-                        }&range=${
+                        `/payment/mc/v2/static-order-pay-bills?country=${this.country3}&range=${
                             this.range
                         }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}`
                     )
@@ -523,14 +538,8 @@ export default {
         formatDate(date) {
             let tmpDate = new Date(date)
             let year = tmpDate.getFullYear()
-            let month =
-                tmpDate.getMonth() + 1 > 10
-                    ? tmpDate.getMonth() + 1
-                    : '0' + (tmpDate.getMonth() + 1)
-            let day =
-                tmpDate.getDate() > 10
-                    ? tmpDate.getDate()
-                    : '0' + tmpDate.getDate()
+            let month = tmpDate.getMonth() + 1 > 10 ? tmpDate.getMonth() + 1 : '0' + (tmpDate.getMonth() + 1)
+            let day = tmpDate.getDate() > 10 ? tmpDate.getDate() : '0' + tmpDate.getDate()
             return year + '-' + month + '-' + day
         }
     },
