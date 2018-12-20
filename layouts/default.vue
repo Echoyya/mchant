@@ -13,7 +13,7 @@
                     <span class="logout" @click="logout">{{$L.head_footer.logout}}</span>
                 </div>
             </Header>
-            <nuxt />
+            <nuxt/>
             <Footer class="mfooter">
                 <p>{{$L.head_footer.cooperative}}中国银行&nbsp;&nbsp;农业银行&nbsp;&nbsp;工商银行&nbsp;&nbsp;建设银行</p>
                 <p>{{$L.head_footer.blogroll_startimes}}</p>
@@ -49,15 +49,14 @@ export default {
         if (token) {
             this.$axios.setHeader('X-Star-Token', this.$store.state.token)
         } else {
-            this.$router.push('/login')
+            this.$router.push('/mchant/login')
         }
         this.username = this.$store.state.username
     },
     methods: {
         logout() {
+            setCookie('token', '')
             this.$router.push('/mchant/login')
-            delCookie('token')
-            delCookie('username')
         },
         changeLang(lang) {
             setCookie('lang', lang)

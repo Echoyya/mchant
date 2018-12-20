@@ -1,5 +1,4 @@
 {
-    "editor.tabSize": 4,
     "editor.wordWrap": "on",
     "editor.minimap.enabled": false,
     "search.exclude": {
@@ -8,30 +7,21 @@
     },
     "files.associations": {
         "*.tpl": "html",
-        "*.ftl": "html",
+        "*.ftl": "html"
         // "*.php": "html"
     },
+    "files.insertFinalNewline": true,
     "git.confirmSync": false,
     "git.enableSmartCommit": true,
     "git.autofetch": true,
-    //FORMAT
     "html.format.unformatted": "",
-    "html.format.indentInnerHtml": false,
     "html.format.indentHandlebars": true,
-    "prettier.singleQuote": true,
-    "prettier.tabWidth": 4,
-    "prettier.semi": false,
-    "vetur.validation.template": false,
-    "vetur.format.defaultFormatter.html": "js-beautify-html",
     "vetur.format.defaultFormatterOptions": {
-        "wrap_attributes": "force-aligned"
+        "prettyhtml": {
+            "printWidth": 150,
+            "singleQuote": false,
+            "tabWidth": 4
+        }
     },
-    //eslint
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "vue",
-        "html"
-    ],
-    "window.zoomLevel": 0
+    "eslint.validate": ["javascript", "vue", "html"]
 }
