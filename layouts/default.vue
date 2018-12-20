@@ -4,7 +4,7 @@
             <Header class="mheader">
                 <h1 class="title">{{$L.head_footer.title}}</h1>
                 <div class="user">
-                    <span>你好,张三</span>
+                    <span>你好,{{username}}</span>
                     <span>
                         <Select v-model="language" size="small" style="width:100px" @on-change="changeLang($event)">
                             <Option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -40,7 +40,8 @@ export default {
                     label: 'English'
                 }
             ],
-            language: this.$store.state.lang
+            language: this.$store.state.lang,
+            username: ''
         }
     },
     created() {
@@ -50,6 +51,7 @@ export default {
         } else {
             this.$router.push('/mchant/login')
         }
+        this.username = this.$store.state.username
     },
     methods: {
         logout() {
@@ -59,6 +61,11 @@ export default {
         changeLang(lang) {
             setCookie('lang', lang)
             window.location.reload()
+        }
+    },
+    head() {
+        return {
+            title: this.$L.login.MerchantManagement
         }
     }
 }

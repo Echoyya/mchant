@@ -2,12 +2,12 @@
     <section class="container">
         <div class="card-box">
             <div>
-                <h3></h3>
+                <h3>{{$L.login.MerchantLogin}}</h3>
                 <div class="p">
-                    <Input v-model="account" :placeholder="$L.login.account"/>
+                    <Input v-model="account" :placeholder="$L.login.account" />
                 </div>
                 <div class="p">
-                    <Input v-model="password" :placeholder="$L.login.password" type="password"/>
+                    <Input v-model="password" :placeholder="$L.login.password" type="password" />
                 </div>
                 <Tooltip max-width="200" placement="bottom-end" :content="$L.login.contact_way">
                     <div class="forgetPwd p">
@@ -40,18 +40,31 @@ export default {
                 })
                 return
             } else {
-                this.$axios.post(`/payment/mc/v2/merchant-operator/login?loginName=${this.account}&loginPassword=${this.password}`).then(res => {
-                    if (res.data.code == 0) {
-                        setCookie('token', res.data.data)
-                        window.location.href = this.$route.query.pre || '/mchant/'
-                    } else {
-                        this.$Modal.error({
-                            title: this.$L.login.failure,
-                            content: this.$L.login.re_enter
-                        })
-                    }
-                })
+                this.$axios
+                    .post(
+                        `/payment/mc/v2/merchant-operator/login?loginName=${
+                            this.account
+                        }&loginPassword=${this.password}`
+                    )
+                    .then(res => {
+                        if (res.data.code == 0) {
+                            setCookie('token', res.data.data)
+                            window.location.href =
+                                this.$route.query.pre || '/mchant/'
+                            setCookie('username', this.account)
+                        } else {
+                            this.$Modal.error({
+                                title: this.$L.login.failure,
+                                content: this.$L.login.re_enter
+                            })
+                        }
+                    })
             }
+        }
+    },
+    head() {
+        return {
+            title: this.$L.login.login
         }
     }
 }
@@ -76,6 +89,8 @@ export default {
 }
 .card-box h3 {
     height: 30px;
+    font-size: 22px;
+    margin-top: 20px;
 }
 .card-box .p {
     margin: 20px auto;
