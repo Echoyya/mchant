@@ -80,6 +80,7 @@
         "password_not_match":"两次密码输入不一致，请重新输入",
         "dealPassword_not_match":"原交易密码不匹配",
         "new_same_as_old":"新交易密码与原交易密码一致，请重新输入",
+        "verification_4_digits":"验证码为4位纯数字",
 
         "build_failed":"生成失败，请重试！"
 

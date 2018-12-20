@@ -12,20 +12,9 @@
                             <i-col span="4" v-if="merchantInfoDto.contactPhone">{{merchantInfoDto.contactPhone.split(' ')[1]}}</i-col>
                             <i-col span="4" v-else>{{$L.account.not_bound}}</i-col>
                             <i-col span="4">
-                                <Button
-                                    type="primary"
-                                    size="small"
-                                    v-if="merchantInfoDto.contactPhone"
-                                    @click="showPhoneModal=true"
-                                >{{$L.account.change}}</Button>
+                                <Button type="primary" size="small" v-if="merchantInfoDto.contactPhone" @click="showPhoneModal=true">{{$L.account.change}}</Button>
                                 <Button type="primary" size="small" v-else @click="showPhoneModal=true">{{$L.account.binding}}</Button>
-                                <Modal
-                                    :title="$L.account.phone_binding"
-                                    v-model="showPhoneModal"
-                                    width="500"
-                                    :closable="false"
-                                    :mask-closable="false"
-                                >
+                                <Modal :title="$L.account.phone_binding" v-model="showPhoneModal" width="500" :closable="false" :mask-closable="false">
                                     <Row class="mb15 lh32">
                                         <i-col span="24">
                                             <p class="phoneText" v-if="current==1">{{$L.account.enter_phone_want_to_bind}}</p>
@@ -40,12 +29,7 @@
                                         </i-col>
                                         <i-col span="12">
                                             <Select v-model="countryPrefix" class="mr15 w200" :placeholder="$L.account.choose_country">
-                                                <Option
-                                                    v-for="item in countryList"
-                                                    :value="item.country"
-                                                    :key="item.country"
-                                                    v-if="item.id != 8 && item.id != 0"
-                                                >{{ item.name}} &nbsp;&nbsp;+{{item.phonePrefix}}</Option>
+                                                <Option v-for="item in countryList" :value="item.country" :key="item.country" v-if="item.id != 8 && item.id != 0">{{ item.name}} &nbsp;&nbsp;+{{item.phonePrefix}}</Option>
                                             </Select>
                                         </i-col>
                                     </Row>
@@ -55,7 +39,7 @@
                                             <span class="required">*</span>
                                         </i-col>
                                         <i-col span="12">
-                                            <Input v-model="phoneNum" :placeholder="$L.account.enter_phone_number" class="w200"/>
+                                            <Input v-model="phoneNum" :placeholder="$L.account.enter_phone_number" class="w200" />
                                         </i-col>
                                     </Row>
                                     <Row class="mb15 lh32">
@@ -64,17 +48,11 @@
                                             <span class="required">*</span>
                                         </i-col>
                                         <i-col span="12">
-                                            <Input v-model="verification" :placeholder="$L.account.enter_verification" class="w200"/>
+                                            <Input v-model="verification" :placeholder="$L.account.enter_verification" class="w200" />
                                         </i-col>
                                         <i-col span="6">
                                             <div>
-                                                <Button
-                                                    type="primary"
-                                                    size="small"
-                                                    v-if="current==2"
-                                                    @click="sendVerificationOrg"
-                                                    :disabled="canSend"
-                                                >
+                                                <Button type="primary" size="small" v-if="current==2" @click="sendVerificationOrg" :disabled="canSend">
                                                     <span v-show="canSend && canSendTime != 0">({{canSendTime}}s)</span>
                                                     {{$L.account.send_verification}}
                                                 </Button>
@@ -101,20 +79,9 @@
                             <i-col span="4" v-if="merchantInfoDto.contactEmail">{{merchantInfoDto.contactEmail}}</i-col>
                             <i-col span="4" v-else>{{$L.account.not_bound}}</i-col>
                             <i-col span="4">
-                                <Button
-                                    type="primary"
-                                    size="small"
-                                    v-if="merchantInfoDto.contactEmail"
-                                    @click="showEmailModal=true"
-                                >{{$L.account.change}}</Button>
+                                <Button type="primary" size="small" v-if="merchantInfoDto.contactEmail" @click="showEmailModal=true">{{$L.account.change}}</Button>
                                 <Button type="primary" size="small" v-else @click="showEmailModal=true">{{$L.account.binding}}</Button>
-                                <Modal
-                                    :title="$L.account.email_address"
-                                    v-model="showEmailModal"
-                                    width="400"
-                                    :closable="false"
-                                    :mask-closable="false"
-                                >
+                                <Modal :title="$L.account.email_address" v-model="showEmailModal" width="400" :closable="false" :mask-closable="false">
                                     <Row class="mb15 lh32">
                                         <i-col span="18" offset="4">
                                             {{$L.account.enter_email}}
@@ -159,19 +126,19 @@
                             <Row class="mb15 lh32">
                                 <i-col span="6">{{$L.account.wallet_account}}</i-col>
                                 <i-col span="12">
-                                    <Input v-model="ewalletNo" :placeholder="$L.account.enter_wallet_account" class="w240"/>
+                                    <Input v-model="ewalletNo" :placeholder="$L.account.enter_wallet_account" class="w240" />
                                 </i-col>
                             </Row>
                             <Row class="mb15 lh32">
                                 <i-col span="6">{{$L.account.payment_notice}}</i-col>
                                 <i-col span="12">
-                                    <Input v-model="payNotifyUrl" :placeholder="$L.account.enter_payment_notice" class="w240"/>
+                                    <Input v-model="payNotifyUrl" :placeholder="$L.account.enter_payment_notice" class="w240" />
                                 </i-col>
                             </Row>
                             <Row class="mb15 lh32">
                                 <i-col span="6">{{$L.account.refund_notice}}</i-col>
                                 <i-col span="12">
-                                    <Input v-model="refundNotifyUrl" :placeholder="$L.account.enter_refund_notice" class="w240"/>
+                                    <Input v-model="refundNotifyUrl" :placeholder="$L.account.enter_refund_notice" class="w240" />
                                 </i-col>
                             </Row>
                             <div slot="footer">
@@ -190,16 +157,8 @@
                                 <p class="row mb15">{{$L.account.wallet_account}}{{item.ewalletAccountNo}}</p>
                                 <p class="row mb15">{{$L.account.payment_notice}}{{item.payNotifyUrl}}</p>
                                 <p class="row mb15">{{$L.account.refund_notice}}{{item.refundNotifyUrl}}</p>
-                                <p
-                                    class="row mb15 fontStyle"
-                                    v-if="!item.dealPassword"
-                                    @click="showPasswordModal=true ; appIndex = index "
-                                >{{$L.account.set_password}}</p>
-                                <p
-                                    class="row mb15 fontStyle"
-                                    v-else
-                                    @click="showRePasswordModal=true ; appIndex = index "
-                                >{{$L.account.change_password}}</p>
+                                <p class="row mb15 fontStyle" v-if="!item.dealPassword" @click="showPasswordModal=true ; appIndex = index ">{{$L.account.set_password}}</p>
+                                <p class="row mb15 fontStyle" v-else @click="showRePasswordModal=true ; appIndex = index ">{{$L.account.change_password}}</p>
                                 <p class="row mb15" v-if="!item.dealPassword">{{$L.account.dealPassword}}{{$L.account.not_have}}</p>
                                 <p class="row mb15" v-else>{{$L.account.dealPassword}} ******</p>
                             </i-col>
@@ -210,7 +169,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12">
-                                        <Input v-model="password" type="password" :placeholder="$L.account.enter_dealPassword" class="w200"/>
+                                        <Input v-model="password" type="password" :placeholder="$L.account.enter_dealPassword" class="w200" />
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -219,7 +178,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12">
-                                        <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200"/>
+                                        <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
                                     </i-col>
                                 </Row>
                                 <div slot="footer">
@@ -227,20 +186,14 @@
                                     <Button type="primary" @click="toUpdataPassword('set',password,repassword,'')">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
-                            <Modal
-                                :title="$L.account.change_password"
-                                v-model="showRePasswordModal"
-                                width="500"
-                                :closable="false"
-                                :mask-closable="false"
-                            >
+                            <Modal :title="$L.account.change_password" v-model="showRePasswordModal" width="500" :closable="false" :mask-closable="false">
                                 <Row class="mb15 lh32">
                                     <i-col span="7">
                                         {{$L.account.original_dealpassword}}
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12">
-                                        <Input v-model="password" type="password" :placeholder="$L.account.enter_original_dealPassword" class="w200"/>
+                                        <Input v-model="password" type="password" :placeholder="$L.account.enter_original_dealPassword" class="w200" />
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -249,7 +202,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12">
-                                        <Input v-model="newPassword" type="password" :placeholder="$L.account.enter_new_dealPassword" class="w200"/>
+                                        <Input v-model="newPassword" type="password" :placeholder="$L.account.enter_new_dealPassword" class="w200" />
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -258,15 +211,12 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12">
-                                        <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200"/>
+                                        <Input v-model="repassword" type="password" :placeholder="$L.account.enter_confirm_dealPassword" class="w200" />
                                     </i-col>
                                 </Row>
                                 <div slot="footer">
                                     <Button @click="cancel('showRePasswordModal')">{{$L.account.cancel}}</Button>
-                                    <Button
-                                        type="primary"
-                                        @click="toUpdataPassword('change',password,repassword,newPassword,password)"
-                                    >{{$L.account.okay}}</Button>
+                                    <Button type="primary" @click="toUpdataPassword('change',password,repassword,newPassword,password)">{{$L.account.okay}}</Button>
                                 </div>
                             </Modal>
                         </Row>
@@ -278,11 +228,7 @@
                             {{$L.record.business_type}}
                             <Button :type="currentType == 1 ? 'primary':'default'" @click="changeCurrType(1)" class="btn">{{$L.record.trading_record}}</Button>
                             <Button :type="currentType == 2 ? 'primary':'default'" @click="changeCurrType(2)" class="btn">{{$L.record.refund_record}}</Button>
-                            <Button
-                                :type="currentType == 3 ? 'primary':'default'"
-                                @click="changeCurrType(3)"
-                                class="btn"
-                            >{{$L.record.trading_summary}}</Button>
+                            <Button :type="currentType == 3 ? 'primary':'default'" @click="changeCurrType(3)" class="btn">{{$L.record.trading_summary}}</Button>
                         </p>
                         <div v-show="currentType==1">
                             <div class="mb15">
@@ -297,31 +243,17 @@
                                 <Select v-model="orderType1" class="mr15 w160" :placeholder="$L.record.please_select">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum1" :placeholder="$L.record.enter_order_number" class="w160"/>
+                                <Input v-model="orderNum1" :placeholder="$L.record.enter_order_number" class="w160" />
                             </div>
                             <div class="mb15">
                                 <span>{{$L.record.trading_time_start}}</span>
-                                <DatePicker
-                                    v-model="dateRecord_start"
-                                    format="yyyy/MM/dd"
-                                    type="daterange"
-                                    placement="bottom-start"
-                                    :placeholder="$L.record.start_end_dates"
-                                    class="w240 mr15"
-                                />
+                                <DatePicker v-model="dateRecord_start" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" />
                                 <span>{{$L.record.trading_time_end}}</span>
-                                <DatePicker
-                                    v-model="dateRecord_end"
-                                    format="yyyy/MM/dd"
-                                    type="daterange"
-                                    placement="bottom-start"
-                                    :placeholder="$L.record.start_end_dates"
-                                    class="w240"
-                                />
+                                <DatePicker v-model="dateRecord_end" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" />
                                 <Button type="primary" class="ml15" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
                                 <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
-                            <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table"/>
+                            <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table" />
                             <Modal :title="$L.record.refund" v-model="showRefundModal" width="700" :closable="false" :mask-closable="false">
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">{{$L.record.order_number}}</i-col>
@@ -341,7 +273,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12" offset="1">
-                                        <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100"/>
+                                        <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100" />
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -351,12 +283,7 @@
                                     </i-col>
                                     <i-col span="12" offset="1">
                                         <Select v-model="refundType" class="w240">
-                                            <Option
-                                                v-for="item in refundTypeList"
-                                                :value="item.value"
-                                                :key="item.value"
-                                                :disabled="item.value=='ORIGINAL'"
-                                            >{{ item.label }}</Option>
+                                            <Option v-for="item in refundTypeList" :value="item.value" :key="item.value" :disabled="item.value=='ORIGINAL'">{{ item.label }}</Option>
                                         </Select>
                                     </i-col>
                                 </Row>
@@ -366,19 +293,13 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12" offset="1">
-                                        <Input v-model="dealPassword" class="w240"/>
+                                        <Input v-model="dealPassword" class="w240" />
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">{{$L.record.refund_remarks}}</i-col>
                                     <i-col span="12" offset="1">
-                                        <Input
-                                            v-model="refundNote"
-                                            type="textarea"
-                                            :rows="4"
-                                            :placeholder="$L.record.enter_refund_remarks"
-                                            class="w240"
-                                        />
+                                        <Input v-model="refundNote" type="textarea" :rows="4" :placeholder="$L.record.enter_refund_remarks" class="w240" />
                                     </i-col>
                                 </Row>
                                 <div slot="footer">
@@ -386,18 +307,7 @@
                                     <Button type="primary" @click="toRefund">{{$L.record.okay}}</Button>
                                 </div>
                             </Modal>
-                            <Page
-                                :total="tableDataAll1.length"
-                                :current="pageIndex1"
-                                :page-size="pageSize1"
-                                :transfer="true"
-                                show-sizer
-                                show-elevator
-                                :page-size-opts="pageSizeOpts"
-                                @on-change="pageIndex1 = $event "
-                                @on-page-size-change="pageSize1 = $event"
-                                class="pageStyle"
-                            />
+                            <Page :total="tableDataAll1.length" :current="pageIndex1" :page-size="pageSize1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex1 = $event " @on-page-size-change="pageSize1 = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==2">
                             <div class="mb15">
@@ -412,7 +322,7 @@
                                 <Select v-model="orderType2" class="mr15 w160" :placeholder="$L.refund.please_select">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum2" :placeholder="$L.refund.enter_order_number" class="w160"/>
+                                <Input v-model="orderNum2" :placeholder="$L.refund.enter_order_number" class="w160" />
                             </div>
                             <div class="mb15">
                                 {{$L.refund.refund_time}}
@@ -420,19 +330,8 @@
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
                                 <Button @click="downloadTableData(2)">{{$L.refund.download}}</Button>
                             </div>
-                            <Table border :columns="columns2" :data="tableData2" :stripe="true"/>
-                            <Page
-                                :total="tableDataAll2.length"
-                                :current="pageIndex2"
-                                :page-size="pageSize2"
-                                :transfer="true"
-                                show-sizer
-                                show-elevator
-                                :page-size-opts="pageSizeOpts"
-                                @on-change="pageIndex2 = $event "
-                                @on-page-size-change="pageSize2 = $event"
-                                class="pageStyle"
-                            />
+                            <Table border :columns="columns2" :data="tableData2" :stripe="true" />
+                            <Page :total="tableDataAll2.length" :current="pageIndex2" :page-size="pageSize2" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex2 = $event " @on-page-size-change="pageSize2 = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==3">
                             <div class="mb15">
@@ -440,21 +339,16 @@
                                 <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">{{$L.summary.nearly_week}}</Button>
                                 <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">{{$L.summary.nearly_month}}</Button>
                                 <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">{{$L.summary.nearly_three_months}}</Button>
-                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)"/>
+                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)" />
                             </div>
                             <div class="mb15">
                                 {{$L.summary.country}}
                                 <Select v-model="country3" class="mr15 w160" :placeholder="$L.summary.select_country">
-                                    <Option
-                                        v-for="item in countryList"
-                                        :value="item.country"
-                                        :key="item.value"
-                                        v-if="item.id != 8 && item.id != 0"
-                                    >{{ item.name }}</Option>
+                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 8 && item.id != 0">{{ item.name }}</Option>
                                 </Select>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.summary.search}}</Button>
                             </div>
-                            <Table border :columns="columns3" :data="tableData3" :stripe="true"/>
+                            <Table border :columns="columns3" :data="tableData3" :stripe="true" />
                         </div>
                     </div>
                 </TabPane>
@@ -804,7 +698,7 @@ export default {
         this.searchOrder(this.currentType)
     },
     methods: {
-        handleChange (date) {
+        handleChange(date) {
             if (date[0] != '' && date[0] != '') {
                 this.range = ''
             } else {
@@ -865,6 +759,7 @@ export default {
         //绑定和更改手机号
         toBindPhone() {
             if (!this.beforeSendVerification()) return
+            if (!this.beforeBindPhone()) return
             this.checkoutVerification(() => {
                 this.$Modal.success({
                     title: this.$L.account.success
@@ -899,12 +794,7 @@ export default {
         // 更换手机号 下一步 验证原来的手机号
         toNextStep(curr) {
             if (!this.beforeSendVerification()) return
-            if (this.verification == '') {
-                this.$Modal.warning({
-                    title: this.$L.account.enter_verification
-                })
-                return
-            }
+            if (!this.beforeBindPhone()) return
             this.$axios.get(`payment/mc/v2/merchantinfomc/check-verify-code?phone=${this.phoneNum}&verifyCode=${this.verification}`).then(res => {
                 if (res.data.code == 0) {
                     clearInterval(this.timer)
@@ -927,7 +817,7 @@ export default {
         // 验证手机号及国家地区
         beforeSendVerification() {
             let reg = /^\d{6,}$/
-            if (this.countryPrefix == '') {
+            if (this.countryPrefix == '' || !this.countryPrefix) {
                 this.$Modal.warning({
                     title: this.$L.account.choose_country
                 })
@@ -940,6 +830,23 @@ export default {
             } else if (!reg.test(this.phoneNum)) {
                 this.$Modal.warning({
                     title: this.$L.account.phone_least_six_digits
+                })
+                return
+            } else {
+                return true
+            }
+        },
+        // 验证验证码输入及格式
+        beforeBindPhone() {
+            let reg = /^\d{4}$/
+            if (this.verification == '') {
+                this.$Modal.warning({
+                    title: this.$L.account.enter_verification
+                })
+                return
+            } else if (!reg.test(this.verification)) {
+                this.$Modal.warning({
+                    title: this.$L.account.verification_4_digits
                 })
                 return
             } else {
