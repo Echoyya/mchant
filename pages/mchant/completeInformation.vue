@@ -9,42 +9,42 @@
             <Card class="mCard" >
                 <p slot="title">联系人</p>
                 <Row class="mtb15">
-                    <Col span="3" offset="6">联系人姓名： <span class="required">*</span></Col>
-                    <Col span="15"><Input v-model="linkman" placeholder="请输入联系人姓名" class="w300"/>
+                    <i-col span="3" offset="6">联系人姓名： <span class="required">*</span></i-col>
+                    <i-col span="15"><Input v-model="linkman" placeholder="请输入联系人姓名" class="w300"/>
                         <p class="hint">请填写商户支付业务联系人的真实姓名，我们会在支付平台签约时进行实名认证</p>
-                    </Col>
+                    </i-col>
                 </Row>
                 <Row class="mtb15">
-                    <Col span="3" offset="6">手机号码： <span class="required">*</span></Col>
-                    <Col span="9"><Input v-model="phoneNumber" placeholder="请输入手机号码" class="w300" />
+                    <i-col span="3" offset="6">手机号码： <span class="required">*</span></i-col>
+                    <i-col span="9"><Input v-model="phoneNumber" placeholder="请输入手机号码" class="w300" />
                         <p class="hint">用于接收支付平台支付的重要管理信息及日常操作验证码</p>
-                    </Col>
+                    </i-col>
                 </Row>
                 <Row class="mtb15">
-                    <Col span="3" offset="6">验证码： <span class="required">*</span></Col>
-                    <Col span="9"><Input v-model="verificationCode" class="w300" />
+                    <i-col span="3" offset="6">验证码： <span class="required">*</span></i-col>
+                    <i-col span="9"><Input v-model="verificationCode" class="w300" />
                         <p class="hint">请填写收到的验证码</p>
-                    </Col>
+                    </i-col>
                 </Row>
                 <Row class="mtb15">
-                    <Col span="3" offset="6">常用邮箱： </Col>
-                    <Col span="9"><Input v-model="email" class="w300" />
+                    <i-col span="3" offset="6">常用邮箱： </i-col>
+                    <i-col span="9"><Input v-model="email" class="w300" />
                         <p class="hint">用于接收支付平台的一些重要信息及账号密码等</p>
-                    </Col>
+                    </i-col>
                 </Row>
             </Card>
             <Card class="mCard">
                 <p slot="title">商户信息</p>
                 <Row class="mtb15">
-                    <Col span="3" offset="6">商户姓名： <span class="required">*</span></Col>
-                    <Col span="9"><Input v-model="linkman" placeholder="请输入商名称"  class="w300" /></Col>
+                    <i-col span="3" offset="6">商户姓名： <span class="required">*</span></i-col>
+                    <i-col span="9"><Input v-model="linkman" placeholder="请输入商名称"  class="w300" /></i-col>
                 </Row>
                 <Row class="mtb15">
-                    <Col span="3" offset="6">注册地址： <span class="required">*</span></Col>
-                    <Col span="9"><Input v-model="phoneNumber" placeholder="请输入注册地址" class="w300" /></Col>
+                    <i-col span="3" offset="6">注册地址： <span class="required">*</span></i-col>
+                    <i-col span="9"><Input v-model="phoneNumber" placeholder="请输入注册地址" class="w300" /></i-col>
                 </Row>
             </Card>
-                <Button type="primary" class="button" @click="submitMsg">确认提交</Button>
+            <Button type="primary" class="button" @click="submitMsg">确认提交</Button>
         </div>
         <div class="card-box submitOk" v-show="submitOk  == 2">
             <div>
