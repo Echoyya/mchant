@@ -175,7 +175,7 @@
                                 <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">近一个月</Button>
                                 <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">近三个月</Button>
                                 <DatePicker
-                                    v-model="dateiCollect"
+                                    v-model="dateCollect"
                                     format="yyyy年MM月dd"
                                     type="daterange"
                                     placement="bottom-start"
@@ -275,7 +275,7 @@ export default {
             payToken2: '',
             dateRecord: [],
             dateRefund: [],
-            dateiCollect: [],
+            dateCollect: [],
             columns1: [
                 {
                     title: '国家',
@@ -516,8 +516,8 @@ export default {
                     })
             } else if (currentType == 3) {
                 //交易汇总查询
-                let createTimeFrom = this.dateiCollect[0] != '' ? this.formatDate(this.dateiCollect[0]) : ''
-                let createTimeTo = this.dateiCollect[1] != '' ? this.formatDate(this.dateiCollect[1]) : ''
+                let createTimeFrom = this.dateCollect[0] != '' ? this.formatDate(this.dateCollect[0]) : ''
+                let createTimeTo = this.dateCollect[1] != '' ? this.formatDate(this.dateCollect[1]) : ''
                 this.$axios
                     .post(
                         `/payment/mc/v2/static-order-pay-bills?country=${this.country3}&range=${
