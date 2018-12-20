@@ -4,7 +4,7 @@
             <Header class="mheader">
                 <h1 class="title">{{$L.head_footer.title}}</h1>
                 <div class="user">
-                    <span>你好,{{username}}</span>
+                    <span>{{$L.head_footer.hello}},{{username}}</span>
                     <span>
                         <Select v-model="language" size="small" style="width:100px" @on-change="changeLang($event)">
                             <Option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</Option>

@@ -9,11 +9,13 @@
                 <div class="p">
                     <Input v-model="password" :placeholder="$L.login.password" type="password" />
                 </div>
-                <Tooltip max-width="200" placement="bottom-end" :content="$L.login.contact_way">
-                    <div class="forgetPwd p">
-                        <a href="#">{{$L.login.forgetPwd}}?</a>
-                    </div>
-                </Tooltip>
+                <div class="p">
+                    <Tooltip class="forgetPwd" max-width="200" placement="bottom-end" :content="$L.login.contact_way">
+                        <div>
+                            <a href="#">{{$L.login.forgetPwd}}?</a>
+                        </div>
+                    </Tooltip>
+                </div>
                 <div class="p">
                     <Button type="primary" @click="toLogin" class="button">{{$L.login.login}}</Button>
                 </div>
@@ -90,8 +92,8 @@ export default {
     width: 300px;
 }
 .card-box .forgetPwd {
-    text-align: right;
-    margin-bottom: 0;
+    margin-bottom: 20px;
+    float: right;
 }
 .card-box .button {
     width: 100%;

@@ -198,7 +198,8 @@
         "contact_us":"Contact Us",
         "open_platform":"Open Platform",
         "customer_hotline":"Customer Hotline：",
-        "service_mailbox":"Service Mailbox："
+        "service_mailbox":"Service Mailbox：",
+        "hello":"Hello"
         
     }
 }

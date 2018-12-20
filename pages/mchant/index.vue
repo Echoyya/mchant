@@ -86,7 +86,8 @@
                                         </i-col>
                                     </Row>
                                     <div slot="footer">
-                                        <Button @click="cancel('showPhoneModal')">{{$L.account.cancel}}</Button>
+                                        <Button @click="cancel('showBindPhoneModal')" v-if="current==1">{{$L.account.cancel}}</Button>
+                                        <Button @click="cancel('showChangePhoneModal')" v-if="current!=1">{{$L.account.cancel}}</Button>
                                         <Button type="primary" @click="toNextStep" v-if="current==2">{{$L.account.next_step}}</Button>
                                         <Button type="primary" @click="toBindPhone" v-else>{{$L.account.okay}}</Button>
                                     </div>
@@ -868,7 +869,7 @@ export default {
                 this.$Modal.success({
                     title: this.$L.account.success
                 })
-                this.cancel('showPhoneModal')
+                this.cancel('showBindPhoneModal')
                 this.getMerchantInfoDto()
                 clearInterval(this.timer)
             })
@@ -981,7 +982,11 @@ export default {
         },
         cancel(model) {
             switch (model) {
-                case 'showPhoneModal':
+                case 'showChangePhoneModal':
+                    this.current = 2
+                    this.cancel('showBindPhoneModal')
+                    break
+                case 'showBindPhoneModal':
                     this.showPhoneModal = false
                     this.countryPrefix = ''
                     this.verification = ''
@@ -1104,6 +1109,9 @@ export default {
                 .put(`/payment/mc/v2/merchantappMc/modifyDealPassword?merchantAppId=${merchantAppId}&oldDealPassword=${oldPwd}&dealPassword=${rePwd}`)
                 .then(res => {
                     if (res.data.code == 0) {
+                        this.$Modal.success({
+                            title: this.$L.account.success
+                        })
                         this.getMerchantAppInfoDto()
                         this.cancel('showPasswordModal')
                         this.cancel('showRePasswordModal')
@@ -1150,6 +1158,7 @@ export default {
                             this.tableDataAll1.forEach(ele => {
                                 ele.currency = this.formatCurrencySymbol(ele.country)
                             })
+                            this.pageIndex1 = 1
                         }
                     })
             } else if (currentType == 2) {
@@ -1169,6 +1178,7 @@ export default {
                             this.tableDataAll2.forEach(ele => {
                                 ele.currency = this.formatCurrencySymbol(ele.country)
                             })
+                            this.pageIndex2 = 1
                         }
                     })
             } else if (currentType == 3) {
