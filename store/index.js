@@ -3,7 +3,8 @@ import en_map from '~/language/en.json'
 import zh_map from '~/language/zh.json'
 export const state = () => ({
     token: '',
-    lang: 'zh'
+    lang: 'zh',
+    username: ''
 })
 export const mutations = {
     SET_LANG: function(state, lang) {
@@ -12,6 +13,9 @@ export const mutations = {
     },
     SET_TOKEN: function(state, token) {
         state.token = token
+    },
+    SET_USERNAME: function(state, username) {
+        state.username = username
     }
 }
 
@@ -27,5 +31,6 @@ export const actions = {
 
         commit('SET_LANG', _COOKIE['lang'])
         commit('SET_TOKEN', _COOKIE['token'])
+        commit('SET_USERNAME', _COOKIE['username'])
     }
 }

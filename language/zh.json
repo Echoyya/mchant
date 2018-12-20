@@ -1,5 +1,7 @@
 {
     "login":{
+        "MerchantLogin":"商户后台管理登录",
+        "MerchantManagement":"商户后台管理",
         "account":"请输入账号",
         "password":"请输入密码",
         "contact_way":"如果忘记密码，请联系管理员,电话：010-53013618,邮箱：kefu@startimes.com.cn",
@@ -18,7 +20,7 @@
         "change":"更改",
         "binding":"绑定",
         "region":"地区：",
-        "choose_country":"选择国家",
+        "choose_country":"请选择国家",
         "enter_phone_number":"请输入手机号",
         "phone_least_six_digits":"手机号至少为6位数字",
         "verification":"验证码：",

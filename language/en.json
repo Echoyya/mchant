@@ -1,5 +1,7 @@
 {
     "login":{
+        "MerchantLogin":"Merchant management login",
+        "MerchantManagement":"Merchant management",
         "account":"Please enter the account number",
         "password":"Please enter your password",
         "contact_way":"If you forget your password, contact your administrator,\n phone：010-53013618,\n emil：kefu@startimes.com.cn",
@@ -18,7 +20,7 @@
         "change":"Change",
         "binding":"Binding",
         "region":"Region：",
-        "choose_country":"Choose the country",
+        "choose_country":"Please choose the country",
         "enter_phone_number":"Please enter your phone number",
         "phone_least_six_digits":"The phone number should be at least 6 digits",
 
@@ -82,7 +84,7 @@
     "record": {
         "transaction_query":"Transaction Query",
         "business_type":"business type：",
-        "trading_record":"trading record",
+        "trading_record":"transaction record",
         "refund_record":"refund record",
         "trading_summary":"transaction summary",
         "country":"country：",

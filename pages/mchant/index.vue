@@ -25,11 +25,13 @@
                                 </Row>
                                 <Row class="mb15 lh32" v-if="current!=3">
                                     <Col span="6"> {{$L.account.region}}
+                                    <span class="required">*</span>
                                     </Col>
                                     <Col span="12">
                                     <Select v-model="countryPrefix" class="mr15 w200" :placeholder="$L.account.choose_country">
-                                        <Option v-for="item in countryList" :value="item.country" :key="item.country" v-if="item.id != 8 && item.id != 1">{{ item.name}} &nbsp;&nbsp;+{{item.phonePrefix}}</Option>
+                                        <Option v-for="item in countryList" :value="item.country" :key="item.country" v-if="item.id != 8 && item.id != 0">{{ item.name}} &nbsp;&nbsp;+{{item.phonePrefix}}</Option>
                                     </Select>
+
                                     </Col>
                                 </Row>
                                 <Row class="mb15 lh32" v-if="current!=3">
@@ -91,12 +93,12 @@
                         </Row>
                     </div>
                     <div class="mCard mb15">
-                        <h2>{{$L.account.yesterday_summary}}</h2>
+                        <h2 class="mb15">{{$L.account.yesterday_summary}}</h2>
                         <Row>
                             <Col span="8" v-for="(item, index) in tradeTotelYesterday" :key="index">
-                            <p class="row mb15 fontbold">{{item.country}}</p>
+                            <p class="row mb15 fontbold">{{item.country | getCountryName }}</p>
                             <p class="row">{{$L.account.order_tota}}{{item.successAmount}}</p>
-                            <p class="row">{{$L.account.currency}}{{item.currency}}</p>
+                            <p class="row">{{$L.account.currency}}{{item.country | getCurrencySymbol}}</p>
                             <p class="row">{{$L.account.success_frequency}}{{item.successCount}} 笔</p>
                             </Col>
                         </Row>
@@ -218,7 +220,7 @@
                             <div class="mb15">
                                 <span> {{$L.record.country}}</span>
                                 <Select v-model="country1" class="mr15 w160" :placeholder="$L.record.select_country">
-                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 1">{{ item.name }}</Option>
+                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 8">{{ item.name }}</Option>
                                 </Select>
                                 <span> {{$L.record.order_status}}</span>
                                 <Select v-model="orderStauts1" class="mr15 w160" :placeholder="$L.record.please_select">
@@ -294,7 +296,7 @@
                             <div class="mb15">
                                 <span> {{$L.refund.country}}</span>
                                 <Select v-model="country2" class="mr15 w160" :placeholder="$L.refund.select_country">
-                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 1">{{ item.name }}</Option>
+                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 8">{{ item.name }}</Option>
                                 </Select>
                                 {{$L.refund.order_status}}
                                 <Select v-model="orderStauts2" class="mr15 w160" :placeholder="$L.refund.please_select">
@@ -324,7 +326,7 @@
                             <div class="mb15">
                                 {{$L.summary.country}}
                                 <Select v-model="country3" class="mr15 w160" :placeholder="$L.summary.select_country">
-                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 1">{{ item.name }}</Option>
+                                    <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 8 && item.id != 0">{{ item.name }}</Option>
                                 </Select>
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.summary.search}}</Button>
                             </div>
@@ -338,6 +340,7 @@
 </template>
 <script>
 import { getCookie } from '~/functions/utils'
+import countrys from '~/functions/countrys.json'
 export default {
     async asyncData() {
         let serverTime = new Date()
@@ -424,8 +427,8 @@ export default {
             ],
             range: '1',
             currentType: 1,
-            country1: '',
-            country2: '',
+            country1: '-',
+            country2: '-',
             country3: '',
             orderStauts1: '0',
             orderStauts2: '0',
@@ -650,7 +653,6 @@ export default {
             repassword: '',
             canSend: false,
             canSendTime: 60,
-            currencySymbol: '-',
             current: 1
         }
     },
@@ -673,13 +675,8 @@ export default {
                 }
             })
         // 获取国家
-        this.$axios.get('/cms/vup/v2/areas?versionCode=5500').then(res => {
-            if (res.data.length > 0) {
-                this.countryList = res.data
-                this.country3 = this.countryList[1].country
-            }
-        })
-
+        this.countryList = countrys
+        this.country3 = this.countryList[1].country
         this.initSearchTime()
         this.searchOrder(this.currentType)
     },
@@ -699,7 +696,7 @@ export default {
                 .then(res => {
                     if (res.data) {
                         this.merchantInfoDto = res.data
-                        if (this.merchantInfoDto.contactPhone != '') {
+                        if (this.merchantInfoDto.contactPhone) {
                             this.current = 2
                         }
                     }
@@ -748,7 +745,11 @@ export default {
         //绑定和更改手机号
         toBindPhone() {
             let reg = /^\d{6,}$/
-            if (this.phoneNum == '') {
+            if (this.countryPrefix == '') {
+                this.$Modal.warning({
+                    title: this.$L.account.choose_country
+                })
+            } else if (this.phoneNum == '') {
                 this.$Modal.warning({
                     title: this.$L.account.enter_phone_number
                 })
@@ -780,11 +781,13 @@ export default {
                 )
                 .then(res => {
                     if (res.data.code == 0) {
-                        let prefix =
-                            this.countryPrefix == ''
-                                ? this.countryList[1].country.toUpperCase()
-                                : this.countryPrefix.toUpperCase()
-                        let countryPhone = prefix + ' ' + this.phoneNum
+                        // let prefix =
+                        //     this.countryPrefix == ''
+                        //         ? this.countryList[0].country.toUpperCase()
+                        //         : this.countryPrefix.toUpperCase()
+                        // let countryPhone = prefix + ' ' + this.phoneNum
+                        let countryPhone =
+                            this.countryPrefix + ' ' + this.phoneNum
                         this.$axios
                             .put(
                                 `/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`
@@ -808,7 +811,12 @@ export default {
         toNextStep(curr) {
             if (curr == 2) {
                 let reg = /^\d{6,}$/
-                if (this.phoneNum == '') {
+                if (this.countryPrefix == '') {
+                    this.$Modal.warning({
+                        title: this.$L.account.choose_country
+                    })
+                    return
+                } else if (this.phoneNum == '') {
                     this.$Modal.warning({
                         title: this.$L.account.enter_phone_number
                     })
@@ -819,11 +827,12 @@ export default {
                     })
                     return
                 }
-                let prefix =
-                    this.countryPrefix == ''
-                        ? this.countryList[1].country.toUpperCase()
-                        : this.countryPrefix.toUpperCase()
-                let orgPhone = prefix + ' ' + this.phoneNum
+                // let prefix =
+                //     this.countryPrefix == ''
+                //         ? this.countryList[0].country.toUpperCase()
+                //         : this.countryPrefix.toUpperCase()
+                // let orgPhone = prefix + ' ' + this.phoneNum
+                let orgPhone = this.countryPrefix + ' ' + this.phoneNum
                 this.$axios
                     .get(
                         `/payment/mc/v2/merchantinfomc/checkOldPhone?phone=${orgPhone}`
@@ -1036,7 +1045,8 @@ export default {
         searchOrder(currentType) {
             if (currentType == 1) {
                 //支付交易记录
-                let upperCounteyCode = this.country1.toUpperCase()
+                let upperCounteyCode =
+                    this.country1 == '-' ? '' : this.country1.toUpperCase()
                 let createTimeFrom =
                     this.dateRecord_start[0] != ''
                         ? this.formatDate(this.dateRecord_start[0])
@@ -1064,11 +1074,17 @@ export default {
                     .then(res => {
                         if (res.data.resultCode == 'SUCCESS') {
                             this.tableDataAll1 = res.data.orderPayBills
+                            this.tableDataAll1.forEach(ele => {
+                                ele.currency = this.formatCurrencySymbol(
+                                    ele.country
+                                )
+                            })
                         }
                     })
             } else if (currentType == 2) {
                 //退款记录查询
-                let upperCounteyCode = this.country2.toUpperCase()
+                let upperCounteyCode =
+                    this.country2 == '-' ? '' : this.country2.toUpperCase()
                 let applyRefundTimeFrom =
                     this.dateRefund[0] != ''
                         ? this.formatDate(this.dateRefund[0])
@@ -1088,6 +1104,11 @@ export default {
                     .then(res => {
                         if (res.data.resultCode == 'SUCCESS') {
                             this.tableDataAll2 = res.data.refundBills
+                            this.tableDataAll2.forEach(ele => {
+                                ele.currency = this.formatCurrencySymbol(
+                                    ele.country
+                                )
+                            })
                         }
                     })
             } else if (currentType == 3) {
@@ -1114,10 +1135,12 @@ export default {
                     )
                     .then(res => {
                         if (res.data.resultCode == 'SUCCESS') {
-                            res.data.currency = res.data.currency
-                                ? res.data.currency
-                                : this.currencySymbol
                             this.tableData3.push(res.data)
+                            this.tableData3.forEach(ele => {
+                                ele.currency = this.formatCurrencySymbol(
+                                    ele.country
+                                )
+                            })
                         }
                     })
             }
@@ -1182,7 +1205,7 @@ export default {
             if (type == 1) {
                 if (this.tableDataAll1.length > 0) {
                     this.$refs.table.exportCsv({
-                        filename: 'record',
+                        filename: this.$L.record.trading_record,
                         columns: this.columns1,
                         data: this.tableDataAll1
                     })
@@ -1194,7 +1217,7 @@ export default {
             } else if (type == 2) {
                 if (this.tableDataAll2.length > 0) {
                     this.$refs.table.exportCsv({
-                        filename: 'refund',
+                        filename: this.$L.record.refund_record,
                         columns: this.columns2,
                         data: this.tableDataAll2
                     })
@@ -1204,6 +1227,15 @@ export default {
                     })
                 }
             }
+        },
+        formatCurrencySymbol(cry) {
+            let s = countrys[1].currencySymbol
+            countrys.forEach(function(ele) {
+                if (ele.country == cry) {
+                    s = ele.currencySymbol
+                }
+            })
+            return s
         }
     },
     watch: {
@@ -1232,19 +1264,22 @@ export default {
             this.orderNum2 = ''
         },
         dateCollect(val) {
+            console.log(this.dateCollect)
             if (val[0] != '' && val[1] != '') {
-                this.range = '0'
+                // if (val) {
+                this.range = ''
             } else {
                 this.range = '1'
             }
+        },
+        range(val) {
+            if (val) {
+                console.log(val)
+                this.dateCollect[0] = ''
+                this.dateCollect[1] = ''
+                console.log(this.dateCollect)
+            }
         }
-        // country3(val) {
-        //     this.countryList.forEach(ele => {
-        //         if (ele.country == val) {
-        //             this.currencySymbol = ele.currencySymbol
-        //         }
-        //     })
-        // }
     },
     computed: {
         tableData1() {
@@ -1301,6 +1336,26 @@ export default {
                 this.pageIndex2 * this.pageSize2
             )
             return tmp
+        }
+    },
+    filters: {
+        getCountryName: function(cry) {
+            let s = countrys[0].name
+            countrys.forEach(ele => {
+                if (ele.country == cry) {
+                    s = ele.name
+                }
+            })
+            return s
+        },
+        getCurrencySymbol(cry) {
+            let s = countrys[0].currencySymbol
+            countrys.forEach(function(ele) {
+                if (ele.country == cry) {
+                    s = ele.currencySymbol
+                }
+            })
+            return s
         }
     }
 }
