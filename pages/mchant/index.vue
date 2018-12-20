@@ -309,7 +309,7 @@
                             </div>
                             <div class="mb15">
                                 {{$L.refund.refund_time}}
-                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" />>
+                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" />
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
                                 <Button @click="downloadTableData(2)">{{$L.refund.download}}</Button>
                             </div>
@@ -321,7 +321,7 @@
                                 <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">{{$L.summary.nearly_week}}</Button>
                                 <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">{{$L.summary.nearly_month}}</Button>
                                 <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">{{$L.summary.nearly_three_months}}</Button>
-                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" />
+                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)"/>
                             </div>
                             <div class="mb15">
                                 {{$L.summary.country}}
@@ -653,7 +653,8 @@ export default {
             repassword: '',
             canSend: false,
             canSendTime: 60,
-            current: 1
+            current: 1,
+            timer: null
         }
     },
     mounted() {
@@ -679,6 +680,13 @@ export default {
         this.searchOrder(this.currentType)
     },
     methods: {
+        handleChange (date) {
+            if (date[0] != '' && date[0] != '') {
+                this.range = ''
+            } else {
+                this.range = 1
+            }
+        },
         // 初始化搜索时间为近一周
         initSearchTime() {
             let lastWeek = this.serverTime.getTime() - 7 * 24 * 3600 * 1000
@@ -739,6 +747,7 @@ export default {
                 })
                 this.cancel('showPhoneModal')
                 this.getMerchantInfoDto()
+                clearInterval(this.timer)
             })
         },
         // 验证手机验证码
@@ -774,6 +783,7 @@ export default {
             }
             this.$axios.get(`payment/mc/v2/merchantinfomc/check-verify-code?phone=${this.phoneNum}&verifyCode=${this.verification}`).then(res => {
                 if (res.data.code == 0) {
+                    clearInterval(this.timer)
                     this.phoneNum = ''
                     this.current = 4
                     this.verification = ''
@@ -835,9 +845,9 @@ export default {
                     this.$Modal.success({
                         title: this.$L.account.later_reapply
                     })
-                    let timer = setInterval(() => {
+                    this.timer = setInterval(() => {
                         if (this.canSendTime <= 0) {
-                            clearInterval(timer)
+                            clearInterval(this.timer)
                             this.canSend = false
                             return
                         }
@@ -976,7 +986,11 @@ export default {
                         this.cancel('showRePasswordModal')
                     } else if (res.data.code == 500) {
                         this.$Modal.warning({
-                            title: res.data.message
+                            title: this.$L.account.dealPassword_not_match
+                        })
+                    } else if (res.data.code == 501) {
+                        this.$Modal.warning({
+                            title: this.$L.account.new_same_as_old
                         })
                     }
                 })
@@ -1037,13 +1051,11 @@ export default {
             } else if (currentType == 3) {
                 //交易汇总查询
                 this.tableData3 = []
-                // let upperCounteyCode = 'TZ' // test 数据
-                let upperCounteyCode = this.country3 == '' ? this.countryList[1].country.toUpperCase() : this.country3.toUpperCase()
                 let createTimeFrom = this.dateCollect[0] != '' ? this.formatDate(this.dateCollect[0]) : ''
                 let createTimeTo = this.dateCollect[1] != '' ? this.formatDate(this.dateCollect[1]) : ''
                 this.$axios
                     .post(
-                        `/payment/mc/v2/static-order-pay-bills?country=${upperCounteyCode}&range=${
+                        `/payment/mc/v2/static-order-pay-bills?country=${this.country3}&range=${
                             this.range
                         }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}`
                     )
@@ -1051,7 +1063,7 @@ export default {
                         if (res.data.resultCode == 'SUCCESS') {
                             this.tableData3.push(res.data)
                             this.tableData3.forEach(ele => {
-                                ele.currency = this.formatCurrencySymbol(ele.country)
+                                ele.currency = this.formatCurrencySymbol(this.country3)
                             })
                         }
                     })
@@ -1165,21 +1177,10 @@ export default {
         orderType2() {
             this.orderNum2 = ''
         },
-        dateCollect(val) {
-            console.log(this.dateCollect)
-            if (val[0] != '' && val[1] != '') {
-                // if (val) {
-                this.range = ''
-            } else {
-                this.range = '1'
-            }
-        },
         range(val) {
             if (val) {
-                console.log(val)
                 this.dateCollect[0] = ''
                 this.dateCollect[1] = ''
-                console.log(this.dateCollect)
             }
         }
     },

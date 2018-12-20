@@ -40,25 +40,18 @@ export default {
                 })
                 return
             } else {
-                this.$axios
-                    .post(
-                        `/payment/mc/v2/merchant-operator/login?loginName=${
-                            this.account
-                        }&loginPassword=${this.password}`
-                    )
-                    .then(res => {
-                        if (res.data.code == 0) {
-                            setCookie('token', res.data.data)
-                            window.location.href =
-                                this.$route.query.pre || '/mchant/'
-                            setCookie('username', this.account)
-                        } else {
-                            this.$Modal.error({
-                                title: this.$L.login.failure,
-                                content: this.$L.login.re_enter
-                            })
-                        }
-                    })
+                this.$axios.post(`/payment/mc/v2/merchant-operator/login?loginName=${this.account}&loginPassword=${this.password}`).then(res => {
+                    if (res.data.code == 0) {
+                        setCookie('token', res.data.data)
+                        window.location.href = this.$route.query.pre || '/mchant/'
+                        setCookie('username', this.account)
+                    } else {
+                        this.$Modal.error({
+                            title: this.$L.login.failure,
+                            content: this.$L.login.re_enter
+                        })
+                    }
+                })
             }
         }
     },
