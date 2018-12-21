@@ -880,6 +880,7 @@ export default {
                         if (this.canSendTime <= 0) {
                             clearInterval(this.timer)
                             this.canSend = false
+                            this.canSendTime = 60
                             return
                         }
                         this.canSendTime--
