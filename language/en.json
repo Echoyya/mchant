@@ -102,6 +102,7 @@
         "search":"search",
         "download":"download",
         "refund":"Refund",
+        "application_name":"application name：",
         "order_number":"order number：",
         "can_refund_amount":"Can be refund amount：",
         "refund_amount":"refund amount：",
@@ -112,7 +113,8 @@
         "okay":"Okay",
         "cancel":"Cancel",
         "no_entries_for_download":"No entries are available for download",
-
+        "message":"message",
+        "Are_you_sure_want_refund":"Are you sure you want a refund?",
 
         "col_country":"country",
         "col_trading_time_start":"trading start time",
@@ -129,6 +131,7 @@
         "password_required":"The current order password is required",
         "refundable_amount":"The refundable amount shall not be greater than the refundable amount",
         "success_refund":"Success, Can be found in the refund record",
+        "dealPassword_wrong":"deal password does not match",
 
         "all":"all",
         "notpay":"NOTPAY",

@@ -1,21 +1,5 @@
 [
     {
-    "id": 0,
-    "name": "ALL",
-    "code": "ALL",
-    "createDate": 1544496672000,
-    "updateDate": 1544496672000,
-    "appFBConfigs": [],
-    "country": "-",
-    "onLine": true,
-    "currencySymbol": "-",
-    "currencyCode": "-",
-    "portalStatus": true,
-    "ottStatus": 0,
-    "dvbStatus": 0,
-    "phonePrefix": "-"
-    },
-    {
         "id": 2,
         "name": "Nigeria",
         "code": "2",

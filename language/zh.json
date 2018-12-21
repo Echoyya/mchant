@@ -81,7 +81,7 @@
         "dealPassword_not_match":"原交易密码不匹配",
         "new_same_as_old":"新交易密码与原交易密码一致，请重新输入",
         "verification_4_digits":"验证码为4位纯数字",
-
+        
         "build_failed":"生成失败，请重试！"
 
     },
@@ -102,6 +102,7 @@
         "search":"搜索",
         "download":"下载",
         "refund":"申请退款",
+        "application_name":"应用名称：",
         "order_number":"订单号：",
         "can_refund_amount":"可退金额：",
         "refund_amount":"退款金额：",
@@ -112,8 +113,9 @@
         "okay":"确定",
         "cancel":"取消",
         "no_entries_for_download":"暂无条目不可下载",
+        "message":"信息",
+        "Are_you_sure_want_refund":"确定申请退款?",
 
-        
         "col_country":"国家",
         "col_trading_time_start":"订单创建时间",
         "col_trading_time_end":"交易完成时间",
@@ -128,7 +130,8 @@
         "amount_required":"退款金额为必填项",
         "password_required":"当前订单应用交易密码为必填项",
         "refundable_amount":"退款金额不可大于可退金额",
-        "success_refund":"申请成功,可在退款记录中查询",
+        "success_refund":"退款申请已提交,可在退款记录中查询",
+        "dealPassword_wrong":"交易密码错误，请重新输入",
 
         "all":"全部",
         "notpay":"未付款",

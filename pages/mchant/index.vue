@@ -169,6 +169,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12">
+                                        <Input type="password" value='1' class="hide" />
                                         <Input v-model="password" type="password" :placeholder="$L.account.enter_dealPassword" class="w200" />
                                     </i-col>
                                 </Row>
@@ -254,7 +255,11 @@
                                 <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
                             <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table" />
-                            <Modal :title="$L.record.refund" v-model="showRefundModal" width="700" :closable="false" :mask-closable="false">
+                            <Modal :title="$L.record.refund" v-model="showRefundModal" width="700" :closable="false" :mask-closable="false" :draggable="true">
+                                <Row class="mb15 lh32">
+                                    <i-col span="6" class="tright">{{$L.record.application_name}}</i-col>
+                                    <i-col span="12" offset="1">{{ refundObj.merchantAppName}}</i-col>
+                                </Row>
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">{{$L.record.order_number}}</i-col>
                                     <i-col span="12" offset="1">{{ refundObj.txNo}}</i-col>
@@ -265,7 +270,7 @@
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">{{$L.record.can_refund_amount}}</i-col>
-                                    <i-col span="12" offset="1">{{ refundObj.amount}}</i-col>
+                                    <i-col span="12" offset="1">{{ refundObj.amount}} {{refundObj.country | getCurrencySymbol}}</i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">
@@ -273,7 +278,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12" offset="1">
-                                        <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100" />
+                                        <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100" /> {{refundObj.country | getCurrencySymbol}}
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -293,7 +298,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12" offset="1">
-                                        <Input v-model="dealPassword" class="w240" />
+                                        <Input v-model="dealPassword" class="w240" type="password" />
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -304,6 +309,18 @@
                                 </Row>
                                 <div slot="footer">
                                     <Button @click="cancel('showRefundModal')">{{$L.record.cancel}}</Button>
+                                    <Button type="primary" @click="makeSure">{{$L.record.okay}}</Button>
+                                </div>
+                            </Modal>
+                            <Modal :title="$L.record.message" v-model="showMsgModal" class-name="vertical-center-modal" class="w200">
+                                <Row class="mb15 lh32">
+                                    <i-col span="24" class="tcenter fontbold fontSize18">{{$L.record.Are_you_sure_want_refund}}</i-col>
+                                </Row>
+                                <Row class="mb15 lh32">
+                                    <i-col span="24" class="tcenter fontbold fontSize18">{{$L.record.refund_amount}} {{refundAmount}} {{refundObj.country | getCurrencySymbol}}</i-col>
+                                </Row>
+                                <div slot="footer">
+                                    <Button @click="cancel('showMsgModal')">{{$L.record.cancel}}</Button>
                                     <Button type="primary" @click="toRefund">{{$L.record.okay}}</Button>
                                 </div>
                             </Modal>
@@ -471,7 +488,7 @@ export default {
                 {
                     title: this.$L.record.col_country,
                     align: 'center',
-                    key: 'country'
+                    key: 'countrySpelling'
                 },
                 {
                     title: this.$L.record.col_trading_time_start,
@@ -531,6 +548,7 @@ export default {
                                         on: {
                                             click: () => {
                                                 this.refundObj = params.row
+                                                console.log(this.refundObj)
                                                 this.showRefundModal = true
                                             }
                                         }
@@ -558,7 +576,7 @@ export default {
                 {
                     title: this.$L.refund.col_country,
                     align: 'center',
-                    key: 'country'
+                    key: 'countrySpelling'
                 },
                 {
                     title: this.$L.refund.col_merchan_number,
@@ -652,6 +670,7 @@ export default {
             showEmailModal: false,
             showPasswordModal: false,
             showRePasswordModal: false,
+            showMsgModal: false,
             appName: '',
             ewalletNo: '',
             payNotifyUrl: '',
@@ -693,6 +712,22 @@ export default {
         })
         // 获取国家
         this.countryList = countrys
+        this.countryList.unshift({
+            id: 0,
+            name: this.$L.record.select_country,
+            code: 'ALL',
+            createDate: 1544496672000,
+            updateDate: 1544496672000,
+            appFBConfigs: [],
+            country: '-',
+            onLine: true,
+            currencySymbol: '-',
+            currencyCode: '-',
+            portalStatus: true,
+            ottStatus: 0,
+            dvbStatus: 0,
+            phonePrefix: '-'
+        })
         this.country3 = this.countryList[1].country
         this.initSearchTime()
         this.searchOrder(this.currentType)
@@ -876,6 +911,8 @@ export default {
                     this.$Modal.success({
                         title: this.$L.account.later_reapply
                     })
+                    let startTime = this.serverTime.getTime()
+                    let endTime = this.serverTime.getTime() + 60 * 1000
                     this.timer = setInterval(() => {
                         if (this.canSendTime <= 0) {
                             clearInterval(this.timer)
@@ -913,7 +950,7 @@ export default {
                     break
                 case 'showRefundModal':
                     this.showRefundModal = false
-                    this.refundAmount = ''
+                    this.refundAmount = 0
                     this.refundNote = ''
                     this.dealPassword = ''
                     break
@@ -927,6 +964,9 @@ export default {
                     this.password = ''
                     this.repassword = ''
                     this.newPassword = ''
+                    break
+                case 'showMsgModal':
+                    this.showMsgModal = false
                     break
             }
         },
@@ -1102,6 +1142,7 @@ export default {
                     )
                     .then(res => {
                         if (res.data.resultCode == 'SUCCESS') {
+                            this.tableData3 = []
                             this.tableData3.push(res.data)
                             this.tableData3.forEach(ele => {
                                 ele.currency = this.formatCurrencySymbol(this.country3)
@@ -1110,9 +1151,34 @@ export default {
                     })
             }
         },
-        // 申请退款接口
         toRefund() {
-            if (this.refundAmount == '') {
+            this.cancel('showMsgModal')
+            this.$axios
+                .post(
+                    `/payment/mc/v2/refund/${this.refundObj.payToken}/applyRefund?amount=${this.refundAmount}&refundNote=${
+                        this.refundNote
+                    }&refundType=${this.refundType}&dealPassword=${this.dealPassword}`
+                )
+                .then(res => {
+                    if (res.data.resultCode == 'SUCCESS') {
+                        this.$Modal.success({
+                            title: this.$L.record.success_refund
+                        })
+                        this.cancel('showRefundModal')
+                    } else if (res.data.resultCode == 'FAIL') {
+                        this.$Modal.warning({
+                            title: this.$L.record.dealPassword_wrong,
+                            onOk: () => {
+                                this.dealPassword = ''
+                            }
+                        })
+                    }
+                })
+        },
+        // 申请退款接口
+        makeSure() {
+            let reg = /^\d{6}$/
+            if (this.refundAmount == 0) {
                 this.$Modal.warning({
                     title: this.$L.record.amount_required
                 })
@@ -1122,26 +1188,18 @@ export default {
                     title: this.$L.record.password_required
                 })
                 return
+            } else if (!reg.test(this.dealPassword)) {
+                this.$Modal.warning({
+                    title: this.$L.account.password_6_digits
+                })
+                return
             } else if (this.refundObj.amount < this.refundAmount) {
                 this.$Modal.warning({
                     title: this.$L.record.refundable_amount
                 })
                 return
             } else {
-                this.$axios
-                    .post(
-                        `/payment/mc/v2/refund/${this.refundObj.payToken}/applyRefund?amount=${this.refundAmount}&refundNote=${
-                            this.refundNote
-                        }&refundType=${this.refundType}&dealPassword=${this.dealPassword}`
-                    )
-                    .then(res => {
-                        if (res.data.resultCode == 'SUCCESS') {
-                            this.$Modal.success({
-                                title: this.$L.record.success_refund
-                            })
-                        }
-                        this.cancel('showRefundModal')
-                    })
+                this.showMsgModal = true
             }
         },
         changeCurrType(Type) {
@@ -1231,20 +1289,26 @@ export default {
                 switch (ele.state) {
                     case '1':
                         ele.stateShow = this.$L.record.notpay
+                        ele.operation = this.$L.record.nonrefundable
                         break
                     case '2':
                         ele.stateShow = this.$L.record.paying
+                        ele.operation = this.$L.record.nonrefundable
                         break
                     case '3':
                         ele.stateShow = this.$L.record.success
+                        ele.operation = this.$L.record.refund
                         break
                     case '4':
                         ele.stateShow = this.$L.record.fail
+                        ele.operation = this.$L.record.nonrefundable
                         break
                     case '5':
                         ele.stateShow = this.$L.record.refunded
+                        ele.operation = this.$L.record.nonrefundable
                         break
                 }
+                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
             })
             let tmp = this.tableDataAll1.slice((this.pageIndex1 - 1) * this.pageSize1, this.pageIndex1 * this.pageSize1)
             return tmp
@@ -1271,6 +1335,7 @@ export default {
                         ele.state = this.$L.refund.audit_fail
                         break
                 }
+                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
             })
             let tmp = this.tableDataAll2.slice((this.pageIndex2 - 1) * this.pageSize2, this.pageIndex2 * this.pageSize2)
             return tmp
@@ -1342,6 +1407,9 @@ export default {
 .tright {
     text-align: right;
 }
+.tcenter {
+    text-align: center;
+}
 .fontbold {
     font-weight: bold;
 }
@@ -1385,5 +1453,15 @@ export default {
     text-align: center;
     font-weight: 600;
     font-size: 15px;
+}
+.fontSize18{
+    font-size: 18px
+}
+.hide {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    border: 0px;
+    padding: 0px;
 }
 </style>
