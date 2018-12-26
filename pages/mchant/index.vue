@@ -270,7 +270,7 @@
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">{{$L.record.can_refund_amount}}</i-col>
-                                    <i-col span="12" offset="1">{{ refundObj.amount}} {{refundObj.country | getCurrencySymbol}}</i-col>
+                                    <i-col span="12" offset="1">{{ refundObj.amount - refundObj.refundedAmount}} {{refundObj.country | getCurrencySymbol}}</i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">
@@ -404,10 +404,6 @@ export default {
                 {
                     value: '4',
                     label: this.$L.record.fail
-                },
-                {
-                    value: '5',
-                    label: this.$L.record.refunded
                 }
             ],
             refundStautsList: [
@@ -537,7 +533,8 @@ export default {
                     width: 150,
                     align: 'center',
                     render: (h, params) => {
-                        if (params.row.state == '3') {
+                        let item = params.row
+                        if (item.state == '3' && (item.amount - item.refundedAmount) > 0) {
                             return h('div', [
                                 h(
                                     'a',
@@ -1286,6 +1283,7 @@ export default {
     computed: {
         tableData1() {
             this.tableDataAll1.forEach(ele => {
+                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
                 switch (ele.state) {
                     case '1':
                         ele.stateShow = this.$L.record.notpay
@@ -1308,13 +1306,13 @@ export default {
                         ele.operation = this.$L.record.nonrefundable
                         break
                 }
-                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
             })
             let tmp = this.tableDataAll1.slice((this.pageIndex1 - 1) * this.pageSize1, this.pageIndex1 * this.pageSize1)
             return tmp
         },
         tableData2() {
             this.tableDataAll2.forEach(ele => {
+                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
                 switch (ele.state) {
                     case '1':
                         ele.state = this.$L.refund.notrefund
@@ -1335,7 +1333,6 @@ export default {
                         ele.state = this.$L.refund.audit_fail
                         break
                 }
-                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
             })
             let tmp = this.tableDataAll2.slice((this.pageIndex2 - 1) * this.pageSize2, this.pageIndex2 * this.pageSize2)
             return tmp
@@ -1343,7 +1340,7 @@ export default {
     },
     filters: {
         getCountryName: function(cry) {
-            let s = countrys[0].name
+            let s = ''
             countrys.forEach(ele => {
                 if (ele.country == cry) {
                     s = ele.name
