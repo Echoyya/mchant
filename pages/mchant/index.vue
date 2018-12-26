@@ -278,7 +278,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12" offset="1">
-                                        <InputNumber :max="refundObj.refundedAmount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100" /> {{refundObj.country | getCurrencySymbol}}
+                                        <InputNumber :max="refundObj.amount - refundObj.refundedAmount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100" /> {{refundObj.country | getCurrencySymbol}}
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
