@@ -723,13 +723,6 @@ export default {
         this.searchOrder(this.currentType)
     },
     methods: {
-        handleChange(date) {
-            if (date[0] != '' && date[0] != '') {
-                this.range = ''
-            } else {
-                this.range = 1
-            }
-        },
         // 初始化搜索时间为近一周
         initSearchTime() {
             let lastWeek = this.serverTime.getTime() - 7 * 24 * 3600 * 1000
@@ -757,7 +750,7 @@ export default {
                 }
             })
         },
-        //绑定和更改邮箱
+        // 绑定和更改邮箱
         toBindEmail() {
             let reg = /^[0-9A-Za-z][\.-_0-9A-Za-z]*@[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)+$/
             if (!reg.test(this.email)) {
@@ -781,7 +774,7 @@ export default {
                 })
             }
         },
-        //绑定和更改手机号
+        // 绑定和更改手机号
         toBindPhone() {
             if (!this.beforeSendVerification()) return
             if (!this.beforeBindPhone()) return
@@ -916,6 +909,7 @@ export default {
                 }
             })
         },
+        // Modal 取消事件
         cancel(model) {
             switch (model) {
                 case 'showChangePhoneModal':
@@ -1142,6 +1136,7 @@ export default {
                     })
             }
         },
+        // 申请退款接口
         toRefund() {
             this.cancel('showMsgModal')
             this.$axios
@@ -1166,7 +1161,7 @@ export default {
                     }
                 })
         },
-        // 申请退款接口
+        // 确认退款金额
         makeSure() {
             let reg = /^\d{6}$/
             if (this.refundAmount == 0) {
@@ -1240,7 +1235,14 @@ export default {
                 }
             })
             return s
-        }
+        },
+        handleChange(date) {
+            if (date[0] != '' && date[0] != '') {
+                this.range = ''
+            } else {
+                this.range = 1
+            }
+        },
     },
     watch: {
         orderNum1() {
@@ -1269,8 +1271,7 @@ export default {
         },
         range(val) {
             if (val) {
-                this.dateCollect[0] = ''
-                this.dateCollect[1] = ''
+                this.dateCollect = null
             }
         }
     },
@@ -1352,7 +1353,7 @@ export default {
             return s
         },
         getCurrencySymbol(cry) {
-            let s = countrys[0].currencySymbol
+            let s = ''
             countrys.forEach(function(ele) {
                 if (ele.country == cry) {
                     s = ele.currencySymbol
