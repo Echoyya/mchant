@@ -56,7 +56,8 @@ export default {
     methods: {
         logout() {
             setCookie('token', '')
-            this.$router.push('/mchant/login')
+            setCookie('username', '')
+            this.$router.replace('/mchant/login')
         },
         changeLang(lang) {
             setCookie('lang', lang)
