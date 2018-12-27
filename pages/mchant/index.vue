@@ -1290,7 +1290,11 @@ export default {
                         break
                     case '3':
                         ele.stateShow = this.$L.record.success
-                        ele.operation = this.$L.record.refund
+                        if(ele.amount > ele.refundedAmount){
+                            ele.operation = this.$L.record.refund
+                        }else {
+                            ele.operation = this.$L.record.nonrefundable
+                        }
                         break
                     case '4':
                         ele.stateShow = this.$L.record.fail
