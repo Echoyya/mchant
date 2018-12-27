@@ -248,9 +248,9 @@
                             </div>
                             <div class="mb15">
                                 <span>{{$L.record.trading_time_start}}</span>
-                                <DatePicker v-model="dateRecord_start" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" />
+                                <DatePicker v-model="dateRecord_start" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" :transfer="true"/>
                                 <span>{{$L.record.trading_time_end}}</span>
-                                <DatePicker v-model="dateRecord_end" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" />
+                                <DatePicker v-model="dateRecord_end" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" :transfer="true" />
                                 <Button type="primary" class="ml15" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
                                 <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
@@ -343,7 +343,7 @@
                             </div>
                             <div class="mb15">
                                 {{$L.refund.refund_time}}
-                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" />
+                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" :transfer="true" />
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
                                 <Button @click="downloadTableData(2)">{{$L.refund.download}}</Button>
                             </div>
@@ -356,7 +356,7 @@
                                 <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">{{$L.summary.nearly_week}}</Button>
                                 <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">{{$L.summary.nearly_month}}</Button>
                                 <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">{{$L.summary.nearly_three_months}}</Button>
-                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)" />
+                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)" :transfer="true"/>
                             </div>
                             <div class="mb15">
                                 {{$L.summary.country}}
@@ -1271,7 +1271,7 @@ export default {
         },
         range(val) {
             if (val) {
-                this.dateCollect = null
+                this.dateCollect = []
             }
         }
     },
