@@ -52,12 +52,12 @@
                                         </i-col>
                                         <i-col span="6">
                                             <div>
-                                                <Button type="primary" size="small" v-if="current==2" @click="sendVerificationOrg" :disabled="canSend">
-                                                    <span v-show="canSend && canSendTime != 0">({{canSendTime}}s)</span>
+                                                <Button type="primary" size="small" v-if="current==2" @click="sendVerificationOrg" :disabled="!canSend">
+                                                    <span v-show="!canSend && canSendTime != 0">({{canSendTime}}s)</span>
                                                     {{$L.account.send_verification}}
                                                 </Button>
-                                                <Button type="primary" size="small" v-if="current!=2" @click="sendVerification" :disabled="canSend">
-                                                    <span v-show="canSend && canSendTime != 0">({{canSendTime}}s)</span>
+                                                <Button type="primary" size="small" v-if="current!=2" @click="sendVerification" :disabled="!canSend">
+                                                    <span v-show="!canSend && canSendTime != 0">({{canSendTime}}s)</span>
                                                     {{$L.account.send_verification}}
                                                 </Button>
                                             </div>
@@ -416,20 +416,12 @@ export default {
                     label: this.$L.refund.notrefund
                 },
                 {
-                    value: '2',
-                    label: this.$L.refund.processing
-                },
-                {
                     value: '4',
                     label: this.$L.refund.fail
                 },
                 {
                     value: '5',
                     label: this.$L.refund.success
-                },
-                {
-                    value: '6',
-                    label: this.$L.refund.closed
                 },
                 {
                     value: '11',
@@ -545,7 +537,6 @@ export default {
                                         on: {
                                             click: () => {
                                                 this.refundObj = params.row
-                                                console.log(this.refundObj)
                                                 this.showRefundModal = true
                                             }
                                         }
@@ -685,9 +676,11 @@ export default {
             password: '',
             newPassword: '',
             repassword: '',
-            canSend: false,
-            canSendTime: 60,
+            canSend: true,
             current: 1,
+            canSendTime: 0,
+            endTime:0,
+            startTime:0,
             timer: null
         }
     },
@@ -697,7 +690,7 @@ export default {
         let getCountryToken =
             'eyJhbGciOiJIUzUxMiJ9.eyJhcHAiOjIsInVpZCI6OTE1MjQyNSwiY2NvZGUiOiJORyIsInJvbGUiOjEsImNyZWF0ZWQiOjE1NDMyMjEzNTk5MTYsImV4cCI6MjA0MjQyMTM1OSwiY2lkIjoyfQ.lfLIxjI86KGl06KTU55KY0gSeRpkABdllX-P-5KQtSL2iytd2PvWazRu7yURb0XWcn3-xKyBTlcz--pDjtPBzg'
         this.$axios.setHeader('token', getCountryToken)
-
+        clearInterval(this.timer)
         this.getMerchantInfoDto()
         this.getMerchantAppInfoDto()
 
@@ -809,8 +802,8 @@ export default {
                     this.$axios.put(`/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`).then(res => {
                         if (res.data.code == 0) {
                             callback && callback()
-                            this.canSend = false
-                            this.canSendTime = 60
+                            this.canSend = true
+                            this.canSendTime = 0
                         }
                     })
                 } else {
@@ -833,8 +826,8 @@ export default {
                     this.phoneNum = ''
                     this.current = 4
                     this.verification = ''
-                    this.canSend = false
-                    this.canSendTime = 60
+                    this.canSend = true
+                    this.canSendTime = 0
                     this.countryPrefix = ''
                 } else {
                     this.$Modal.warning({
@@ -904,21 +897,22 @@ export default {
             if (!this.beforeSendVerification()) return
             this.$axios.post(`payment/mc/v2/merchantinfomc/send-verify-code?phone=${this.phoneNum}`).then(res => {
                 if (res.data.code == 0) {
-                    this.canSend = true
+                    this.canSend = false
                     this.$Modal.success({
                         title: this.$L.account.later_reapply
                     })
-                    let startTime = this.serverTime.getTime()
-                    let endTime = this.serverTime.getTime() + 60 * 1000
+                    this.endTime = new Date().getTime() + 60 * 1000
                     this.timer = setInterval(() => {
-                        if (this.canSendTime <= 0) {
+                        this.startTime = null
+                        this.startTime = new Date().getTime()
+                        if (this.endTime <= this.startTime ) {
                             clearInterval(this.timer)
-                            this.canSend = false
-                            this.canSendTime = 60
+                            this.canSend = true
                             return
                         }
-                        this.canSendTime--
-                    }, 1000)
+                        this.mistming -= 15
+                        this.canSendTime = Math.floor(this.mistming / 1000)
+                    }, 15)
                 }
             })
         },
@@ -1336,6 +1330,15 @@ export default {
             })
             let tmp = this.tableDataAll2.slice((this.pageIndex2 - 1) * this.pageSize2, this.pageIndex2 * this.pageSize2)
             return tmp
+        },
+        mistming: {
+            get(){
+                let mm = this.endTime  - this.startTime
+                return mm > 0 ? mm : 0 
+            },
+            set(){
+
+            }
         }
     },
     filters: {
@@ -1451,8 +1454,8 @@ export default {
     font-weight: 600;
     font-size: 15px;
 }
-.fontSize18{
-    font-size: 18px
+.fontSize18 {
+    font-size: 18px;
 }
 .hide {
     width: 1px;
