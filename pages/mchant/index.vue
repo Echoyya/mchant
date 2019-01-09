@@ -52,12 +52,12 @@
                                         </i-col>
                                         <i-col span="6">
                                             <div>
-                                                <Button type="primary" size="small" v-if="current==2" @click="sendVerificationOrg" :disabled="canSend">
-                                                    <span v-show="canSend && canSendTime != 0">({{canSendTime}}s)</span>
+                                                <Button type="primary" size="small" v-if="current==2" @click="sendVerificationOrg" :disabled="!canSend">
+                                                    <span v-show="!canSend && canSendTime != 0">({{canSendTime}}s)</span>
                                                     {{$L.account.send_verification}}
                                                 </Button>
-                                                <Button type="primary" size="small" v-if="current!=2" @click="sendVerification" :disabled="canSend">
-                                                    <span v-show="canSend && canSendTime != 0">({{canSendTime}}s)</span>
+                                                <Button type="primary" size="small" v-if="current!=2" @click="sendVerification" :disabled="!canSend">
+                                                    <span v-show="!canSend && canSendTime != 0">({{canSendTime}}s)</span>
                                                     {{$L.account.send_verification}}
                                                 </Button>
                                             </div>
@@ -248,9 +248,9 @@
                             </div>
                             <div class="mb15">
                                 <span>{{$L.record.trading_time_start}}</span>
-                                <DatePicker v-model="dateRecord_start" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" />
+                                <DatePicker v-model="dateRecord_start" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" :transfer="true"/>
                                 <span>{{$L.record.trading_time_end}}</span>
-                                <DatePicker v-model="dateRecord_end" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" />
+                                <DatePicker v-model="dateRecord_end" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" :transfer="true" />
                                 <Button type="primary" class="ml15" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
                                 <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
@@ -270,7 +270,7 @@
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">{{$L.record.can_refund_amount}}</i-col>
-                                    <i-col span="12" offset="1">{{ refundObj.amount}} {{refundObj.country | getCurrencySymbol}}</i-col>
+                                    <i-col span="12" offset="1">{{ refundObj.amount - refundObj.refundedAmount}} {{refundObj.country | getCurrencySymbol}}</i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">
@@ -278,7 +278,7 @@
                                         <span class="required">*</span>
                                     </i-col>
                                     <i-col span="12" offset="1">
-                                        <InputNumber :max="refundObj.amount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100" /> {{refundObj.country | getCurrencySymbol}}
+                                        <InputNumber :max="refundObj.amount - refundObj.refundedAmount" :min="0.1" :step="0.1" v-model="refundAmount" class="w100" /> {{refundObj.country | getCurrencySymbol}}
                                     </i-col>
                                 </Row>
                                 <Row class="mb15 lh32">
@@ -343,7 +343,7 @@
                             </div>
                             <div class="mb15">
                                 {{$L.refund.refund_time}}
-                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" />
+                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" :transfer="true" />
                                 <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
                                 <Button @click="downloadTableData(2)">{{$L.refund.download}}</Button>
                             </div>
@@ -356,7 +356,7 @@
                                 <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">{{$L.summary.nearly_week}}</Button>
                                 <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">{{$L.summary.nearly_month}}</Button>
                                 <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">{{$L.summary.nearly_three_months}}</Button>
-                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)" />
+                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)" :transfer="true"/>
                             </div>
                             <div class="mb15">
                                 {{$L.summary.country}}
@@ -404,10 +404,6 @@ export default {
                 {
                     value: '4',
                     label: this.$L.record.fail
-                },
-                {
-                    value: '5',
-                    label: this.$L.record.refunded
                 }
             ],
             refundStautsList: [
@@ -420,20 +416,12 @@ export default {
                     label: this.$L.refund.notrefund
                 },
                 {
-                    value: '2',
-                    label: this.$L.refund.processing
-                },
-                {
                     value: '4',
                     label: this.$L.refund.fail
                 },
                 {
                     value: '5',
                     label: this.$L.refund.success
-                },
-                {
-                    value: '6',
-                    label: this.$L.refund.closed
                 },
                 {
                     value: '11',
@@ -537,7 +525,8 @@ export default {
                     width: 150,
                     align: 'center',
                     render: (h, params) => {
-                        if (params.row.state == '3') {
+                        let item = params.row
+                        if (item.state == '3' && (item.amount - item.refundedAmount) > 0) {
                             return h('div', [
                                 h(
                                     'a',
@@ -548,7 +537,6 @@ export default {
                                         on: {
                                             click: () => {
                                                 this.refundObj = params.row
-                                                console.log(this.refundObj)
                                                 this.showRefundModal = true
                                             }
                                         }
@@ -688,9 +676,11 @@ export default {
             password: '',
             newPassword: '',
             repassword: '',
-            canSend: false,
-            canSendTime: 60,
+            canSend: true,
             current: 1,
+            canSendTime: 0,
+            endTime:0,
+            startTime:0,
             timer: null
         }
     },
@@ -700,7 +690,7 @@ export default {
         let getCountryToken =
             'eyJhbGciOiJIUzUxMiJ9.eyJhcHAiOjIsInVpZCI6OTE1MjQyNSwiY2NvZGUiOiJORyIsInJvbGUiOjEsImNyZWF0ZWQiOjE1NDMyMjEzNTk5MTYsImV4cCI6MjA0MjQyMTM1OSwiY2lkIjoyfQ.lfLIxjI86KGl06KTU55KY0gSeRpkABdllX-P-5KQtSL2iytd2PvWazRu7yURb0XWcn3-xKyBTlcz--pDjtPBzg'
         this.$axios.setHeader('token', getCountryToken)
-
+        clearInterval(this.timer)
         this.getMerchantInfoDto()
         this.getMerchantAppInfoDto()
 
@@ -733,13 +723,6 @@ export default {
         this.searchOrder(this.currentType)
     },
     methods: {
-        handleChange(date) {
-            if (date[0] != '' && date[0] != '') {
-                this.range = ''
-            } else {
-                this.range = 1
-            }
-        },
         // 初始化搜索时间为近一周
         initSearchTime() {
             let lastWeek = this.serverTime.getTime() - 7 * 24 * 3600 * 1000
@@ -767,7 +750,7 @@ export default {
                 }
             })
         },
-        //绑定和更改邮箱
+        // 绑定和更改邮箱
         toBindEmail() {
             let reg = /^[0-9A-Za-z][\.-_0-9A-Za-z]*@[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)+$/
             if (!reg.test(this.email)) {
@@ -791,7 +774,7 @@ export default {
                 })
             }
         },
-        //绑定和更改手机号
+        // 绑定和更改手机号
         toBindPhone() {
             if (!this.beforeSendVerification()) return
             if (!this.beforeBindPhone()) return
@@ -812,8 +795,8 @@ export default {
                     this.$axios.put(`/payment/mc/v2/merchantinfomc/modifyPhone?phone=${countryPhone}`).then(res => {
                         if (res.data.code == 0) {
                             callback && callback()
-                            this.canSend = false
-                            this.canSendTime = 60
+                            this.canSend = true
+                            this.canSendTime = 0
                         }
                     })
                 } else {
@@ -836,8 +819,8 @@ export default {
                     this.phoneNum = ''
                     this.current = 4
                     this.verification = ''
-                    this.canSend = false
-                    this.canSendTime = 60
+                    this.canSend = true
+                    this.canSendTime = 0
                     this.countryPrefix = ''
                 } else {
                     this.$Modal.warning({
@@ -907,24 +890,26 @@ export default {
             if (!this.beforeSendVerification()) return
             this.$axios.post(`payment/mc/v2/merchantinfomc/send-verify-code?phone=${this.phoneNum}`).then(res => {
                 if (res.data.code == 0) {
-                    this.canSend = true
+                    this.canSend = false
                     this.$Modal.success({
                         title: this.$L.account.later_reapply
                     })
-                    let startTime = this.serverTime.getTime()
-                    let endTime = this.serverTime.getTime() + 60 * 1000
+                    this.endTime = new Date().getTime() + 60 * 1000
                     this.timer = setInterval(() => {
-                        if (this.canSendTime <= 0) {
+                        this.startTime = null
+                        this.startTime = new Date().getTime()
+                        if (this.endTime <= this.startTime ) {
                             clearInterval(this.timer)
-                            this.canSend = false
-                            this.canSendTime = 60
+                            this.canSend = true
                             return
                         }
-                        this.canSendTime--
-                    }, 1000)
+                        this.mistming -= 15
+                        this.canSendTime = Math.floor(this.mistming / 1000)
+                    }, 15)
                 }
             })
         },
+        // Modal 取消事件
         cancel(model) {
             switch (model) {
                 case 'showChangePhoneModal':
@@ -1151,6 +1136,7 @@ export default {
                     })
             }
         },
+        // 申请退款接口
         toRefund() {
             this.cancel('showMsgModal')
             this.$axios
@@ -1175,7 +1161,7 @@ export default {
                     }
                 })
         },
-        // 申请退款接口
+        // 确认退款金额
         makeSure() {
             let reg = /^\d{6}$/
             if (this.refundAmount == 0) {
@@ -1249,7 +1235,14 @@ export default {
                 }
             })
             return s
-        }
+        },
+        handleChange(date) {
+            if (date[0] != '' && date[0] != '') {
+                this.range = ''
+            } else {
+                this.range = 1
+            }
+        },
     },
     watch: {
         orderNum1() {
@@ -1278,14 +1271,14 @@ export default {
         },
         range(val) {
             if (val) {
-                this.dateCollect[0] = ''
-                this.dateCollect[1] = ''
+                this.dateCollect = []
             }
         }
     },
     computed: {
         tableData1() {
             this.tableDataAll1.forEach(ele => {
+                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
                 switch (ele.state) {
                     case '1':
                         ele.stateShow = this.$L.record.notpay
@@ -1297,7 +1290,11 @@ export default {
                         break
                     case '3':
                         ele.stateShow = this.$L.record.success
-                        ele.operation = this.$L.record.refund
+                        if(ele.amount > ele.refundedAmount){
+                            ele.operation = this.$L.record.refund
+                        }else {
+                            ele.operation = this.$L.record.nonrefundable
+                        }
                         break
                     case '4':
                         ele.stateShow = this.$L.record.fail
@@ -1308,13 +1305,13 @@ export default {
                         ele.operation = this.$L.record.nonrefundable
                         break
                 }
-                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
             })
             let tmp = this.tableDataAll1.slice((this.pageIndex1 - 1) * this.pageSize1, this.pageIndex1 * this.pageSize1)
             return tmp
         },
         tableData2() {
             this.tableDataAll2.forEach(ele => {
+                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
                 switch (ele.state) {
                     case '1':
                         ele.state = this.$L.refund.notrefund
@@ -1335,15 +1332,23 @@ export default {
                         ele.state = this.$L.refund.audit_fail
                         break
                 }
-                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
             })
             let tmp = this.tableDataAll2.slice((this.pageIndex2 - 1) * this.pageSize2, this.pageIndex2 * this.pageSize2)
             return tmp
+        },
+        mistming: {
+            get(){
+                let mm = this.endTime  - this.startTime
+                return mm > 0 ? mm : 0 
+            },
+            set(){
+
+            }
         }
     },
     filters: {
         getCountryName: function(cry) {
-            let s = countrys[0].name
+            let s = ''
             countrys.forEach(ele => {
                 if (ele.country == cry) {
                     s = ele.name
@@ -1352,7 +1357,7 @@ export default {
             return s
         },
         getCurrencySymbol(cry) {
-            let s = countrys[0].currencySymbol
+            let s = ''
             countrys.forEach(function(ele) {
                 if (ele.country == cry) {
                     s = ele.currencySymbol
@@ -1454,8 +1459,8 @@ export default {
     font-weight: 600;
     font-size: 15px;
 }
-.fontSize18{
-    font-size: 18px
+.fontSize18 {
+    font-size: 18px;
 }
 .hide {
     width: 1px;
