@@ -61,6 +61,7 @@
         "enter_refund_notice":"请输入退款通知Url",
         "application_list":"应用列表",
         "apiKey":"密钥：",
+        "appId":"appId：",
         "set_password":"设置交易密码",
         "change_password":"修改交易密码",
         "dealPassword":"交易密码：",

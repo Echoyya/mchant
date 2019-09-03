@@ -153,6 +153,7 @@
                                     {{$L.account.application_name}}{{item.name}}
                                     <Button type="primary" @click="createApiKey(item.id,index)" class="ml15" size="small">生成密钥</Button>
                                 </p>
+                                <p class="row mb15">{{$L.account.appId}}{{item.id}}</p>
                                 <p class="row mb15">{{$L.account.apiKey}}{{item.apiKey}}</p>
                                 <p class="row mb15">{{$L.account.wallet_account}}{{item.ewalletAccountNo}}</p>
                                 <p class="row mb15">{{$L.account.payment_notice}}{{item.payNotifyUrl}}</p>
