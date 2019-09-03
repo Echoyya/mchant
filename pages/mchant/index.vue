@@ -124,12 +124,6 @@
                                 </i-col>
                             </Row>
                             <Row class="mb15 lh32">
-                                <i-col span="6">{{$L.account.wallet_account}}</i-col>
-                                <i-col span="12">
-                                    <Input v-model="ewalletNo" :placeholder="$L.account.enter_wallet_account" class="w240" />
-                                </i-col>
-                            </Row>
-                            <Row class="mb15 lh32">
                                 <i-col span="6">{{$L.account.payment_notice}}</i-col>
                                 <i-col span="12">
                                     <Input v-model="payNotifyUrl" :placeholder="$L.account.enter_payment_notice" class="w240" />
@@ -155,7 +149,6 @@
                                 </p>
                                 <p class="row mb15">{{$L.account.appId}}{{item.id}}</p>
                                 <p class="row mb15">{{$L.account.apiKey}}{{item.apiKey}}</p>
-                                <p class="row mb15">{{$L.account.wallet_account}}{{item.ewalletAccountNo}}</p>
                                 <p class="row mb15">{{$L.account.payment_notice}}{{item.payNotifyUrl}}</p>
                                 <p class="row mb15">{{$L.account.refund_notice}}{{item.refundNotifyUrl}}</p>
                                 <p class="row mb15 fontStyle" v-if="!item.dealPassword" @click="showPasswordModal=true ; appIndex = index ">{{$L.account.set_password}}</p>

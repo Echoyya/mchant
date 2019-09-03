@@ -62,7 +62,7 @@
         "enter_refund_notice":"Please enter refund notice URL：",
         "application_list":"Application List",
         "apiKey":"apiKey：",
-        "appId":"appId",
+        "appId":"appId:",
         "set_password":"Set password",
         "change_password":"Change password",
         "dealPassword":"password：",
