@@ -203,18 +203,18 @@
         "withdraw_currency":"提现币种",
         "withdraw_limit":"提现额度",
         "withdraw_used_limit":"已使用提现额度",
-        "col_country":"国家名称",
+        "col_country":"国家",
         "col_trading_time_end":"交易时间",
         "col_currency":"货币符号",
         "col_merchan_number":"商户订单号",
-        "col_trading_time_start":"支付记录创建时间",
+        "col_trading_time_start":"支付创建时间",
         "col_trading_description":"交易描述",
         "col_platform_number":"支付平台订单号",
         "col_trading_number":"交易金额",
         "col_state":"状态",
         "col_application_id":"商户应用",
         "col_application_name":"商户应用名称",
-        "col_currency_name":"提现币种",
+        "col_currency_name":"货币符号",
         "col_currency_code":"币种代码",
         "col_available_amount":"提现额度",
         "col_used_amount":"已使用额度",
@@ -228,6 +228,7 @@
         "merchantLimit":"提现额度",
         "okay":"确定",
         "valid":"有效",
-        "Invalid":"无效"
+        "invalid":"无效",
+        "network_error":"网络异常，请稍后重试!"
     }
 }
