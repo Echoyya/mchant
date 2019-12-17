@@ -372,7 +372,7 @@
                             </Select>
                             <span>{{$L.record.order_status}}</span>
                             <Select v-model="cashOrderStauts" class="mr15 w160" :placeholder="$L.record.please_select">
-                                <Option v-for="item in orderStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in cashStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                             <Select v-model="cashOrderType" class="mr15 w160" :placeholder="$L.record.please_select">
                                 <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -475,8 +475,8 @@ export default {
             ],
             currentType: 1,
             pageSizeOpts: [10, 20, 30, 40, 50],
-            options:{
-                disabledDate (date) {
+            options: {
+                disabledDate(date) {
                     return date && date.valueOf() > Date.now()
                 }
             },
@@ -801,17 +801,17 @@ export default {
                 {
                     title: this.$L.withdraw.col_application_name,
                     align: 'center',
-                    key: 'merchantAppName',
+                    key: 'merchantAppName'
                 },
                 {
                     title: this.$L.withdraw.col_currency_name,
                     align: 'center',
-                    key: 'currencyName',
+                    key: 'currencyName'
                 },
                 {
                     title: this.$L.withdraw.col_currency_code,
                     align: 'center',
-                    key: 'currency',
+                    key: 'currency'
                 },
                 {
                     title: this.$L.withdraw.col_available_amount,
@@ -835,6 +835,36 @@ export default {
                             return h('div', [h('span', this.$L.withdraw.valid)])
                         }
                     }
+                }
+            ],
+            cashStautsList: [
+                {
+                    value: '0',
+                    label: this.$L.record.all
+                },
+                {
+                    value: '1',
+                    label: this.$L.withdraw.notwithdraw
+                },
+                {
+                    value: '2',
+                    label: this.$L.withdraw.withdrawing
+                },
+                {
+                    value: '3',
+                    label: this.$L.withdraw.success
+                },
+                {
+                    value: '4',
+                    label: this.$L.withdraw.fail
+                },
+                {
+                    value: '6',
+                    label: this.$L.withdraw.closed
+                },
+                {
+                    value: '7',
+                    label: this.$L.withdraw.revoked
                 }
             ]
         }
