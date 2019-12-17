@@ -37,10 +37,7 @@ module.exports = {
     /*
   ** Plugins to load before mounting the App
   */
-    plugins: [
-        { src: '~plugins/iview', ssr: true },
-        { src: '~plugins/axios', ssr: false }
-    ],
+    plugins: [{ src: '~plugins/iview', ssr: true }, { src: '~plugins/axios', ssr: false }],
 
     /*
   ** Nuxt.js modules
@@ -72,7 +69,7 @@ module.exports = {
         /*
     ** You can extend webpack config here
         */
-        publicPath: '/mchant/',
+        publicPath: '/mchres/',
         extend(config, ctx) {
             // Run ESLint on save
             if (ctx.isDev && ctx.isClient) {
