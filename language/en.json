@@ -210,7 +210,6 @@
         "col_state":"State",
         "col_application_id":"Merchant Application Id",
         "col_application_name":"Merchant Application Name",
-        "col_currency_name":"Currency",
         "col_currency_code":"Currency Code",
         "col_available_amount":"Available Amount",
         "col_used_amount":"Used Amount",

@@ -804,11 +804,6 @@ export default {
                     key: 'merchantAppName'
                 },
                 {
-                    title: this.$L.withdraw.col_currency_name,
-                    align: 'center',
-                    key: 'currencyName'
-                },
-                {
                     title: this.$L.withdraw.col_currency_code,
                     align: 'center',
                     key: 'currency'
@@ -1377,6 +1372,7 @@ export default {
                             } else {
                                 this.cashTableData = res.data.elements
                             }
+                            this.cashPageIndex = 1
                         }
                     })
                     .catch(() => {
