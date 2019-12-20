@@ -384,7 +384,7 @@
                             <DatePicker v-model="cashDate_start" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" :transfer="true"/>
                             <span>{{$L.record.trading_time_end}}</span>
                             <DatePicker v-model="cashDate_end" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" :transfer="true" />
-                            <Button type="primary" class="ml15" :loading="cashLoading" @click="searchOrder(4)">{{$L.record.search}}</Button>
+                            <Button type="primary" class="ml15" :loading="cashLoading" @click="searchCashOrder(1)">{{$L.record.search}}</Button>
                             <Button @click="downloadTableData(4)">{{$L.record.download}}</Button>
                             <Button type="primary" class="limit-btn" :loading="cashLimitLoading" @click="getCheckLimit">{{$L.withdraw.checkLimit}}</Button>
                         </div>
@@ -901,7 +901,7 @@ export default {
         this.summaryCountry = this.countryList[1].country
         this.initSearchTime()
         this.searchOrder(this.currentType)
-        this.searchOrder(4)
+        this.searchCashOrder(1)
     },
     methods: {
         // 初始化搜索时间为近一周
@@ -1254,7 +1254,7 @@ export default {
                 }
             })
         },
-        searchOrder(currentType, flag, callback) {
+        searchOrder(currentType) {
             if (currentType == 1) {
                 //支付交易记录
                 let upperCounteyCode = this.recordCountry == '-' ? '' : this.recordCountry.toUpperCase()
@@ -1341,47 +1341,48 @@ export default {
                             title: this.$L.withdraw.network_error
                         })
                     })
-            } else if (currentType == 4) {
-                let upperCounteyCode = this.cashCountry == '-' ? '' : this.cashCountry.toUpperCase()
-                let createTimeFrom = this.cashDate_start[0] != '' ? this.formatDate(this.cashDate_start[0]) : ''
-                let createTimeTo = this.cashDate_start[1] != '' ? this.formatDate(this.cashDate_start[1]) : ''
-                let withdrawTimeFrom = this.cashDate_end[0] != '' ? this.formatDate(this.cashDate_end[0]) : ''
-                let withdrawTimeTo = this.cashDate_end[1] != '' ? this.formatDate(this.cashDate_end[1]) : ''
-                let state = this.cashOrderStauts == '0' ? '' : this.cashOrderStauts
-                let pSize = flag && this.cashTotalElements ? this.cashTotalElements : this.cashPageSize
-                this.cashLoading = true
-                this.$axios
-                    .get(
-                        `/payment/mc/v2/order-cash-query?country=${upperCounteyCode}&state=${state}&withdrawOrderId=${this.cashTxNo}&withdrawSeqNo=${
-                            this.cashPayToken
-                        }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}&withdrawTimeFrom=${withdrawTimeFrom}&withdrawTimeTo=${withdrawTimeTo}&pageSize=${pSize}&pageIndex=${
-                            this.cashPageIndex
-                        }`
-                    )
-                    .then(res => {
-                        this.cashLoading = false
-                        if (res.data.totalElements >= 0) {
-                            this.cashTotalElements = res.data.totalElements
-                            res.data.elements.forEach(ele => {
-                                ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
-                                ele.stateShow = this.getCashState(ele.state)
-                            })
-                            if (flag) {
-                                this.cashTableDataAll = res.data.elements
-                                callback && callback()
-                            } else {
-                                this.cashTableData = res.data.elements
-                            }
-                            this.cashPageIndex = 1
-                        }
-                    })
-                    .catch(() => {
-                        this.cashLoading = false
-                        this.$Modal.warning({
-                            title: this.$L.withdraw.network_error
-                        })
-                    })
             }
+        },
+        searchCashOrder(pageIndex, flag, callback) {
+            this.cashPageIndex = pageIndex
+            let upperCounteyCode = this.cashCountry == '-' ? '' : this.cashCountry.toUpperCase()
+            let createTimeFrom = this.cashDate_start[0] != '' ? this.formatDate(this.cashDate_start[0]) : ''
+            let createTimeTo = this.cashDate_start[1] != '' ? this.formatDate(this.cashDate_start[1]) : ''
+            let withdrawTimeFrom = this.cashDate_end[0] != '' ? this.formatDate(this.cashDate_end[0]) : ''
+            let withdrawTimeTo = this.cashDate_end[1] != '' ? this.formatDate(this.cashDate_end[1]) : ''
+            let state = this.cashOrderStauts == '0' ? '' : this.cashOrderStauts
+            let pSize = flag && this.cashTotalElements ? this.cashTotalElements : this.cashPageSize
+            this.cashLoading = true
+            this.$axios
+                .get(
+                    `/payment/mc/v2/order-cash-query?country=${upperCounteyCode}&state=${state}&withdrawOrderId=${this.cashTxNo}&withdrawSeqNo=${
+                        this.cashPayToken
+                    }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}&withdrawTimeFrom=${withdrawTimeFrom}&withdrawTimeTo=${withdrawTimeTo}&pageSize=${pSize}&pageIndex=${
+                        this.cashPageIndex
+                    }`
+                )
+                .then(res => {
+                    this.cashLoading = false
+                    if (res.data.totalElements >= 0) {
+                        this.cashTotalElements = res.data.totalElements
+                        res.data.elements.forEach(ele => {
+                            ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
+                            ele.stateShow = this.getCashState(ele.state)
+                        })
+                        if (flag) {
+                            this.cashTableDataAll = res.data.elements
+                            callback && callback()
+                        } else {
+                            this.cashTableData = res.data.elements
+                        }
+                    }
+                })
+                .catch(() => {
+                    this.cashLoading = false
+                    this.$Modal.warning({
+                        title: this.$L.withdraw.network_error
+                    })
+                })
         },
         // 申请退款接口
         toRefund() {
@@ -1473,7 +1474,7 @@ export default {
                     })
                 }
             } else if (type == 4) {
-                this.searchOrder(4, 1, () => {
+                this.searchCashOrder(1, 1, () => {
                     if (this.cashTableDataAll.length > 0) {
                         this.$refs.table.exportCsv({
                             filename: this.$L.withdraw.withdraw_query,
@@ -1579,10 +1580,10 @@ export default {
             }
         },
         cashPageSize() {
-            this.searchOrder(4)
+            this.searchCashOrder(1)
         },
         cashPageIndex() {
-            this.searchOrder(4)
+            this.searchCashOrder(this.cashPageIndex)
         }
     },
     computed: {
