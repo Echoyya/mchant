@@ -882,22 +882,24 @@ export default {
         })
         // 获取国家
         this.countryList = countrys
-        this.countryList.unshift({
-            id: 0,
-            name: this.$L.record.select_country,
-            code: 'ALL',
-            createDate: 1544496672000,
-            updateDate: 1544496672000,
-            appFBConfigs: [],
-            country: '-',
-            onLine: true,
-            currencySymbol: '-',
-            currencyCode: '-',
-            portalStatus: true,
-            ottStatus: 0,
-            dvbStatus: 0,
-            phonePrefix: '-'
-        })
+        if(this.countryList[0].id){
+            this.countryList.unshift({
+                id: 0,
+                name: this.$L.record.select_country,
+                code: 'ALL',
+                createDate: 1544496672000,
+                updateDate: 1544496672000,
+                appFBConfigs: [],
+                country: '-',
+                onLine: true,
+                currencySymbol: '-',
+                currencyCode: '-',
+                portalStatus: true,
+                ottStatus: 0,
+                dvbStatus: 0,
+                phonePrefix: '-'
+            })
+        }
         this.summaryCountry = this.countryList[1].country
         this.initSearchTime()
         this.searchOrder(this.currentType)
