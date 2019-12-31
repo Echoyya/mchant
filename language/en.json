@@ -48,6 +48,7 @@
         "key_transaction":"Apply key and transaction password management",
         "add_application":"Add Application",
         "application_name":"application name：",
+        "secret_key":"generate apiKey",
         "enter_application_name":"Please enter an application name",
         "wallet_account":"wallet account：",
         "enter_wallet_account":"Please enter your wallet account",

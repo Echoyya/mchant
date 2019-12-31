@@ -141,11 +141,11 @@
                             </div>
                         </Modal>
                         <h3 class="fontbold ml15">{{$L.account.application_list}}</h3>
-                        <Row>
-                            <i-col span="8" class="appBorder mt15" v-for="(item, index) in merchantAppInfoDto" :key="index">
+                        <Row type="flex" justify="start" align="top" class="appBorder">
+                            <i-col span="8" class="mt15" v-for="(item, index) in merchantAppInfoDto" :key="index">
                                 <p class="row mb15 fontbold">
                                     {{$L.account.application_name}}{{item.name}}
-                                    <Button type="primary" @click="createApiKey(item.id,index)" class="ml15" size="small">生成密钥</Button>
+                                    <Button type="primary" @click="createApiKey(item.id,index)" class="ml15" size="small">{{$L.account.secret_key}}</Button>
                                 </p>
                                 <p class="row mb15">{{$L.account.appId}}{{item.id}}</p>
                                 <p class="row mb15">{{$L.account.apiKey}}{{item.apiKey}}</p>
@@ -378,6 +378,7 @@
                                 <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                             <Input v-model="cashOrderNum" :placeholder="$L.record.enter_order_number" class="w160" />
+                            <Button type="primary" class="ml15" :loading="cashLimitLoading" @click="getCheckLimit">{{$L.withdraw.checkLimit}}</Button>
                         </div>
                         <div class="mb15">
                             <span>{{$L.record.trading_time_start}}</span>
@@ -386,7 +387,7 @@
                             <DatePicker v-model="cashDate_end" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" :transfer="true" />
                             <Button type="primary" class="ml15" :loading="cashLoading" @click="searchCashOrder(1,'init')">{{$L.record.search}}</Button>
                             <Button @click="downloadTableData(4)">{{$L.record.download}}</Button>
-                            <Button type="primary" class="limit-btn" :loading="cashLimitLoading" @click="getCheckLimit">{{$L.withdraw.checkLimit}}</Button>
+                            
                         </div>
                         <Table border :columns="cashColumns" :data="cashTableData" :stripe="true" ref="table" />
                         <Page :total="cashTotalElements" :current="cashPageIndex" :page-size="cashPageSize" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="cashPageIndex = $event " @on-page-size-change="cashPageSize = $event" class="pageStyle" />
@@ -1766,8 +1767,9 @@ export default {
 .required {
     color: #f00;
 }
-.appBorder {
-    border-bottom: 1px solid #ccc;
+.appBorder .mt15:nth-child(n+4){
+    border-top: 1px solid #ccc;
+    padding-top:15px;
 }
 .phoneText {
     text-align: center;
@@ -1783,10 +1785,5 @@ export default {
     position: absolute;
     border: 0px;
     padding: 0px;
-}
-.limit-btn {
-    position: relative;
-    top: -25px;
-    left: 40px;
 }
 </style>

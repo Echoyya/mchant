@@ -48,6 +48,7 @@
         "key_transaction":"应用密钥及交易密码管理",
         "add_application":"添加应用",
         "application_name":"应用名称：",
+        "secret_key":"生成密钥",
         "enter_application_name":"请输入应用名称",
         "wallet_account":"钱包账号：",
         "enter_wallet_account":"请输入钱包账号",
