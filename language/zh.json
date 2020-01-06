@@ -37,21 +37,18 @@
         "next_step":"下一步",
         "binding_number_not_match":"绑定号码不匹配",
         "enter_old_verification":"请输入原手机号验证码",
-
-
         "email_address":"邮箱绑定",
         "merchant_name":"商户名称：",
         "email":"邮箱：",
         "enter_email":"请输入您的邮箱账号",
-
         "yesterday_summary":"昨日成功交易汇总（按国家）",
         "order_tota":"订单总金额：",
         "currency":"货币符号：",
         "success_frequency":"成功笔数：",
-
         "key_transaction":"应用密钥及交易密码管理",
         "add_application":"添加应用",
         "application_name":"应用名称：",
+        "secret_key":"生成密钥",
         "enter_application_name":"请输入应用名称",
         "wallet_account":"钱包账号：",
         "enter_wallet_account":"请输入钱包账号",
@@ -74,7 +71,6 @@
         "new_assword":"新交易密码：",
         "enter_new_dealPassword":"请输入新交易密码",
         "confirm_new_dealPassword":"确认新交易密码：",
-
         "correct_mailbox":"请输入正确的邮箱格式",
         "success":"操作成功",
         "password_6_digits":"密码为6位纯数字",
@@ -82,7 +78,6 @@
         "dealPassword_not_match":"原交易密码不匹配",
         "new_same_as_old":"新交易密码与原交易密码一致，请重新输入",
         "verification_4_digits":"验证码为4位纯数字",
-        
         "build_failed":"生成失败，请重试！"
 
     },
@@ -151,7 +146,6 @@
         "search":"搜索",
         "download":"下载",
         "refund_time":"申请退款时间：",
-
         "col_country":"国家",
         "col_merchan_number":"商户订单号",
         "col_platform_number":"支付平台订单号",
@@ -183,7 +177,6 @@
         "country":"国家：",
         "select_country":"选择国家",
         "search":"搜索",
-
         "col_currency":"货币符号",
         "col_paid_amount":"支付成功金额",
         "col_paid_number":"支付成功笔数",
@@ -204,5 +197,38 @@
         "customer_hotline":"客服热线：",
         "service_mailbox":"客服热线：",
         "hello":"您好"
+    },
+    "withdraw":{
+        "withdraw_query":"提现查询",
+        "application_name":"商户应用名称",
+        "withdraw_currency":"提现币种",
+        "withdraw_limit":"提现额度",
+        "withdraw_used_limit":"已使用提现额度",
+        "col_country":"国家",
+        "col_trading_time_end":"交易完成时间",
+        "col_currency":"货币符号",
+        "col_merchan_number":"商户订单号",
+        "col_trading_time_start":"订单创建时间",
+        "col_trading_description":"交易描述",
+        "col_platform_number":"支付平台订单号",
+        "col_trading_number":"交易金额",
+        "col_state":"状态",
+        "col_application_id":"商户应用",
+        "col_application_name":"商户应用名称",
+        "col_currency_code":"币种代码",
+        "col_available_amount":"提现额度",
+        "col_used_amount":"已使用额度",
+        "notwithdraw":"未提现",
+        "withdrawing":"提现中",
+        "success":"已提现",
+        "fail":"提现失败",
+        "closed":"关闭",
+        "revoked":"撤销",
+        "checkLimit":"查看提现额度",
+        "merchantLimit":"提现额度",
+        "okay":"确定",
+        "valid":"有效",
+        "invalid":"无效",
+        "network_error":"网络异常，请稍后重试!"
     }
 }

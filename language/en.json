@@ -23,7 +23,6 @@
         "choose_country":"Please choose the country",
         "enter_phone_number":"Please enter your phone number",
         "phone_least_six_digits":"The phone number should be at least 6 digits",
-
         "verification":"verification：",
         "send_verification":"Send Verification",
         "enter_verification":"Please enter the verification code",
@@ -38,21 +37,18 @@
         "next_step":"Next Step",
         "binding_number_not_match":"The binding number does not match",
         "enter_old_verification":"Please enter the original mobile phone number verification code",
-
-
         "email_address":"Email Address",
         "merchant_name":"Merchant Name：",
         "email":"Email：",
         "enter_email":"Please enter your email account",
-
         "yesterday_summary":"Successful transaction summary yesterday (by country)",
         "order_tota":"total amount of the order：",
         "currency":"currency：",
         "success_frequency":"Frequency of success：",
-
         "key_transaction":"Apply key and transaction password management",
         "add_application":"Add Application",
         "application_name":"application name：",
+        "secret_key":"generate apiKey",
         "enter_application_name":"Please enter an application name",
         "wallet_account":"wallet account：",
         "enter_wallet_account":"Please enter your wallet account",
@@ -75,7 +71,6 @@
         "new_assword":"new password：",
         "enter_new_dealPassword":"Please enter new password ",
         "confirm_new_dealPassword":"Confirm new password:",
-
         "correct_mailbox":"Please enter the correct mailbox",
         "success":"success",
         "password_6_digits":"The password is 6 pure digits",
@@ -83,7 +78,6 @@
         "dealPassword_not_match":"dealPassword do not match",
         "new_same_as_old":"The new password is the same as the original transaction password. Please re-enter it",
         "verification_4_digits":"The verification is 4 pure digits",
-
         "build_failed":"The build failed. Please try again!"
     },
     "record": {
@@ -116,7 +110,6 @@
         "no_entries_for_download":"No entries are available for download",
         "message":"message",
         "Are_you_sure_want_refund":"Are you sure you want a refund?",
-
         "col_country":"country",
         "col_trading_time_start":"trading start time",
         "col_trading_time_end":"trading cpmplete time",
@@ -133,7 +126,6 @@
         "refundable_amount":"The refundable amount shall not be greater than the refundable amount",
         "success_refund":"Success, Can be found in the refund record",
         "dealPassword_wrong":"deal password does not match",
-
         "all":"all",
         "notpay":"NOTPAY",
         "paying":"PAYING",
@@ -151,7 +143,6 @@
         "search":"search",
         "download":"download",
         "refund_time":"Refund application time",
-
         "col_country":"country",
         "col_merchan_number":"Merchant order number",
         "col_platform_number":"Payment platform order number",
@@ -162,7 +153,6 @@
         "col_done_time":"Refund time",
         "col_refund_remarks":"refund remarks",
         "col_state":"refund state",
-
         "all":"all",
         "notrefund":"NOTREFUND",
         "processing":"PROCESSING",
@@ -170,7 +160,6 @@
         "success":"SUCCESS",
         "closed":"CLOSED" ,
         "audit_fail":"AUDIT_FAIL",
-
         "ewallet":"EWALLET",
         "original":"ORIGINAL"
     },
@@ -183,7 +172,6 @@
         "country":"country：",
         "select_country":"Please select country",
         "search":"search",
-
         "col_currency":"currency",
         "col_paid_amount":"paid successful amount",
         "col_paid_number":"paid successful number",
@@ -205,6 +193,39 @@
         "customer_hotline":"Customer Hotline：",
         "service_mailbox":"Service Mailbox：",
         "hello":"Hello"
-        
+    },
+    "withdraw":{
+        "withdraw_query":"Withdrawal Query",
+        "application_name":"Application Name",
+        "withdraw_currency":"Withdrawal of currency",
+        "withdraw_limit":"Withdrawal limit amount",
+        "withdraw_used_limit":"The withdrawal limit has been used",
+        "col_country":"Country",
+        "col_trading_time_end":"trading cpmplete time",
+        "col_currency":"Currency",
+        "col_merchan_number":"Merchant order number",
+        "col_trading_time_start":"Trading start time",
+        "col_trading_description":"Trading description",
+        "col_platform_number":"Payment platform order number",
+        "col_trading_number":"Trading amount",
+        "col_state":"State",
+        "col_application_id":"Merchant Application Id",
+        "col_application_name":"Merchant Application Name",
+        "col_currency_code":"Currency Code",
+        "col_available_amount":"Available Amount",
+        "col_used_amount":"Used Amount",
+        "notwithdraw":"NOTWITHDRAW",
+        "withdrawing":"WITHDRAWING",
+        "success":"SUCCESS",
+        "fail":"FAIL",
+        "closed":"CLOSED",
+        "revoked":"REVOKED",
+        "checkLimit":"Check withdrawal limit",
+        "merchantLimit":"The withdrawal limit",
+        "okay":"OK",
+        "valid":"Valid",
+        "invalid":"Invalid",
+        "network_error":"Network exception, please try again later!"
+
     }
 }

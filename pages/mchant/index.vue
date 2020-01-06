@@ -141,11 +141,11 @@
                             </div>
                         </Modal>
                         <h3 class="fontbold ml15">{{$L.account.application_list}}</h3>
-                        <Row>
-                            <i-col span="8" class="appBorder mt15" v-for="(item, index) in merchantAppInfoDto" :key="index">
+                        <Row type="flex" justify="start" align="top" class="appBorder">
+                            <i-col span="8" class="mt15" v-for="(item, index) in merchantAppInfoDto" :key="index">
                                 <p class="row mb15 fontbold">
                                     {{$L.account.application_name}}{{item.name}}
-                                    <Button type="primary" @click="createApiKey(item.id,index)" class="ml15" size="small">生成密钥</Button>
+                                    <Button type="primary" @click="createApiKey(item.id,index)" class="ml15" size="small">{{$L.account.secret_key}}</Button>
                                 </p>
                                 <p class="row mb15">{{$L.account.appId}}{{item.id}}</p>
                                 <p class="row mb15">{{$L.account.apiKey}}{{item.apiKey}}</p>
@@ -228,27 +228,27 @@
                         <div v-show="currentType==1">
                             <div class="mb15">
                                 <span>{{$L.record.country}}</span>
-                                <Select v-model="country1" class="mr15 w160" :placeholder="$L.record.select_country">
+                                <Select v-model="recordCountry" class="mr15 w160" :placeholder="$L.record.select_country">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 8">{{ item.name }}</Option>
                                 </Select>
                                 <span>{{$L.record.order_status}}</span>
-                                <Select v-model="orderStauts1" class="mr15 w160" :placeholder="$L.record.please_select">
+                                <Select v-model="recordOrderStauts" class="mr15 w160" :placeholder="$L.record.please_select">
                                     <Option v-for="item in orderStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Select v-model="orderType1" class="mr15 w160" :placeholder="$L.record.please_select">
+                                <Select v-model="recordOrderType" class="mr15 w160" :placeholder="$L.record.please_select">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum1" :placeholder="$L.record.enter_order_number" class="w160" />
+                                <Input v-model="recordOrderNum" :placeholder="$L.record.enter_order_number" class="w160" />
                             </div>
                             <div class="mb15">
                                 <span>{{$L.record.trading_time_start}}</span>
-                                <DatePicker v-model="dateRecord_start" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" :transfer="true"/>
+                                <DatePicker v-model="recordDate_start" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" :transfer="true"/>
                                 <span>{{$L.record.trading_time_end}}</span>
-                                <DatePicker v-model="dateRecord_end" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" :transfer="true" />
-                                <Button type="primary" class="ml15" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
+                                <DatePicker v-model="recordDate_end" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" :transfer="true" />
+                                <Button type="primary" class="ml15" :loading="recordLoading" @click="searchOrder(currentType)">{{$L.record.search}}</Button>
                                 <Button @click="downloadTableData(1)">{{$L.record.download}}</Button>
                             </div>
-                            <Table border :columns="columns1" :data="tableData1" :stripe="true" ref="table" />
+                            <Table border :columns="recordColumns" :data="recordTableData" :stripe="true" ref="table" />
                             <Modal :title="$L.record.refund" v-model="showRefundModal" width="700" :closable="false" :mask-closable="false" :draggable="true">
                                 <Row class="mb15 lh32">
                                     <i-col span="6" class="tright">{{$L.record.application_name}}</i-col>
@@ -318,31 +318,31 @@
                                     <Button type="primary" @click="toRefund">{{$L.record.okay}}</Button>
                                 </div>
                             </Modal>
-                            <Page :total="tableDataAll1.length" :current="pageIndex1" :page-size="pageSize1" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex1 = $event " @on-page-size-change="pageSize1 = $event" class="pageStyle" />
+                            <Page :total="recordTableDataAll.length" :current="recordPageIndex" :page-size="recordPageSize" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="recordPageIndex = $event " @on-page-size-change="recordPageSize = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==2">
                             <div class="mb15">
                                 <span>{{$L.refund.country}}</span>
-                                <Select v-model="country2" class="mr15 w160" :placeholder="$L.refund.select_country">
+                                <Select v-model="refundCountry" class="mr15 w160" :placeholder="$L.refund.select_country">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 8">{{ item.name }}</Option>
                                 </Select>
                                 {{$L.refund.order_status}}
-                                <Select v-model="orderStauts2" class="mr15 w160" :placeholder="$L.refund.please_select">
+                                <Select v-model="refundOrderStauts" class="mr15 w160" :placeholder="$L.refund.please_select">
                                     <Option v-for="item in refundStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Select v-model="orderType2" class="mr15 w160" :placeholder="$L.refund.please_select">
+                                <Select v-model="refundOrderType" class="mr15 w160" :placeholder="$L.refund.please_select">
                                     <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Input v-model="orderNum2" :placeholder="$L.refund.enter_order_number" class="w160" />
+                                <Input v-model="refundOrderNum" :placeholder="$L.refund.enter_order_number" class="w160" />
                             </div>
                             <div class="mb15">
                                 {{$L.refund.refund_time}}
-                                <DatePicker v-model="dateRefund" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" :transfer="true" />
-                                <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
+                                <DatePicker v-model="refundDate" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.refund.start_end_dates" class="w240" :transfer="true" />
+                                <Button type="primary" class="search" :loading="refundLoading" @click="searchOrder(currentType)">{{$L.refund.search}}</Button>
                                 <Button @click="downloadTableData(2)">{{$L.refund.download}}</Button>
                             </div>
-                            <Table border :columns="columns2" :data="tableData2" :stripe="true" />
-                            <Page :total="tableDataAll2.length" :current="pageIndex2" :page-size="pageSize2" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="pageIndex2 = $event " @on-page-size-change="pageSize2 = $event" class="pageStyle" />
+                            <Table border :columns="refundColumns" :data="refundTableData" :stripe="true" />
+                            <Page :total="refundTableDataAll.length" :current="refundPageIndex" :page-size="refundPageSize" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="refundPageIndex = $event " @on-page-size-change="refundPageSize = $event" class="pageStyle" />
                         </div>
                         <div v-show="currentType==3">
                             <div class="mb15">
@@ -350,20 +350,56 @@
                                 <Button :type="range == '1'? 'primary':'default'" @click="range='1'" class="btn">{{$L.summary.nearly_week}}</Button>
                                 <Button :type="range == '2' ? 'primary':'default'" @click="range='2'" class="btn">{{$L.summary.nearly_month}}</Button>
                                 <Button :type="range == '3' ? 'primary':'default'" @click="range='3'" class="btn">{{$L.summary.nearly_three_months}}</Button>
-                                <DatePicker v-model="dateCollect" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)" :transfer="true"/>
+                                <DatePicker v-model="summaryDate" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.summary.start_end_dates" class="w240" @on-change="handleChange($event)" :transfer="true"/>
                             </div>
                             <div class="mb15">
                                 {{$L.summary.country}}
-                                <Select v-model="country3" class="mr15 w160" :placeholder="$L.summary.select_country">
+                                <Select v-model="summaryCountry" class="mr15 w160" :placeholder="$L.summary.select_country">
                                     <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 8 && item.id != 0">{{ item.name }}</Option>
                                 </Select>
-                                <Button type="primary" class="search" @click="searchOrder(currentType)">{{$L.summary.search}}</Button>
+                                <Button type="primary" class="search" :loading="summaryLoading" @click="searchOrder(currentType)">{{$L.summary.search}}</Button>
                             </div>
-                            <Table border :columns="columns3" :data="tableData3" :stripe="true" />
+                            <Table border :columns="summaryColumns" :data="summaryTableData" :stripe="true" />
                         </div>
                     </div>
                 </TabPane>
-            </Tabs>
+                <TabPane :label="$L.withdraw.withdraw_query">
+                    <div :bordered="false" :dis-hover="true" class="mCard mb15">
+                        <div class="mb15 ">
+                            <span>{{$L.record.country}}</span>
+                            <Select v-model="cashCountry" class="mr15 w160" :placeholder="$L.record.select_country">
+                                <Option v-for="item in countryList" :value="item.country" :key="item.value" v-if="item.id != 8">{{ item.name }}</Option>
+                            </Select>
+                            <span>{{$L.record.order_status}}</span>
+                            <Select v-model="cashOrderStauts" class="mr15 w160" :placeholder="$L.record.please_select">
+                                <Option v-for="item in cashStautsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                            <Select v-model="cashOrderType" class="mr15 w160" :placeholder="$L.record.please_select">
+                                <Option v-for="item in orderTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                            <Input v-model="cashOrderNum" :placeholder="$L.record.enter_order_number" class="w160" />
+                            <Button type="primary" class="ml15" :loading="cashLimitLoading" @click="getCheckLimit">{{$L.withdraw.checkLimit}}</Button>
+                        </div>
+                        <div class="mb15">
+                            <span>{{$L.record.trading_time_start}}</span>
+                            <DatePicker v-model="cashDate_start" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240 mr15" :transfer="true"/>
+                            <span>{{$L.record.trading_time_end}}</span>
+                            <DatePicker v-model="cashDate_end" :options="options" format="yyyy/MM/dd" type="daterange" placement="bottom-start" :placeholder="$L.record.start_end_dates" class="w240" :transfer="true" />
+                            <Button type="primary" class="ml15" :loading="cashLoading" @click="searchCashOrder(1,'init')">{{$L.record.search}}</Button>
+                            <Button @click="downloadTableData(4)">{{$L.record.download}}</Button>
+                            
+                        </div>
+                        <Table border :columns="cashColumns" :data="cashTableData" :stripe="true" ref="table" />
+                        <Page :total="cashTotalElements" :current="cashPageIndex" :page-size="cashPageSize" :transfer="true" show-sizer show-elevator :page-size-opts="pageSizeOpts" @on-change="cashPageIndex = $event " @on-page-size-change="cashPageSize = $event" class="pageStyle" />
+                        <Modal :title="$L.withdraw.merchantLimit" v-model="showCheckLimitModal" width="75%">
+                            <Table border :columns="cashLimitColumns" :data="cashLimitData" :stripe="true" ref="table" height="300"/>
+                            <div slot="footer">
+                                <Button type="primary" class="ml15" @click="showCheckLimitModal=false">{{$L.withdraw.okay}}</Button> 
+                            </div>
+                        </Modal>
+                    </div>
+                </TabPane>
+            </Tabs> 
         </div>
     </section>
 </template>
@@ -377,6 +413,34 @@ export default {
     },
     data() {
         return {
+            // 账户管理
+            tradeTotelYesterday: [], //昨日交易
+            merchantInfoDto: {}, //商户
+            merchantAppInfoDto: [], //商户应用列表
+            showAppModal: false,
+            showPhoneModal: false,
+            showEmailModal: false,
+            showPasswordModal: false,
+            showRePasswordModal: false,
+            appName: '',
+            ewalletNo: '',
+            payNotifyUrl: '',
+            refundNotifyUrl: '',
+            countryPrefix: '',
+            verification: '',
+            phoneNum: '',
+            email: '',
+            appIndex: '',
+            password: '',
+            newPassword: '',
+            repassword: '',
+            canSend: true,
+            current: 1,
+            canSendTime: 0,
+            endTime: 0,
+            startTime: 0,
+            timer: null,
+
             countryList: [],
             orderStautsList: [
                 {
@@ -400,28 +464,6 @@ export default {
                     label: this.$L.record.fail
                 }
             ],
-            refundStautsList: [
-                {
-                    value: '0',
-                    label: this.$L.refund.all
-                },
-                {
-                    value: '1',
-                    label: this.$L.refund.notrefund
-                },
-                {
-                    value: '4',
-                    label: this.$L.refund.fail
-                },
-                {
-                    value: '5',
-                    label: this.$L.refund.success
-                },
-                {
-                    value: '11',
-                    label: this.$L.refund.audit_fail
-                }
-            ],
             orderTypeList: [
                 {
                     label: this.$L.refund.col_platform_number,
@@ -432,41 +474,27 @@ export default {
                     value: 2
                 }
             ],
-            refundTypeList: [
-                {
-                    label: this.$L.refund.ewallet,
-                    value: 'EWALLET'
-                },
-                {
-                    label: this.$L.refund.original,
-                    value: 'ORIGINAL'
-                }
-            ],
-            range: '1',
             currentType: 1,
-            country1: '-',
-            country2: '-',
-            country3: '',
-            orderStauts1: '0',
-            orderStauts2: '0',
-            orderType1: 1,
-            orderType2: 1,
-            orderNum1: '',
-            orderNum2: '',
-            txNo1: '', //商户订单号
-            txNo2: '',
-            payToken1: '', //支付平台订单号
-            payToken2: '',
-            dateRecord_start: [],
-            dateRecord_end: [],
-            dateRefund: [],
-            dateCollect: [],
-            refundAmount: 0,
-            refundNote: '',
-            refundType: 'EWALLET',
-            dealPassword: '',
-            refundObj: {},
-            columns1: [
+            pageSizeOpts: [10, 20, 30, 40, 50],
+            options: {
+                disabledDate(date) {
+                    return date && date.valueOf() > Date.now()
+                }
+            },
+
+            // 交易查询
+            recordCountry: '-',
+            recordOrderStauts: '0',
+            recordOrderType: 1,
+            recordOrderNum: '',
+            recordTxNo: '', //商户订单号
+            recordPayToken: '', //支付平台订单号
+            recordDate_start: [],
+            recordDate_end: [],
+            recordTableDataAll: [],
+            recordPageIndex: 1,
+            recordPageSize: 10,
+            recordColumns: [
                 {
                     title: this.$L.record.col_country,
                     align: 'center',
@@ -520,7 +548,7 @@ export default {
                     align: 'center',
                     render: (h, params) => {
                         let item = params.row
-                        if (item.state == '3' && (item.amount - item.refundedAmount) > 0) {
+                        if (item.state == '3' && item.amount - item.refundedAmount > 0) {
                             return h('div', [
                                 h(
                                     'a',
@@ -554,7 +582,28 @@ export default {
                     }
                 }
             ],
-            columns2: [
+            showRefundModal: false,
+            showMsgModal: false,
+            recordLoading: false,
+
+            // 退款记录
+            refundCountry: '-',
+            refundOrderStauts: '0',
+            refundOrderType: 1,
+            refundOrderNum: '',
+            refundTxNo: '',
+            refundPayToken: '',
+            refundDate: [],
+            refundAmount: 0,
+            refundNote: '',
+            refundType: 'EWALLET',
+            dealPassword: '',
+            refundObj: {},
+            refundTableDataAll: [],
+            refundPageIndex: 1,
+            refundPageSize: 10,
+            refundLoading: false,
+            refundColumns: [
                 {
                     title: this.$L.refund.col_country,
                     align: 'center',
@@ -607,7 +656,45 @@ export default {
                     key: 'state'
                 }
             ],
-            columns3: [
+            refundStautsList: [
+                {
+                    value: '0',
+                    label: this.$L.refund.all
+                },
+                {
+                    value: '1',
+                    label: this.$L.refund.notrefund
+                },
+                {
+                    value: '4',
+                    label: this.$L.refund.fail
+                },
+                {
+                    value: '5',
+                    label: this.$L.refund.success
+                },
+                {
+                    value: '11',
+                    label: this.$L.refund.audit_fail
+                }
+            ],
+            refundTypeList: [
+                {
+                    label: this.$L.refund.ewallet,
+                    value: 'EWALLET'
+                },
+                {
+                    label: this.$L.refund.original,
+                    value: 'ORIGINAL'
+                }
+            ],
+            // 交易汇总
+            summaryCountry: '',
+            range: '1',
+            summaryDate: [],
+            summaryTableData: [],
+            summaryLoading: false,
+            summaryColumns: [
                 {
                     title: this.$L.summary.col_currency,
                     align: 'center',
@@ -640,42 +727,142 @@ export default {
                     key: 'netAmount'
                 }
             ],
-            tableDataAll1: [],
-            tableDataAll2: [],
-            tableData3: [],
-            tradeTotelYesterday: [], //昨日交易
-            merchantInfoDto: {}, //商户
-            merchantAppInfoDto: [], //商户应用列表
-            showAppModal: false,
-            showRefundModal: false,
-            showPhoneModal: false,
-            showEmailModal: false,
-            showPasswordModal: false,
-            showRePasswordModal: false,
-            showMsgModal: false,
-            appName: '',
-            ewalletNo: '',
-            payNotifyUrl: '',
-            refundNotifyUrl: '',
-            pageSizeOpts: [10, 20, 30, 40, 50],
-            pageIndex1: 1,
-            pageIndex2: 1,
-            pageSize1: 10,
-            pageSize2: 10,
-            countryPrefix: '',
-            verification: '',
-            phoneNum: '',
-            email: '',
-            appIndex: '',
-            password: '',
-            newPassword: '',
-            repassword: '',
-            canSend: true,
-            current: 1,
-            canSendTime: 0,
-            endTime:0,
-            startTime:0,
-            timer: null
+            // 提现查询
+            cashCountry: '-',
+            cashOrderStauts: '0',
+            cashOrderType: 1,
+            cashOrderNum: '',
+            cashTxNo: '',
+            cashPayToken: '',
+            cashDate_end: [], // 交易时间
+            cashDate_start: [], // 订单创建时间
+            cashTableData: [],
+            cashTableDataAll: [],
+            cashLimitData: [],
+            cashPageIndex: 1,
+            cashPageSize: 10,
+            cashTotalElements: 0,
+            showCheckLimitModal: false,
+            cashLoading: false,
+            cashLimitLoading: false,
+            cashColumns: [
+                {
+                    title: this.$L.withdraw.col_country,
+                    align: 'center',
+                    key: 'countrySpelling'
+                },
+                {
+                    title: this.$L.withdraw.col_trading_time_start,
+                    align: 'center',
+                    key: 'createTime'
+                },
+                {
+                    title: this.$L.withdraw.col_trading_time_end,
+                    align: 'center',
+                    key: 'withdrawTime'
+                },
+                {
+                    title: this.$L.withdraw.col_merchan_number,
+                    align: 'center',
+                    key: 'withdrawOrderId'
+                },
+                {
+                    title: this.$L.withdraw.col_platform_number,
+                    align: 'center',
+                    width: 180,
+                    key: 'withdrawSeqNo'
+                },
+                {
+                    title: this.$L.withdraw.col_trading_number,
+                    align: 'center',
+                    key: 'amount'
+                },
+                {
+                    title: this.$L.withdraw.col_currency,
+                    align: 'center',
+                    key: 'currency'
+                },
+                {
+                    title: this.$L.withdraw.col_trading_description,
+                    align: 'center',
+                    key: 'withdrawNote'
+                },
+                {
+                    title: this.$L.withdraw.col_state,
+                    align: 'center',
+                    key: 'stateShow'
+                }
+            ],
+            cashLimitColumns: [
+                {
+                    title: this.$L.withdraw.col_application_id,
+                    align: 'center',
+                    key: 'merchantAppId'
+                },
+                {
+                    title: this.$L.withdraw.col_application_name,
+                    align: 'center',
+                    key: 'merchantAppName'
+                },
+                {
+                    title: this.$L.withdraw.col_currency_code,
+                    align: 'center',
+                    key: 'currency'
+                },
+                {
+                    title: this.$L.withdraw.col_available_amount,
+                    align: 'center',
+                    key: 'availableAmount'
+                },
+                {
+                    title: this.$L.withdraw.col_used_amount,
+                    align: 'center',
+                    key: 'usedAmount'
+                },
+                {
+                    title: this.$L.withdraw.col_state,
+                    key: 'state',
+                    align: 'center',
+                    render: (h, params) => {
+                        let item = params.row
+                        if (item.state == '0') {
+                            return h('div', [h('span', this.$L.withdraw.invalid)])
+                        } else {
+                            return h('div', [h('span', this.$L.withdraw.valid)])
+                        }
+                    }
+                }
+            ],
+            cashStautsList: [
+                {
+                    value: '0',
+                    label: this.$L.record.all
+                },
+                {
+                    value: '1',
+                    label: this.$L.withdraw.notwithdraw
+                },
+                {
+                    value: '2',
+                    label: this.$L.withdraw.withdrawing
+                },
+                {
+                    value: '3',
+                    label: this.$L.withdraw.success
+                },
+                {
+                    value: '4',
+                    label: this.$L.withdraw.fail
+                },
+                {
+                    value: '6',
+                    label: this.$L.withdraw.closed
+                },
+                {
+                    value: '7',
+                    label: this.$L.withdraw.revoked
+                }
+            ]
         }
     },
     mounted() {
@@ -696,34 +883,39 @@ export default {
         })
         // 获取国家
         this.countryList = countrys
-        this.countryList.unshift({
-            id: 0,
-            name: this.$L.record.select_country,
-            code: 'ALL',
-            createDate: 1544496672000,
-            updateDate: 1544496672000,
-            appFBConfigs: [],
-            country: '-',
-            onLine: true,
-            currencySymbol: '-',
-            currencyCode: '-',
-            portalStatus: true,
-            ottStatus: 0,
-            dvbStatus: 0,
-            phonePrefix: '-'
-        })
-        this.country3 = this.countryList[1].country
+        if(this.countryList[0].id){
+            this.countryList.unshift({
+                id: 0,
+                name: this.$L.record.select_country,
+                code: 'ALL',
+                createDate: 1544496672000,
+                updateDate: 1544496672000,
+                appFBConfigs: [],
+                country: '-',
+                onLine: true,
+                currencySymbol: '-',
+                currencyCode: '-',
+                portalStatus: true,
+                ottStatus: 0,
+                dvbStatus: 0,
+                phonePrefix: '-'
+            })
+        }
+        this.summaryCountry = this.countryList[1].country
         this.initSearchTime()
         this.searchOrder(this.currentType)
+        this.searchCashOrder(1, 'init')
     },
     methods: {
         // 初始化搜索时间为近一周
         initSearchTime() {
             let lastWeek = this.serverTime.getTime() - 7 * 24 * 3600 * 1000
-            this.dateRecord_start[0] = this.formatDate(lastWeek)
-            this.dateRecord_start[1] = this.formatDate(this.serverTime)
-            this.dateRefund[0] = this.formatDate(lastWeek)
-            this.dateRefund[1] = this.formatDate(this.serverTime)
+            this.recordDate_start[0] = this.formatDate(lastWeek)
+            this.recordDate_start[1] = this.formatDate(this.serverTime)
+            this.refundDate[0] = this.formatDate(lastWeek)
+            this.refundDate[1] = this.formatDate(this.serverTime)
+            this.cashDate_start[0] = this.formatDate(lastWeek)
+            this.cashDate_start[1] = this.formatDate(this.serverTime)
         },
         // 获取商户
         getMerchantInfoDto() {
@@ -892,7 +1084,7 @@ export default {
                     this.timer = setInterval(() => {
                         this.startTime = null
                         this.startTime = new Date().getTime()
-                        if (this.endTime <= this.startTime ) {
+                        if (this.endTime <= this.startTime) {
                             clearInterval(this.timer)
                             this.canSend = true
                             return
@@ -1068,67 +1260,136 @@ export default {
         searchOrder(currentType) {
             if (currentType == 1) {
                 //支付交易记录
-                let upperCounteyCode = this.country1 == '-' ? '' : this.country1.toUpperCase()
-                let createTimeFrom = this.dateRecord_start[0] != '' ? this.formatDate(this.dateRecord_start[0]) : ''
-                let createTimeTo = this.dateRecord_start[1] != '' ? this.formatDate(this.dateRecord_start[1]) : ''
-                let payEndTimeFrom = this.dateRecord_end[0] != '' ? this.formatDate(this.dateRecord_end[0]) : ''
-                let payEndTimeTo = this.dateRecord_end[1] != '' ? this.formatDate(this.dateRecord_end[1]) : ''
+                let upperCounteyCode = this.recordCountry == '-' ? '' : this.recordCountry.toUpperCase()
+                let createTimeFrom = this.recordDate_start[0] != '' ? this.formatDate(this.recordDate_start[0]) : ''
+                let createTimeTo = this.recordDate_start[1] != '' ? this.formatDate(this.recordDate_start[1]) : ''
+                let payEndTimeFrom = this.recordDate_end[0] != '' ? this.formatDate(this.recordDate_end[0]) : ''
+                let payEndTimeTo = this.recordDate_end[1] != '' ? this.formatDate(this.recordDate_end[1]) : ''
+                this.recordLoading = true
                 this.$axios
                     .post(
-                        `payment/mc/v2/order-pay-bills?country=${upperCounteyCode}&state=${this.orderStauts1}&txNo=${this.txNo1}&payToken=${
-                            this.payToken1
+                        `payment/mc/v2/order-pay-bills?country=${upperCounteyCode}&state=${this.recordOrderStauts}&txNo=${this.recordTxNo}&payToken=${
+                            this.recordPayToken
                         }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}&payEndTimeFrom=${payEndTimeFrom}&payEndTimeTo=${payEndTimeTo}`
                     )
                     .then(res => {
+                        this.recordLoading = false
                         if (res.data.resultCode == 'SUCCESS') {
-                            this.tableDataAll1 = res.data.orderPayBills
-                            this.tableDataAll1.forEach(ele => {
+                            this.recordTableDataAll = res.data.orderPayBills
+                            this.recordTableDataAll.forEach(ele => {
                                 ele.currency = this.formatCurrencySymbol(ele.country)
                             })
-                            this.pageIndex1 = 1
+                            this.recordPageIndex = 1
                         }
+                    })
+                    .catch(() => {
+                        this.recordLoading = false
+                        this.$Modal.warning({
+                            title: this.$L.withdraw.network_error
+                        })
                     })
             } else if (currentType == 2) {
                 //退款记录查询
-                let upperCounteyCode = this.country2 == '-' ? '' : this.country2.toUpperCase()
-                let applyRefundTimeFrom = this.dateRefund[0] != '' ? this.formatDate(this.dateRefund[0]) : ''
-                let applyRefundTimeTo = this.dateRefund[1] != '' ? this.formatDate(this.dateRefund[1]) : ''
+                let upperCounteyCode = this.refundCountry == '-' ? '' : this.refundCountry.toUpperCase()
+                let applyRefundTimeFrom = this.refundDate[0] != '' ? this.formatDate(this.refundDate[0]) : ''
+                let applyRefundTimeTo = this.refundDate[1] != '' ? this.formatDate(this.refundDate[1]) : ''
+                this.refundLoading = true
                 this.$axios
                     .post(
-                        `/payment/mc/v2/refund/find-refund-bill?country=${upperCounteyCode}&state=${this.orderStauts2}&txNo=${this.txNo2}&payToken=${
-                            this.payToken2
-                        }&applyRefundTimeFrom=${applyRefundTimeFrom}&applyRefundTimeTo=${applyRefundTimeTo}`
+                        `/payment/mc/v2/refund/find-refund-bill?country=${upperCounteyCode}&state=${this.refundOrderStauts}&txNo=${
+                            this.refundTxNo
+                        }&payToken=${this.refundPayToken}&applyRefundTimeFrom=${applyRefundTimeFrom}&applyRefundTimeTo=${applyRefundTimeTo}`
                     )
                     .then(res => {
+                        this.refundLoading = false
                         if (res.data.resultCode == 'SUCCESS') {
-                            this.tableDataAll2 = res.data.refundBills
-                            this.tableDataAll2.forEach(ele => {
+                            this.refundTableDataAll = res.data.refundBills
+                            this.refundTableDataAll.forEach(ele => {
                                 ele.currency = this.formatCurrencySymbol(ele.country)
                             })
-                            this.pageIndex2 = 1
+                            this.refundPageIndex = 1
                         }
+                    })
+                    .catch(() => {
+                        this.refundLoading = false
+                        this.$Modal.warning({
+                            title: this.$L.withdraw.network_error
+                        })
                     })
             } else if (currentType == 3) {
                 //交易汇总查询
-                this.tableData3 = []
-                let createTimeFrom = this.dateCollect[0] != '' ? this.formatDate(this.dateCollect[0]) : ''
-                let createTimeTo = this.dateCollect[1] != '' ? this.formatDate(this.dateCollect[1]) : ''
+                this.summaryTableData = []
+                let createTimeFrom = this.summaryDate[0] != '' ? this.formatDate(this.summaryDate[0]) : ''
+                let createTimeTo = this.summaryDate[1] != '' ? this.formatDate(this.summaryDate[1]) : ''
+                this.summaryLoading = true
                 this.$axios
                     .post(
-                        `/payment/mc/v2/static-order-pay-bills?country=${this.country3}&range=${
+                        `/payment/mc/v2/static-order-pay-bills?country=${this.summaryCountry}&range=${
                             this.range
                         }&createTimeFrom=${createTimeFrom}&createTimeTo=${createTimeTo}`
                     )
                     .then(res => {
+                        this.summaryLoading = false
                         if (res.data.resultCode == 'SUCCESS') {
-                            this.tableData3 = []
-                            this.tableData3.push(res.data)
-                            this.tableData3.forEach(ele => {
-                                ele.currency = this.formatCurrencySymbol(this.country3)
+                            this.summaryTableData = []
+                            this.summaryTableData.push(res.data)
+                            this.summaryTableData.forEach(ele => {
+                                ele.currency = this.formatCurrencySymbol(this.summaryCountry)
                             })
                         }
                     })
+                    .catch(() => {
+                        this.summaryLoading = false
+                        this.$Modal.warning({
+                            title: this.$L.withdraw.network_error
+                        })
+                    })
             }
+        },
+        searchCashOrder(pageIndex, isInit, isDownload, callback) {
+            if (isInit) {
+                this.upperCounteyCode = this.cashCountry == '-' ? '' : this.cashCountry.toUpperCase()
+                this.state = this.cashOrderStauts == '0' ? '' : this.cashOrderStauts
+                this.txNo = this.cashTxNo
+                this.paytoken = this.cashPayToken
+
+                this.createTimeFrom = this.cashDate_start[0] != '' ? this.formatDate(this.cashDate_start[0]) : ''
+                this.createTimeTo = this.cashDate_start[1] != '' ? this.formatDate(this.cashDate_start[1]) : ''
+                this.withdrawTimeFrom = this.cashDate_end[0] != '' ? this.formatDate(this.cashDate_end[0]) : ''
+                this.withdrawTimeTo = this.cashDate_end[1] != '' ? this.formatDate(this.cashDate_end[1]) : ''
+            }
+            let pSize = isDownload && this.cashTotalElements ? this.cashTotalElements : this.cashPageSize
+            this.cashLoading = true
+            this.$axios
+                .get(
+                    `/payment/mc/v2/order-cash-query?country=${this.upperCounteyCode}&state=${this.state}&withdrawOrderId=${
+                        this.txNo
+                    }&withdrawSeqNo=${this.paytoken}&createTimeFrom=${this.createTimeFrom}&createTimeTo=${this.createTimeTo}&withdrawTimeFrom=${
+                        this.withdrawTimeFrom
+                    }&withdrawTimeTo=${this.withdrawTimeTo}&pageSize=${pSize}&pageIndex=${pageIndex}`
+                )
+                .then(res => {
+                    this.cashLoading = false
+                    if (res.data.totalElements >= 0) {
+                        this.cashTotalElements = res.data.totalElements
+                        res.data.elements.forEach(ele => {
+                            ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
+                            ele.stateShow = this.getCashState(ele.state)
+                        })
+                        if (isDownload) {
+                            this.cashTableDataAll = res.data.elements
+                            callback && callback()
+                        } else {
+                            this.cashTableData = res.data.elements
+                        }
+                    }
+                })
+                .catch(() => {
+                    this.cashLoading = false
+                    this.$Modal.warning({
+                        title: this.$L.withdraw.network_error
+                    })
+                })
         },
         // 申请退款接口
         toRefund() {
@@ -1196,11 +1457,11 @@ export default {
         // 下载
         downloadTableData(type) {
             if (type == 1) {
-                if (this.tableDataAll1.length > 0) {
+                if (this.recordTableDataAll.length > 0) {
                     this.$refs.table.exportCsv({
                         filename: this.$L.record.trading_record,
-                        columns: this.columns1,
-                        data: this.tableDataAll1
+                        columns: this.recordColumns,
+                        data: this.recordTableDataAll
                     })
                 } else {
                     this.$Modal.warning({
@@ -1208,19 +1469,34 @@ export default {
                     })
                 }
             } else if (type == 2) {
-                if (this.tableDataAll2.length > 0) {
+                if (this.refundTableDataAll.length > 0) {
                     this.$refs.table.exportCsv({
                         filename: this.$L.record.refund_record,
-                        columns: this.columns2,
-                        data: this.tableDataAll2
+                        columns: this.refundColumns,
+                        data: this.refundTableDataAll
                     })
                 } else {
                     this.$Modal.warning({
                         title: this.$L.record.no_entries_for_download
                     })
                 }
+            } else if (type == 4) {
+                this.searchCashOrder(1, '', 'down', () => {
+                    if (this.cashTableDataAll.length > 0) {
+                        this.$refs.table.exportCsv({
+                            filename: this.$L.withdraw.withdraw_query,
+                            columns: this.cashColumns,
+                            data: this.cashTableDataAll
+                        })
+                    } else {
+                        this.$Modal.warning({
+                            title: this.$L.record.no_entries_for_download
+                        })
+                    }
+                })
             }
         },
+        downloadCashData() {},
         formatCurrencySymbol(cry) {
             let s = countrys[1].currencySymbol
             countrys.forEach(function(ele) {
@@ -1237,41 +1513,89 @@ export default {
                 this.range = 1
             }
         },
+        getCheckLimit() {
+            this.cashLimitLoading = true
+            this.$axios
+                .get(`/payment/mc/v2/merchant-quota-query`)
+                .then(res => {
+                    this.showCheckLimitModal = true
+                    this.cashLimitLoading = false
+                    if (res.data && res.data.length > 0) {
+                        res.data.forEach(ele => {
+                            ele.currencySymbol = this.formatCurrencySymbol(ele.country)
+                        })
+                        this.cashLimitData = res.data
+                    }
+                })
+                .catch(() => {
+                    this.cashLimitLoading = false
+                    this.$Modal.warning({
+                        title: this.$L.withdraw.network_error
+                    })
+                })
+        },
+        getCashState(state) {
+            let tmp = ''
+            switch (state) {
+                case 1:
+                    tmp = this.$L.withdraw.notwithdraw
+                    break
+                case 2:
+                    tmp = this.$L.withdraw.withdrawing
+                    break
+                case 3:
+                    tmp = this.$L.withdraw.success
+                    break
+                case 4:
+                    tmp = this.$L.withdraw.fail
+                    break
+                case 6:
+                    tmp = this.$L.withdraw.closed
+                    break
+                case 7:
+                    tmp = this.$L.withdraw.revoked
+                    break
+            }
+            return tmp
+        }
     },
     watch: {
-        orderNum1() {
-            if (this.orderType1 == 1) {
-                this.payToken1 = this.orderNum1
-                this.txNo1 = ''
-            } else {
-                this.txNo1 = this.orderNum1
-                this.payToken1 = ''
-            }
+        recordOrderNum() {
+            this.recordPayToken = this.recordOrderType == 1 ? this.recordOrderNum : ''
+            this.recordTxNo = this.recordOrderType == 2 ? this.recordOrderNum : ''
         },
-        orderNum2() {
-            if (this.orderType2 == 1) {
-                this.payToken2 = this.orderNum2
-                this.txNo2 = ''
-            } else {
-                this.txNo2 = this.orderNum2
-                this.payToken2 = ''
-            }
+        refundOrderNum() {
+            this.refundPayToken = this.refundOrderType == 1 ? this.refundOrderNum : ''
+            this.refundTxNo = this.refundOrderType == 2 ? this.refundOrderNum : ''
         },
-        orderType1() {
-            this.orderNum1 = ''
+        cashOrderNum() {
+            this.cashPayToken = this.cashOrderType == 1 ? this.cashOrderNum : ''
+            this.cashTxNo = this.cashOrderType == 2 ? this.cashOrderNum : ''
         },
-        orderType2() {
-            this.orderNum2 = ''
+        recordOrderType() {
+            this.recordOrderNum = ''
+        },
+        refundOrderType() {
+            this.refundOrderNum = ''
+        },
+        cashOrderType() {
+            this.cashOrderNum = ''
         },
         range(val) {
             if (val) {
-                this.dateCollect = []
+                this.summaryDate = []
             }
+        },
+        cashPageSize() {
+            this.searchCashOrder(1)
+        },
+        cashPageIndex() {
+            this.searchCashOrder(this.cashPageIndex)
         }
     },
     computed: {
-        tableData1() {
-            this.tableDataAll1.forEach(ele => {
+        recordTableData() {
+            this.recordTableDataAll.forEach(ele => {
                 ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
                 switch (ele.state) {
                     case '1':
@@ -1284,9 +1608,9 @@ export default {
                         break
                     case '3':
                         ele.stateShow = this.$L.record.success
-                        if(ele.amount > ele.refundedAmount){
+                        if (ele.amount > ele.refundedAmount) {
                             ele.operation = this.$L.record.refund
-                        }else {
+                        } else {
                             ele.operation = this.$L.record.nonrefundable
                         }
                         break
@@ -1300,11 +1624,11 @@ export default {
                         break
                 }
             })
-            let tmp = this.tableDataAll1.slice((this.pageIndex1 - 1) * this.pageSize1, this.pageIndex1 * this.pageSize1)
+            let tmp = this.recordTableDataAll.slice((this.recordPageIndex - 1) * this.recordPageSize, this.recordPageIndex * this.recordPageSize)
             return tmp
         },
-        tableData2() {
-            this.tableDataAll2.forEach(ele => {
+        refundTableData() {
+            this.refundTableDataAll.forEach(ele => {
                 ele.countrySpelling = this.$options.filters.getCountryName(ele.country)
                 switch (ele.state) {
                     case '1':
@@ -1327,17 +1651,15 @@ export default {
                         break
                 }
             })
-            let tmp = this.tableDataAll2.slice((this.pageIndex2 - 1) * this.pageSize2, this.pageIndex2 * this.pageSize2)
+            let tmp = this.refundTableDataAll.slice((this.refundPageIndex - 1) * this.refundPageSize, this.refundPageIndex * this.refundPageSize)
             return tmp
         },
         mistming: {
-            get(){
-                let mm = this.endTime  - this.startTime
-                return mm > 0 ? mm : 0 
+            get() {
+                let mm = this.endTime - this.startTime
+                return mm > 0 ? mm : 0
             },
-            set(){
-
-            }
+            set() {}
         }
     },
     filters: {
@@ -1445,8 +1767,9 @@ export default {
 .required {
     color: #f00;
 }
-.appBorder {
-    border-bottom: 1px solid #ccc;
+.appBorder .mt15:nth-child(n+4){
+    border-top: 1px solid #ccc;
+    padding-top:15px;
 }
 .phoneText {
     text-align: center;
